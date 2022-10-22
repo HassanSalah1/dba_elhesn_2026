@@ -21,7 +21,7 @@ use App\Http\Controllers\Dashboard\User\UserController;
 //});
 
 Route::group(['prefix' => 'admin'], function () {
-
+    Route::get('card', [AuthenticationController::class, 'showCard']);
 
     Route::group(['prefix' => 'auth'], function () {
         Route::get('login', [AuthenticationController::class, 'showLogin']);

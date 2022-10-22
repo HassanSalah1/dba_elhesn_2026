@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 class AuthenticationController extends Controller
 {
 
+
+    public function showCard()
+    {
+        return view('pdf.profile_card');
+    }
+
     // Login Cover
     public function showLogin()
     {
@@ -36,10 +42,12 @@ class AuthenticationController extends Controller
     }
 
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $url = url('/admin/auth/login');
         return AuthService::logout($url);
     }
 
 }
+
 ?>
