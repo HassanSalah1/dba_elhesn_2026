@@ -24,6 +24,13 @@ class UserController extends Controller
         return UserApiService::editProfile($data);
     }
 
+
+    public function downloadProfileCard(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::downloadProfileCard($data);
+    }
+
 }
 
 ?>

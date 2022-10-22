@@ -248,6 +248,10 @@ return [
     'order' => 'الترتيب',
     "sport_games_title" => "إدارة الألعاب الرياضية",
     "add_sportGame" => "إضافة",
-    "edit_sportGame" => "تعديل"
+    "edit_sportGame" => "تعديل",
+    "regulations_title" => "اللوائج والأنظمة",
+    "file_error_message" => "تأكد من رفع ملف (pdf) صالح لا بتجاوز حجمه 10 ميجا",
+    "add" => "إضافة",
+    "notifications_title" => "الإشعارات"
 ];
 ?>

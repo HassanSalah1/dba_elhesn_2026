@@ -103,6 +103,18 @@
             "icon": "box",
             "url": "admin/sportGames",
             "slug": "dashboard-sportGames"
+        },
+        {
+            "name": "regulations_title",
+            "icon": "box",
+            "url": "admin/regulations",
+            "slug": "dashboard-regulation"
+        },
+        {
+            "name": "notifications_title",
+            "icon": "box",
+            "url": "admin/notification",
+            "slug": "dashboard-show_send_notification"
         }
     ]
 }

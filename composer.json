@@ -10,7 +10,10 @@
   "require": {
     "php": "^7.3|^8.0",
     "ext-json": "*",
+    "ext-pdo": "*",
+    "ext-sqlsrv": "*",
     "apility/laravel-fcm": "^1.4",
+    "barryvdh/laravel-dompdf": "^2.0",
     "fideloper/proxy": "^4.4",
     "fruitcake/laravel-cors": "^2.0",
     "guzzlehttp/guzzle": "^7.0.1",
@@ -20,9 +23,7 @@
     "laravel/tinker": "^2.5",
     "mcamara/laravel-localization": "^1.7",
     "propaganistas/laravel-phone": "^4.3",
-    "yajra/laravel-datatables-oracle": "~9.0",
-    "ext-sqlsrv": "*",
-      "ext-pdo": "*"
+    "yajra/laravel-datatables-oracle": "~9.0"
   },
   "require-dev": {
     "facade/ignition": "^2.5",

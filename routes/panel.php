@@ -84,6 +84,16 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/committee/edit', [CommitteeController::class, 'editCommittee']); // edit Committee
         Route::post('/committee/delete', [CommitteeController::class, 'deleteCommittee']); // delete Committee
 
+
+        ////////////////////////////////
+        Route::get('/regulations', [RegulationController::class, 'showRegulations'])->name('dashboard-regulation'); // show Index page that control all Regulations
+        Route::get('/regulations/data', [RegulationController::class, 'getRegulationsData']); // get all Regulations data for DataTable
+        Route::post('/regulation/add', [RegulationController::class, 'addRegulation']); // add Regulation
+        Route::post('/regulation/data', [RegulationController::class, 'getRegulationData']); // get Regulation data
+        Route::post('/regulation/edit', [RegulationController::class, 'editRegulation']); // edit Regulation
+        Route::post('/regulation/delete', [RegulationController::class, 'deleteRegulation']); // delete Regulation
+
+
         ////////////////////////////////
         Route::get('/sportGames', [SportGameController::class, 'showSportGames'])->name('dashboard-sportGames'); // show Index page that control all SportGamess
         Route::get('/sportGames/data', [SportGameController::class, 'getSportGamesData']); // get all SportGamess data for DataTable

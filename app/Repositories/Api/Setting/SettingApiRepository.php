@@ -24,6 +24,7 @@ use App\Models\Gallery;
 use App\Models\Image;
 use App\Models\Intro;
 use App\Models\News;
+use App\Models\Regulations;
 use App\Models\Setting;
 use App\Models\SportGame;
 use App\Models\Team;
@@ -392,6 +393,16 @@ class SettingApiRepository
         }
 
         return [
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getRegulations(array $data)
+    {
+        $intros = Regulations::orderBy('order', 'ASC')->get();
+        return [
+            'data' => RegulationResource::collection($intros),
             'message' => 'success',
             'code' => HttpCode::SUCCESS
         ];

@@ -4,22 +4,12 @@ namespace App\Repositories\Api\User;
 
 
 use App\Entities\HttpCode;
-use App\Entities\OrderStatus;
-use App\Entities\ProductType;
-use App\Http\Resources\ChatMessagesResource;
-use App\Http\Resources\ChatResource;
-use App\Http\Resources\NotificationResource;
-use App\Http\Resources\ProductResource;
 use App\Http\Resources\UserResource;
-use App\Models\BankAccount;
-use App\Models\Chat;
-use App\Models\Favourite;
-use App\Models\Notification;
-use App\Models\Product;
-use App\Models\User;
 use App\Repositories\Api\Auth\AuthApiRepository;
 use App\Repositories\General\UtilsRepository;
-use Illuminate\Pagination\LengthAwarePaginator as Paginator;
+use Illuminate\Support\Facades\App;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class UserApiRepository
 {
@@ -71,5 +61,16 @@ class UserApiRepository
             'message' => trans('api.done_successfully'),
             'code' => HttpCode::SUCCESS
         ];
+    }
+
+    public static function downloadProfileCard(array $data)
+    {
+        $user = auth()->user();
+        return PDF::loadView('pdf.profile_card' , [
+            'user' => $user
+        ])
+            ->setPaper('a4', 'landscape')
+            ->setWarnings(true)
+            ->download($user->name . '.pdf');
     }
 }

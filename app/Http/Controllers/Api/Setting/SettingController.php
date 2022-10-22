@@ -5,41 +5,9 @@ namespace App\Http\Controllers\Api\Setting;
 use App\Http\Controllers\Controller;
 use App\Services\Api\Setting\SettingApiService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Mockery\Exception;
-use PDO;
-use PDOException;
 
 class SettingController extends Controller
 {
-
-    public function testConnection(Request $request)
-    {
-        $serverName = 'dhsckarem.ddns.net';
-        $uid = 'dhclubapp';
-        $pwd = 'bNHW^3&q1mH5';
-        $databaseName = 'FBall';
-
-        $connectionInfo = [
-            "UID" => $uid,
-            "PWD" => $pwd,
-            "Database" => $databaseName,
-            "ColumnEncryption"=>"Enabled",
-            "TrustServerCertificate" => true
-        ];
-        /* Connect using SQL Server Authentication. */
-        $conn = \sqlsrv_connect($serverName, $connectionInfo);
-
-        if( $conn ) {
-            $sql = "SELECT RowID FROM dbo.MobileApp_Sports";
-            if(($result = \sqlsrv_query($conn, $sql)) !== false){
-                while( $object = sqlsrv_fetch_object( $result )) {
-                    echo $object->RowID.'<br />';
-                }
-            }
-        }else{
-        }
-    }
 
     public function getSiteNews(Request $request)
     {
@@ -152,6 +120,12 @@ class SettingController extends Controller
         $data = $request->all();
         $data['id'] = $id;
         return SettingApiService::getActionDetails($data);
+    }
+
+    public function getRegulations(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getRegulations($data);
     }
 
 }

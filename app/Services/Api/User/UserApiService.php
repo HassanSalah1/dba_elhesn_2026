@@ -59,4 +59,9 @@ class UserApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function downloadProfileCard(array $data)
+    {
+        return UserApiRepository::downloadProfileCard($data);
+    }
+
 }

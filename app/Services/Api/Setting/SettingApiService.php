@@ -130,6 +130,12 @@ class SettingApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getRegulations(array $data)
+    {
+        $response = SettingApiRepository::getRegulations($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
 }
 
 ?>

@@ -20,9 +20,6 @@ use \App\Http\Controllers\Api\SqlServerController;
 Route::group(['middleware' => 'lang'], function () {
     Route::group(['prefix' => 'v1'], function () {
 
-        Route::get('/handle/sports', [SqlServerController::class, 'getSports']);
-        Route::get('/handle/teams', [SqlServerController::class, 'getTeams']);
-
         ////////////////////////////////////////
         ///
         Route::get('/handle/site', [SettingController::class, 'getSiteNews']); // get intros
@@ -65,6 +62,8 @@ Route::group(['middleware' => 'lang'], function () {
         Route::post('/password/forget/change', [AuthController::class, 'changeForgetPassword']); // change forget password
 
 
+        Route::get('/regulations', [SettingController::class, 'getRegulations']); // get regulations
+
 //        Route::get('/get/home', [HomeController::class, 'getHome']); // get Home data
 
         Route::group(['middleware' => ['auth:api', 'authApi']], function () {
@@ -75,6 +74,7 @@ Route::group(['middleware' => 'lang'], function () {
             Route::post('/profile/edit', [UserController::class, 'editProfile']); // edit profile
             Route::post('/delete-account', [AuthController::class, 'deleteAccount']); // delete Account (only deactivate)
 
+            Route::get('/profile/download/card', [UserController::class, 'downloadProfileCard']); // download Profile Card
 
         });
     });

@@ -104,6 +104,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
+    function devices()
+    {
+        return $this->hasMany(Devices::class);
+    }
+
     function contacts()
     {
         return $this->hasMany(Contact::class);
