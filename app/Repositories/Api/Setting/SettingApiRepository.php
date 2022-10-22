@@ -14,6 +14,7 @@ use App\Http\Resources\ImageResource;
 use App\Http\Resources\IntroResource;
 use App\Http\Resources\NewDetailsResource;
 use App\Http\Resources\NewResource;
+use App\Http\Resources\RegulationResource;
 use App\Http\Resources\SportGameResource;
 use App\Http\Resources\TeamResource;
 use App\Models\Action;

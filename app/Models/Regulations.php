@@ -10,7 +10,7 @@ class Regulations extends Model
 {
     use HasFactory;
     protected $table = 'regulations';
-    protected $fillable = ['name_ar' , 'name_en' , 'description_ar' , 'description_en' , 'file' , 'sort'];
+    protected $fillable = ['name_ar' , 'name_en' , 'description_ar' , 'description_en' , 'file' , 'order'];
 
     protected $appends = ['name', 'description'];
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\Notification\NotificationController;
 use App\Http\Controllers\Dashboard\Setting\CommitteeController;
 use App\Http\Controllers\Dashboard\Setting\GalleryController;
 use App\Http\Controllers\Dashboard\Setting\IntroController;
+use App\Http\Controllers\Dashboard\Setting\RegulationController;
 use App\Http\Controllers\Dashboard\Setting\SportGameController;
 use App\Http\Controllers\Dashboard\Setting\TeamController;
 use App\Http\Controllers\Dashboard\User\UserController;
