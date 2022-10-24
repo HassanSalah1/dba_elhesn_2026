@@ -440,7 +440,7 @@ class SettingApiRepository
             $sport = SportGame::where(['game_id' => $team->sport_id])->first();
             TeamPlayerResource::using([
                 'description' => $sport->description
-            ])
+            ]);
             return [
                 'data' => TeamPlayerResource::collection($players),
                 'message' => 'success',
