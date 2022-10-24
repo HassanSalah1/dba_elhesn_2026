@@ -16,6 +16,8 @@ use App\Http\Resources\NewDetailsResource;
 use App\Http\Resources\NewResource;
 use App\Http\Resources\RegulationResource;
 use App\Http\Resources\SportGameResource;
+use App\Http\Resources\SportTeamResource;
+use App\Http\Resources\TeamPlayerResource;
 use App\Http\Resources\TeamResource;
 use App\Models\Action;
 use App\Models\Category;
@@ -28,7 +30,9 @@ use App\Models\News;
 use App\Models\Regulations;
 use App\Models\Setting;
 use App\Models\SportGame;
+use App\Models\SportTeam;
 use App\Models\Team;
+use App\Models\TeamPlayer;
 use App\Repositories\General\UtilsRepository;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -408,4 +412,47 @@ class SettingApiRepository
             'code' => HttpCode::SUCCESS
         ];
     }
+
+    public static function getSportTeams(array $data)
+    {
+        $sport = SportGame::find($data['id']);
+        if ($sport) {
+            $teams = SportTeam::where(['sport_id' => $sport->game_id])->get();
+            return [
+                'data' => SportTeamResource::collection($teams),
+                'message' => 'success',
+                'code' => HttpCode::SUCCESS
+            ];
+        }
+
+        return [
+            'message' => 'not found',
+            'code' => HttpCode::ERROR
+        ];
+    }
+
+    public static function getTeamPlayers(array $data)
+    {
+        $team = SportTeam::find($data['id']);
+        if ($team) {
+            $players = TeamPlayer::where(['team_id' => $team->team_id])->get();
+
+            $sport = SportGame::where(['game_id' => $team->sport_id])->first();
+            TeamPlayerResource::using([
+                'description' => $sport->description
+            ])
+            return [
+                'data' => TeamPlayerResource::collection($players),
+                'message' => 'success',
+                'code' => HttpCode::SUCCESS
+            ];
+        }
+
+        return [
+            'message' => 'not found',
+            'code' => HttpCode::ERROR
+        ];
+    }
+
+
 }

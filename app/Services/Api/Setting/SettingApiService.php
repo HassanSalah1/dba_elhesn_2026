@@ -136,6 +136,18 @@ class SettingApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getSportTeams(array $data)
+    {
+        $response = SettingApiRepository::getSportTeams($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function getTeamPlayers(array $data)
+    {
+        $response = SettingApiRepository::getTeamPlayers($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
 }
 
 ?>

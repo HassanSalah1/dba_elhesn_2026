@@ -38,6 +38,9 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('/sport/games', [SettingController::class, 'getSportGames']); // get SportGames
         Route::get('/sport/games/{id}/gallery', [SettingController::class, 'getSportGamesGallery']); // get SportGames
 
+        Route::get('/sport/teams/{id}', [SettingController::class, 'getSportTeams']); // get Sport teams
+        Route::get('/team/players/{id}', [SettingController::class, 'getTeamPlayers']); // get Sport teams
+
         Route::get('/history', [SettingController::class, 'getHistory']); // history
 
         Route::get('/categories', [SettingController::class, 'getCategories']); // get categories

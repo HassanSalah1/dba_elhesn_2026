@@ -128,6 +128,20 @@ class SettingController extends Controller
         return SettingApiService::getRegulations($data);
     }
 
+    public function getSportTeams(Request $request , $id)
+    {
+        $data = $request->all();
+        $data['id'] = $id;
+        return SettingApiService::getSportTeams($data);
+    }
+
+    public function getTeamPlayers(Request $request , $id)
+    {
+        $data = $request->all();
+        $data['id'] = $id;
+        return SettingApiService::getTeamPlayers($data);
+    }
+
 }
 
 ?>
