@@ -77,6 +77,9 @@ Route::group(['middleware' => 'lang'], function () {
 
             Route::get('/profile/download/card', [UserController::class, 'downloadProfileCard']); // download Profile Card
 
+            // get my notifications
+            Route::get('/my/notifications', [UserController::class, 'getMyNotifications']); // get my notifications
+
         });
     });
 });

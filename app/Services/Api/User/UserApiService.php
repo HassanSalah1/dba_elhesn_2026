@@ -64,4 +64,10 @@ class UserApiService
         return UserApiRepository::downloadProfileCard($data);
     }
 
+    public static function getMyNotifications(array $data)
+    {
+        $response = UserApiRepository::getMyNotifications($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
 }

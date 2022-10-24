@@ -516,6 +516,9 @@ function sendAjaxRequest(form_selector, url, lang_obj) {
             if (lang_obj.update) {
                 $('.user-img').find('img').attr('src', response.data.admin_image);
             }
+            if (lang_obj.clear){
+                resetForm(form_selector);
+            }
 
         },
         error: function (response) {

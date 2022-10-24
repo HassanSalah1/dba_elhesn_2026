@@ -31,6 +31,12 @@ class UserController extends Controller
         return UserApiService::downloadProfileCard($data);
     }
 
+    public function getMyNotifications(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::getMyNotifications($data);
+    }
+
 }
 
 ?>

@@ -4,9 +4,12 @@ namespace App\Repositories\Api\User;
 
 
 use App\Entities\HttpCode;
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserResource;
+use App\Models\Notification;
 use App\Repositories\Api\Auth\AuthApiRepository;
 use App\Repositories\General\UtilsRepository;
+use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Illuminate\Support\Facades\App;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -66,11 +69,35 @@ class UserApiRepository
     public static function downloadProfileCard(array $data)
     {
         $user = auth()->user();
-        return PDF::loadView('pdf.profile_card' , [
+        return PDF::loadView('pdf.profile_card', [
             'user' => $user
         ])
             ->setPaper('a4', 'landscape')
             ->setWarnings(true)
             ->download($user->name . '.pdf');
+    }
+
+    public static function getMyNotifications(array $data)
+    {
+        $page = (isset($data['page'])) ? $data['page'] : 1;
+        $per_page = 20;
+        $offset = $per_page * ($page - 1);
+
+        $notifications = Notification::where(['user_id' => auth()->user()->id])
+            ->orderBy('id', 'desc');
+
+        $count = $notifications->count();
+        $notifications = $notifications->offset($offset)
+            ->skip($offset)
+            ->take($per_page)
+            ->get();
+
+        $notifications = new Paginator(NotificationResource::collection($notifications), $count, $per_page);
+
+        return [
+            'data' => $notifications,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
     }
 }

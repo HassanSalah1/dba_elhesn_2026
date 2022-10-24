@@ -110,6 +110,7 @@
                     error_message: '{{trans('admin.general_error_message')}}',
                     error_title: '',
                     loader: true,
+                    clear: true
                 });
             });
         });
