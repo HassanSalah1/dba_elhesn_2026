@@ -4,8 +4,6 @@
     <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Repositories/Api/SqlServerApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/SqlServerApiRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pdf/profile_card.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/pdf/profile_card.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,7 +209,7 @@
       <workItem from="1663002456476" duration="15412000" />
       <workItem from="1666204855590" duration="10060000" />
       <workItem from="1666347806217" duration="17496000" />
-      <workItem from="1666606504473" duration="2229000" />
+      <workItem from="1666606504473" duration="3301000" />
     </task>
     <servers />
   </component>
