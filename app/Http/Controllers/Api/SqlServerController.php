@@ -23,7 +23,7 @@ class SqlServerController extends Controller
 
     public function getTeams(Request $request)
     {
-        return SqlServerApiRepository::getTeamImages();
+        return SqlServerApiRepository::getPlayerImages();
     }
 }
 

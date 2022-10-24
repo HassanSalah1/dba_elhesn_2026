@@ -129,6 +129,7 @@ class SqlServerApiRepository
         $image_path = 'uploads/players/';
         if (($result = \sqlsrv_query($conn, $sql)) !== false) {
             $object = sqlsrv_fetch_object($result);
+            var_dump(sqlsrv_errors());
             if ($object) {
                 return UtilsRepository::createImageBase64(base64_encode($object->PlayerPhoto), $image_path, $file_id, 282, 561);
             }
@@ -164,13 +165,14 @@ class SqlServerApiRepository
 
     public static function getTeamImage($conn, $teamId)
     {
-        $sql = "SELECT TOP 1 Photo FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID=$teamId";
+        $sql = "SELECT Photo FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID=$teamId";
         $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
         $image_path = 'uploads/sport_teams/';
         if (($result = \sqlsrv_query($conn, $sql)) !== false) {
-            $object = sqlsrv_fetch_object($result);
-            if ($object) {
-                return UtilsRepository::createImageBase64(base64_encode($object->Photo), $image_path, $file_id, 282, 561);
+            while ($object = sqlsrv_fetch_object($result)) {
+                if ($object) {
+                    return UtilsRepository::createImageBase64(base64_encode($object->Photo), $image_path, $file_id, 282, 561);
+                }
             }
         }
         return null;

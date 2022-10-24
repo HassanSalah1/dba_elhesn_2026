@@ -20,6 +20,7 @@ use \App\Http\Controllers\Api\SqlServerController;
 Route::group(['middleware' => 'lang'], function () {
     Route::group(['prefix' => 'v1'], function () {
 
+        Route::get('/handle/teams', [SqlServerController::class, 'getTeams']); // get intros
         ////////////////////////////////////////
         ///
         Route::get('/handle/site', [SettingController::class, 'getSiteNews']); // get intros
