@@ -70,4 +70,80 @@ class UserApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function subscribeSport(array $data)
+    {
+        $keys = [
+            'full_name_ar' => 'required',
+            'full_name_en' => 'required',
+            'birth_date' => 'required',
+            'nationality' => 'required',
+            'birth_place' => 'required',
+            'category' => 'required',
+            'identification_number' => 'required',
+            'id_expiration_date' => 'required',
+            'passport_number' => 'required',
+            'passport_expiry' => 'required',
+            'address' => 'required',
+            'guardian_phone' => 'required',
+            'another_club' => 'required',
+            'sport_id' => 'required',
+            'level' => 'required',
+            'weight' => 'required',
+            'height' => 'required',
+            'clothes_size' => 'required',
+            'shoe_size' => 'required',
+            'vaccine_number' => 'required',
+            'personal_image' => 'required',
+            'id_photo' => 'required',
+            'player_passport_photo' => 'required',
+            'parent_id_photo' => 'required',
+            'parent_passport_photo' => 'required',
+            'player_parent_residence_photo' => 'required',
+            'medical_examination_photo' => 'required',
+
+
+            // صورة شخصية بملابس رياضية
+            // صورة الهوية
+            // صورة جواز سفر اللاعب
+            // صورة هوية ولى الامر
+            // صورة جواز ولى الامر
+            // صورة اقامة اللاعب وولى الامر
+            // صورة فحص طبى لائق طبيا
+            /////
+            // اقرار  ولى الامر للموافقة على تسجيل اللاعب - اللاعبين تحت 18 سنه
+            // شهادة ميلاد اللاعب
+            // صورة جوازة السفر وخلاصة القيد للأم للاعبين أبناء المواطنات
+            // صورة جواز السفر والإقامو للكفيل للاعبين المشاركين فى لعبة ألعاب القوى
+            //
+            //
+        ];
+        $messages = [
+            'required' => trans('api.required_error_message'),
+        ];
+        $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);
+        if ($validated !== true) {
+            return $validated;
+        }
+        $response = UserApiRepository::subscribeSport($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function uploadImage(array $data)
+    {
+        $keys = [
+            'image' => 'required|mimes:jpg,jpeg,png|max:5120',
+        ];
+        $messages = [
+            'required' => trans('api.required_error_message'),
+            'mimes' => trans('api.mimes_error_message'),
+            'max' => trans('api.max_size_error_message'),
+        ];
+        $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);
+        if ($validated !== true) {
+            return $validated;
+        }
+        $response = UserApiRepository::uploadImage($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
 }

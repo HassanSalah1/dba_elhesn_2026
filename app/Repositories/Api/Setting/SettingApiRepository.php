@@ -192,7 +192,7 @@ class SettingApiRepository
 
     public static function getSportGames(array $data)
     {
-        $games = SportGame::orderBy('order', 'ASC')->paginate(30);
+        $games = SportGame::orderBy('order', 'ASC')->paginate(10);
         $games->{'games'} = SportGameResource::collection($games);
         // return success response
         return [

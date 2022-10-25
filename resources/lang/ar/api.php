@@ -106,5 +106,6 @@ return [
     'account_verification_subject' => 'تفعيل الحساب',
     'hello_user' => 'مرحبا',
     'account_verification_message' => 'أدخل رمز التحقق التالى لتفعيل حسابك : {code}',
+    'max_size_error_message' => 'يجب ألا يزيد حجم الملف عن 5 ميجا',
 ];
 ?>
