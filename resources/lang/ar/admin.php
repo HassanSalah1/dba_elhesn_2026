@@ -252,6 +252,11 @@ return [
     "regulations_title" => "اللوائج والأنظمة",
     "file_error_message" => "تأكد من رفع ملف (pdf) صالح لا بتجاوز حجمه 10 ميجا",
     "add" => "إضافة",
-    "notifications_title" => "الإشعارات"
+    "notifications_title" => "الإشعارات",
+    "subscription_title" => "الإشتراكات",
+    "full_name_en" => "الاسم رباعي باللغة الإنجليزية",
+    "full_name_ar" => "الاسم رباعي باللغة العربية",
+    "sport_name" => "الرياضة",
+    "nationality" => "الجنسية"
 ];
 ?>

@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\Setting\IntroController;
 use App\Http\Controllers\Dashboard\Setting\RegulationController;
 use App\Http\Controllers\Dashboard\Setting\SportGameController;
 use App\Http\Controllers\Dashboard\Setting\TeamController;
+use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\User\UserController;
 
 
@@ -103,6 +104,13 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/sportGame/data', [SportGameController::class, 'getSportGameData']); // get SportGames data
         Route::post('/sportGame/edit', [SportGameController::class, 'editSportGame']); // edit SportGames
         Route::post('/sportGame/delete', [SportGameController::class, 'deleteSportGame']); // delete SportGames
+
+
+        ////////////////////////////////
+        Route::get('/sport/subscription', [SubscriptionController::class, 'showSubscriptions'])->name('dashboard-subscription'); // show Index page that control all SportGamess
+        Route::get('/sport/subscription/data', [SubscriptionController::class, 'getSubscriptionsData']); // get all SportGamess data for DataTable
+        Route::get('/sport/subscription/show/{id}', [SubscriptionController::class, 'showSubscription']); // get all SportGamess data for DataTable
+
 
         //////////////////////////////////
         Route::get('/history', [HomeController::class, 'showHistory'])->name('dashboard-history'); // history page

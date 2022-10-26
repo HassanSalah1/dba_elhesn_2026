@@ -105,6 +105,12 @@
             "slug": "dashboard-sportGames"
         },
         {
+            "name": "subscription_title",
+            "icon": "box",
+            "url": "admin/sport/subscription",
+            "slug": "dashboard-subscription"
+        },
+        {
             "name": "regulations_title",
             "icon": "box",
             "url": "admin/regulations",

@@ -17,7 +17,7 @@ class GalleryController extends Controller
             'direction' => 'rtl'
         ];
         $data['id'] = $id;
-        $data['title'] = trans('admin.teams_title');
+        $data['title'] = trans('admin.gallery_title');
         $data['debatable_names'] = array(trans('admin.type'), trans('admin.file'), trans('admin.actions'));
         return view('admin.settings.gallery')->with($data);
     }
