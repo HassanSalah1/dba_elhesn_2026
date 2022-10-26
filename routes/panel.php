@@ -70,7 +70,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/team/delete', [TeamController::class, 'deleteTeam']); // delete Team
 
         ////////////////////////////////
-        Route::get('/galleries/{id?}', [GalleryController::class, 'showGalleries'])->name('dashboard-galleries'); // show Index page that control all Galleries
+        Route::get('/galleries', [GalleryController::class, 'showGalleries'])->name('dashboard-galleries'); // show Index page that control all Galleries
+        Route::get('/sport/galleries/{id}', [GalleryController::class, 'showGalleries'])->name('dashboard-galleries'); // show Index page that control all Galleries
         Route::get('/galleries/data', [GalleryController::class, 'getGalleriesData']); // get all Galleries data for DataTable
         Route::post('/gallery/add', [GalleryController::class, 'addGallery']); // add Gallery
         Route::post('/gallery/data', [GalleryController::class, 'getGalleryData']); // get Gallery data

@@ -17,7 +17,7 @@ class SportGameRepository
         return DataTables::of($teams)
             ->addColumn('actions', function ($team) {
                 $ul = '';
-                $ul .= '<a data-toggle="tooltip" title="' . trans('admin.gallery_title') . '" id="' . $team->id . '" href="'.url('/admin/galleries/' . $team->id).'" class="on-default edit-row btn btn-success"><i data-feather="eye"></i></a>
+                $ul .= '<a data-toggle="tooltip" title="' . trans('admin.gallery_title') . '" id="' . $team->id . '" href="'.url('/admin/sport/galleries/' . $team->id).'" class="on-default edit-row btn btn-success"><i data-feather="eye"></i></a>
                    ';
                 $ul .= '<a data-toggle="tooltip" title="' . trans('admin.edit') . '" id="' . $team->id . '" onclick="editSportGame(this);return false;" href="#" class="on-default edit-row btn btn-info"><i data-feather="edit"></i></a>
                    ';

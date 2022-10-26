@@ -3,13 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/Setting/GalleryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/Setting/GalleryController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/Setting/SportGameController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/Setting/SportGameController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Gallery.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Gallery.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/Api/SqlServerApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/SqlServerApiRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/Dashboard/Setting/GalleryRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Dashboard/Setting/GalleryRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/Dashboard/Setting/SportGameRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Dashboard/Setting/SportGameRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/settings/gallery.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/settings/gallery.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/panel.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/panel.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -218,7 +211,7 @@
       <workItem from="1666347806217" duration="17496000" />
       <workItem from="1666606504473" duration="3408000" />
       <workItem from="1666633238248" duration="5318000" />
-      <workItem from="1666719539570" duration="9571000" />
+      <workItem from="1666719539570" duration="9835000" />
     </task>
     <servers />
   </component>
