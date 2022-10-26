@@ -114,7 +114,6 @@ class SqlServerApiRepository
                         'team_id' => $object->TeamRowID,
                         'name_en' => $object->PNameAR,
                         'name_ar' => $object->PNameEN,
-                        'image' => null
                     ]);
                 }
             }

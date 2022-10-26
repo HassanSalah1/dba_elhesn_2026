@@ -12,7 +12,14 @@ class GalleryRepository
     // get Galleries and create datatable data.
     public static function getGalleriesData(array $data)
     {
-        $gallerys = Gallery::orderBy('id', 'DESC');
+        $gallerys = Gallery::orderBy('id', 'DESC')
+            ->where(function ($query) use ($data) {
+                if(isset($data['id']) && $data['id']){
+                    $query->where([
+                        'sport_game_id' => $data['id']
+                    ]);
+                }
+            });
         return DataTables::of($gallerys)
             ->addColumn('type', function ($gallery) {
                 return $gallery->image !== null ? trans('admin.Image') : trans('admin.Video');
@@ -39,6 +46,7 @@ class GalleryRepository
     {
         $galleryData = [
             'video_url' => $data['type'] == 'video' ? $data['video_url'] : null,
+            'sport_game_id' => isset($data['sport_game_id']) && $data['sport_game_id'] ? $data['sport_game_id'] : null
         ];
         if ($data['type'] == 'image') {
             $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
@@ -110,6 +118,7 @@ class GalleryRepository
 
             $galleryData = [
                 'video_url' => $data['type'] == 'video' ? $data['video_url'] : null,
+                'sport_game_id' => isset($data['sport_game_id']) && $data['sport_game_id'] ? $data['sport_game_id'] : null
             ];
             if ($data['type'] == 'image') {
                 $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));

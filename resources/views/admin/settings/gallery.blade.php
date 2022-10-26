@@ -46,6 +46,8 @@
     <div class="mb-1" id="dropify_image" style="display: none;">
     </div>
 
+    <input type="hidden" name="sport_game_id" value=""/>
+
 @stop
 
 @section('content')
@@ -118,12 +120,14 @@
             addModal({
                 title: '{{trans('admin.add_gallery')}}',
                 dropify: true,
-                select_selector: ['type']
+                select_selector: ['type'],
+                hiddenName: 'sport_game_id',
+                hiddenValue: '{{isset($id) && $id ? $id : ''}}'
             });
 
             onClose();
 
-            loadDataTables('{{ url("/admin/galleries/data") }}',
+            loadDataTables('{{ url("/admin/galleries/data" . ( (isset($id) && $id) ? '?id=' . $id : '')  ) }}',
                 ['type', 'file', 'actions'], '',
                 {
                     'show': '{{trans('admin.show')}}',

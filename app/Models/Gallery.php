@@ -10,7 +10,7 @@ class Gallery extends Model
     use HasFactory;
 
     protected $table = 'galleries';
-    protected $fillable = ['video_url', 'image'];
+    protected $fillable = ['video_url', 'image' , 'sport_game_id'];
 
     public function getUrlAttribute()
     {

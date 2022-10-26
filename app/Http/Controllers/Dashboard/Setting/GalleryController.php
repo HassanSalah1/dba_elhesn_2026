@@ -9,13 +9,14 @@ use Illuminate\Http\Request;
 class GalleryController extends Controller
 {
     //
-    public function showGalleries()
+    public function showGalleries($id = null)
     {
         $data['pageConfigs'] = [
             'pageHeader' => false,
             'defaultLanguage' => 'ar',
             'direction' => 'rtl'
         ];
+        $data['id'] = $id;
         $data['title'] = trans('admin.teams_title');
         $data['debatable_names'] = array(trans('admin.type'), trans('admin.file'), trans('admin.actions'));
         return view('admin.settings.gallery')->with($data);
