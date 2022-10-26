@@ -18,6 +18,10 @@ class GalleryRepository
                     $query->where([
                         'sport_game_id' => $data['id']
                     ]);
+                }else{
+                    $query->where([
+                        'sport_game_id' => null
+                    ]);
                 }
             });
         return DataTables::of($gallerys)
