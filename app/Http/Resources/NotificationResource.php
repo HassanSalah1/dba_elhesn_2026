@@ -6,6 +6,7 @@ use App\Entities\Key;
 use App\Entities\OrderType;
 use App\Models\Setting;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\App;
 
 class NotificationResource extends JsonResource
 {
@@ -19,10 +20,10 @@ class NotificationResource extends JsonResource
     {
         $title = null;
         $message = null;
-        $user = $this->user;
+        $lang = App::getLocale();
         if ($this->title_ar !== null) {
-            $title = $this->title;
-            $message = $this->message;
+            $title = $lang === 'en' ? $this->title_en : $this->title_ar;
+            $message = $lang === 'en' ? $this->message_en : $this->message_ar;
         } else {
             $title = trans('api.' . $this->title_key);
 
