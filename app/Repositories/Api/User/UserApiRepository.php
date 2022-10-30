@@ -78,6 +78,17 @@ class UserApiRepository
             ->download($user->name . '.pdf');
     }
 
+    public static function getNotificationsCount(array $data)
+    {
+        $count = Notification::where(['user_id' => auth()->id(), 'seen' => 0])->count();
+        return [
+            'data' => $count,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
+
     public static function getMyNotifications(array $data)
     {
         $page = (isset($data['page'])) ? $data['page'] : 1;
@@ -94,6 +105,15 @@ class UserApiRepository
             ->get();
 
         $notifications = new Paginator(NotificationResource::collection($notifications), $count, $per_page);
+
+        Notification::where(['user_id' => auth()->user()->id])
+            ->orderBy('id', 'desc')
+            ->offset($offset)
+            ->skip($offset)
+            ->take($per_page)
+            ->update([
+                'seen' => 1
+            ]);
 
         return [
             'data' => $notifications,

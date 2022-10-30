@@ -82,6 +82,7 @@ Route::group(['middleware' => 'lang'], function () {
 
             // get my notifications
             Route::get('/my/notifications', [UserController::class, 'getMyNotifications']); // get my notifications
+            Route::get('/notifications/count', [UserController::class, 'getNotificationsCount']); // get my notifications
 
             Route::post('/image/upload', [UserController::class, 'uploadImage']);
             Route::post('/sport/subscribe', [UserController::class, 'subscribeSport']);

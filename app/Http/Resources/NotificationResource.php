@@ -39,7 +39,8 @@ class NotificationResource extends JsonResource
             'message' => $message,
             'time' => date('h:i a', strtotime($this->created_at)),
             'date' => date('Y/m/d', strtotime($this->created_at)),
-            'type' => $this->type
+            'type' => $this->type,
+            'seen' => $this->seen
         ];
     }
 }

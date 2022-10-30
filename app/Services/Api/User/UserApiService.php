@@ -70,6 +70,12 @@ class UserApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getNotificationsCount(array $data)
+    {
+        $response = UserApiRepository::getNotificationsCount($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
     public static function subscribeSport(array $data)
     {
         $keys = [

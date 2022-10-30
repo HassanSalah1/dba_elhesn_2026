@@ -37,6 +37,12 @@ class UserController extends Controller
         return UserApiService::getMyNotifications($data);
     }
 
+    public function getNotificationsCount(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::getNotificationsCount($data);
+    }
+
     public function subscribeSport(Request $request)
     {
         $data = $request->all();
