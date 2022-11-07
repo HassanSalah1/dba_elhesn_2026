@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\TeamPlayer;
 use App\Repositories\Api\Setting\SettingApiRepository;
 use App\Repositories\Api\SqlServerApiRepository;
 use Illuminate\Console\Command;
@@ -39,7 +40,19 @@ class GetPlayerPhotos extends Command
      */
     public function handle()
     {
-        SqlServerApiRepository::getPlayerImages();
+        $conn = SqlServerApiRepository::startConnection();
+        if ($conn) {
+            $players = TeamPlayer::where('image', '=', null)->get();
+            foreach ($players as $player) {
+                $image = SqlServerApiRepository::getPlayerImage($conn, $player->player_id);
+                $this->info('image : ' . $image);
+                if ($image) {
+                    $player->update([
+                        'image' => $image
+                    ]);
+                }
+            }
+        }
         $this->info('Successfully');
         return Command::SUCCESS;
     }
