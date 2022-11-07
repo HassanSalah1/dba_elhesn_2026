@@ -16,7 +16,7 @@ class TeamPlayer extends Model
 
     public function getImageUrlAttribute()
     {
-        $image = $this->image ? url($this->image) : null; //'images/default.png';
+        $image = $this->image ? url($this->image) : 'images/default.png';
         return $image;
     }
 
