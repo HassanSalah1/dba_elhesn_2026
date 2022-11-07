@@ -52,6 +52,9 @@ class GetPlayerPhotos extends Command
                 $image_path = 'uploads/players/';
                 if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                     $object = sqlsrv_fetch_object($result);
+
+                    $errors = sqlsrv_errors();
+                    $this->info(count($errors) > 0 ? $errors [0] : '');
                     if ($object) {
                         $image = UtilsRepository::createImageBase64(base64_encode($object->PlayerPhoto), $image_path, $file_id, 282, 561);
                     }
