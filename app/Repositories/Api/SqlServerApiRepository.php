@@ -112,8 +112,8 @@ class SqlServerApiRepository
                         'player_id' => $object->PlayerRowID
                     ], [
                         'team_id' => $object->TeamRowID,
-                        'name_en' => $object->PNameAR,
-                        'name_ar' => $object->PNameEN,
+                        'name_en' => $object->PNameEN,
+                        'name_ar' => $object->PNameAR,
                     ]);
                 }
             }

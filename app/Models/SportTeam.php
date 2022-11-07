@@ -17,7 +17,7 @@ class SportTeam extends Model
 
     public function getImageUrlAttribute()
     {
-        $image = $this->image ? $this->image : 'images/default.png';
+        $image = $this->image ? $this->image : null ; //'images/default.png';
         return url($image);
     }
 
