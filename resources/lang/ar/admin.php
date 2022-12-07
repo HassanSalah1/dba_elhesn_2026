@@ -278,5 +278,7 @@ return [
     "another_club_name"=> 'إسم النادى الآخر',
     "weight"=> 'الوزن',
     "height"=> 'الطول',
+    'resident' => 'مقيم',
+    'citizen' => 'مواطن'
 ];
 ?>
