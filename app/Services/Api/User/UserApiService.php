@@ -89,13 +89,13 @@ class UserApiService
             "parent_full_name_en" => 'required',
             "parent_email" => 'required',
             "parent_category" => 'required',
-            "parent_passport_photo" => 'required',
-            "parent_residence_photo" => 'required',
-            "parent_id_photo" => 'required',
+//            "parent_passport_photo" => 'required',
+//            "parent_residence_photo" => 'required',
+//            "parent_id_photo" => 'required',
             "clothes_size" => 'required',
             "shoe_size" => 'required',
-            "is_another_club" => 'required',
-            "another_club_name" => 'required',
+//            "is_another_club" => 'required',
+//            "another_club_name" => 'required',
             "weight" => 'required',
             "height" => 'required'
         ];
