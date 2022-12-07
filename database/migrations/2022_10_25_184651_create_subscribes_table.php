@@ -25,7 +25,7 @@ class CreateSubscribesTable extends Migration
             $table->string('parent_full_name_ar');
             $table->string('parent_full_name_en');
             $table->string('parent_email');
-            $table->string('parent_category');
+            $table->tinyInteger('parent_category');
             $table->string('parent_passport_photo')->nullable();
             $table->string('parent_residence_photo')->nullable();
             $table->string('parent_id_photo')->nullable();
