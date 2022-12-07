@@ -144,7 +144,8 @@ class UserApiRepository
             "another_club_name" => $data['another_club_name'],
             "parent_passport_photo" => $data['parent_passport_photo'] ?: null,
             "parent_residence_photo" => $data['parent_residence_photo'] ?: null,
-            "parent_id_photo" => $data['parent_id_photo'] ?: null
+            "parent_id_photo" => $data['parent_id_photo'] ?: null,
+            'guardian_phone' => $data['guardian_phone']
         ];
         $subscribe = Subscribe::create($subscribeData);
         if ($subscribe) {

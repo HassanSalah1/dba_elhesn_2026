@@ -35,6 +35,7 @@ class CreateSubscribesTable extends Migration
             $table->string('height');
             $table->tinyInteger('is_another_club');
             $table->string('another_club_name')->nullable();
+            $table->string('guardian_phone')->nullable();
             $table->timestamps();
         });
     }

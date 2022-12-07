@@ -24,6 +24,7 @@ class Subscribe extends Model
         "parent_passport_photo",
         "parent_residence_photo",
         "parent_id_photo",
+        'guardian_phone',
         "clothes_size",
         "shoe_size",
         "is_another_club",

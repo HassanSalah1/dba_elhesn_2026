@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscribe;
 use App\Services\Dashboard\SubscriptionService;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class SubscriptionController extends Controller
         ];
         $data['title'] = trans('admin.subscription_title');
         $data['debatable_names'] = array(trans('admin.player_full_name_ar'),
-            trans('admin.player_full_name_en'),trans('admin.parent_full_name_en'),
+            trans('admin.player_full_name_en'), trans('admin.parent_full_name_en'),
             trans('admin.parent_full_name_en'), trans('admin.nationality'), trans('admin.actions'));
         return view('admin.subscription.index')->with($data);
     }
@@ -27,6 +28,14 @@ class SubscriptionController extends Controller
     {
         $data = $request->all();
         return SubscriptionService::getSubscriptionsData($data);
+    }
+
+
+    public function showSubscription(Request $request, $id)
+    {
+        $data = $request->all();
+        $data['subscribeObj'] = Subscribe::find($id);
+        return view('admin.subscription.show')->with($data);
     }
 
 }
