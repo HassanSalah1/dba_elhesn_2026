@@ -257,6 +257,11 @@ return [
     "full_name_en" => "الاسم رباعي باللغة الإنجليزية",
     "full_name_ar" => "الاسم رباعي باللغة العربية",
     "sport_name" => "الرياضة",
-    "nationality" => "الجنسية"
+    "nationality" => "الجنسية",
+
+    "player_full_name_ar" => "إسم اللاعب عربى",
+    "parent_full_name_ar" => "إسم الأب عربى",
+    'parent_phone' => "رقم جوال الأب",
+    "parent_email" => "البريد الإلكترونى للأب",
 ];
 ?>
