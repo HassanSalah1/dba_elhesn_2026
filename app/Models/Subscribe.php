@@ -30,7 +30,8 @@ class Subscribe extends Model
         "is_another_club",
         "another_club_name",
         "weight",
-        "height"
+        "height",
+        'sport_id'
     ];
 
     public function user()
