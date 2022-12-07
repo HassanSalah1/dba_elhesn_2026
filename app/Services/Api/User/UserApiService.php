@@ -90,7 +90,7 @@ class UserApiService
             "parent_email" => 'required',
             "parent_category" => 'required',
             "guardian_phone" => 'required',
-//            "parent_residence_photo" => 'required',
+            "sport_id" => 'required',
 //            "parent_id_photo" => 'required',
             "clothes_size" => 'required',
             "shoe_size" => 'required',
