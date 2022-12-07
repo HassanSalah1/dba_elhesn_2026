@@ -261,7 +261,7 @@ return [
 
     "player_full_name_ar" => "إسم اللاعب عربى",
     "parent_full_name_ar" => "إسم الأب عربى",
-    'parent_phone' => "رقم جوال الأب",
+    'guardian_phone' => "رقم جوال الأب",
     "parent_email" => "البريد الإلكترونى للأب",
 ];
 ?>

@@ -19,7 +19,7 @@ class SubscriptionController extends Controller
         ];
         $data['title'] = trans('admin.subscription_title');
         $data['debatable_names'] = array(trans('admin.player_full_name_ar'),
-            trans('admin.parent_full_name_ar'), trans('admin.parent_phone'),
+            trans('admin.parent_full_name_ar'), trans('admin.guardian_phone'),
             trans('admin.parent_email'), trans('admin.nationality'),
             trans('admin.sport_name'), trans('admin.actions'));
         return view('admin.subscription.index')->with($data);
@@ -34,7 +34,12 @@ class SubscriptionController extends Controller
 
     public function showSubscription(Request $request, $id)
     {
-        $data = $request->all();
+        $data['pageConfigs'] = [
+            'pageHeader' => false,
+            'defaultLanguage' => 'ar',
+            'direction' => 'rtl'
+        ];
+        $data['title'] = trans('admin.subscription_title');
         $data['subscribeObj'] = Subscribe::find($id);
         return view('admin.subscription.show')->with($data);
     }
