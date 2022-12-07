@@ -79,49 +79,25 @@ class UserApiService
     public static function subscribeSport(array $data)
     {
         $keys = [
-            'full_name_ar' => 'required',
-            'full_name_en' => 'required',
-            'birth_date' => 'required',
-            'nationality' => 'required',
-            'birth_place' => 'required',
-            'category' => 'required',
-            'identification_number' => 'required',
-            'id_expiration_date' => 'required',
-            'passport_number' => 'required',
-            'passport_expiry' => 'required',
-            'address' => 'required',
-            'guardian_phone' => 'required',
-            'another_club' => 'required',
-            'sport_id' => 'required',
-            'level' => 'required',
-            'weight' => 'required',
-            'height' => 'required',
-            'clothes_size' => 'required',
-            'shoe_size' => 'required',
-            'vaccine_number' => 'required',
-            'personal_image' => 'required',
-            'id_photo' => 'required',
-            'player_passport_photo' => 'required',
-            'parent_id_photo' => 'required',
-            'parent_passport_photo' => 'required',
-            'player_parent_residence_photo' => 'required',
-            'medical_examination_photo' => 'required',
-
-
-            // صورة شخصية بملابس رياضية
-            // صورة الهوية
-            // صورة جواز سفر اللاعب
-            // صورة هوية ولى الامر
-            // صورة جواز ولى الامر
-            // صورة اقامة اللاعب وولى الامر
-            // صورة فحص طبى لائق طبيا
-            /////
-            // اقرار  ولى الامر للموافقة على تسجيل اللاعب - اللاعبين تحت 18 سنه
-            // شهادة ميلاد اللاعب
-            // صورة جوازة السفر وخلاصة القيد للأم للاعبين أبناء المواطنات
-            // صورة جواز السفر والإقامو للكفيل للاعبين المشاركين فى لعبة ألعاب القوى
-            //
-            //
+            "player_full_name_ar" => 'required',
+            "player_full_name_en" => 'required',
+            "player_photo" => 'required',
+            "birth_date" => 'required',
+            "birth_place" => 'required',
+            "nationality" => 'required',
+            "parent_full_name_ar" => 'required',
+            "parent_full_name_en" => 'required',
+            "parent_email" => 'required',
+            "parent_category" => 'required',
+            "parent_passport_photo" => 'required',
+            "parent_residence_photo" => 'required',
+            "parent_id_photo" => 'required',
+            "clothes_size" => 'required',
+            "shoe_size" => 'required',
+            "is_another_club" => 'required',
+            "another_club_name" => 'required',
+            "weight" => 'required',
+            "height" => 'required'
         ];
         $messages = [
             'required' => trans('api.required_error_message'),
