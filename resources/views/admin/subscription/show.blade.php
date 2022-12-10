@@ -88,8 +88,8 @@
                                 <td>{{trans('admin.parent_category')}}</td>
                                 <td>{{trans('admin.' . ($subscribeObj->parent_category == 1 ? 'resident' : 'citizen'))}}</td>
 
-                                <td>{{trans('admin.guardian_phone')}}</td>
-                                <td>{{$subscribeObj->guardian_phone}}</td>
+                                {{--                                <td>{{trans('admin.guardian_phone')}}</td>--}}
+                                {{--                                <td>{{$subscribeObj->guardian_phone}}</td>--}}
                             </tr>
 
 

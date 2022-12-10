@@ -128,6 +128,7 @@ class UtilsRepository
                 $message->subject($data['subject']);
             });
         } catch (\Exception $ex) {
+            echo  $ex->getMessage();
         }
     }
 
