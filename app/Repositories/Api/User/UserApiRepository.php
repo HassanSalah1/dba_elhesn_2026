@@ -154,7 +154,18 @@ class UserApiRepository
             "sport_level" => $data['sport_level'],
             "vaccine_count" => $data['vaccine_count'],
             "player_passport_photo" => $data['player_passport_photo'],
-            "player_medical_examination_photo" => $data['player_medical_examination_photo']
+            "player_medical_examination_photo" => $data['player_medical_examination_photo'],
+            "player_birth_certificate_photo" => $data['player_birth_certificate_photo'],
+            "player_phone" => isset($data['player_phone']) ? $data['player_phone'] : null,
+            "player_school_name" => isset($data['player_school_name']) ? $data['player_school_name'] : null,
+            "player_class_name" => isset($data['player_class_name']) ? $data['player_class_name'] : null,
+            "vaccine_1" => isset($data['vaccine_1']) ? $data['vaccine_1'] : null,
+            "vaccine_2" => isset($data['vaccine_2']) ? $data['vaccine_2'] : null,
+            "vaccine_3" => isset($data['vaccine_3']) ? $data['vaccine_3'] : null,
+            "player_mother_passport_photo" => isset($data['player_mother_passport_photo']) ?
+                $data['player_mother_passport_photo'] : null,
+            "player_kafel_passport_photo" => isset($data['player_kafel_passport_photo']) ?
+                $data['player_kafel_passport_photo'] : null
         ];
         $subscribe = Subscribe::create($subscribeData);
         if ($subscribe) {
