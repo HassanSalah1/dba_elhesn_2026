@@ -15,7 +15,6 @@ class AddFieldsToSubscribesTable extends Migration
     {
         Schema::table('subscribes', function (Blueprint $table) {
             //
-            $table->integer('user_id')->nullable();
             $table->string('player_id_number');
             $table->date('player_id_expire');
             $table->string('player_passport_number');

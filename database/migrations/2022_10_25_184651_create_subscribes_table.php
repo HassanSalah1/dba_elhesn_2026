@@ -15,7 +15,7 @@ class CreateSubscribesTable extends Migration
     {
         Schema::create('subscribes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('user_id')->nullable();
             $table->integer('sport_id');
             $table->string('player_full_name_ar');
             $table->string('player_full_name_en');
