@@ -91,13 +91,18 @@ class UserApiService
             "parent_category" => 'required',
             "guardian_phone" => 'required',
             "sport_id" => 'required',
-//            "parent_id_photo" => 'required',
             "clothes_size" => 'required',
             "shoe_size" => 'required',
-//            "is_another_club" => 'required',
-//            "another_club_name" => 'required',
             "weight" => 'required',
-            "height" => 'required'
+            "height" => 'required',
+            "player_id_number" => 'required',
+            "player_id_expire" => 'required',
+            "player_passport_number" => 'required',
+            "player_passport_expire" => 'required',
+            "sport_level" => 'required',
+            "vaccine_count" => 'required',
+            "player_passport_photo" => 'required',
+            "player_medical_examination_photo" => 'required'
         ];
         $messages = [
             'required' => trans('api.required_error_message'),

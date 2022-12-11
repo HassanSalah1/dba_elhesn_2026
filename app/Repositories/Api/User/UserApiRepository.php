@@ -125,7 +125,7 @@ class UserApiRepository
     public static function subscribeSport(array $data)
     {
         $subscribeData = [
-            'user_id' => auth()->id(),
+            'user_id' => auth()->user() ? auth()->id() : null,
             'player_full_name_ar' => $data['player_full_name_ar'],
             'player_full_name_en' => $data['player_full_name_en'],
             "player_photo" => $data['player_photo'] ?: null,
@@ -146,7 +146,15 @@ class UserApiRepository
             "parent_residence_photo" => $data['parent_residence_photo'] ?: null,
             "parent_id_photo" => $data['parent_id_photo'] ?: null,
             'guardian_phone' => $data['guardian_phone'],
-            'sport_id' => $data['sport_id']
+            'sport_id' => $data['sport_id'],
+            "player_id_number" => $data['player_id_number'],
+            "player_id_expire" => $data['player_id_expire'],
+            "player_passport_number" => $data['player_passport_number'],
+            "player_passport_expire" => $data['player_passport_expire'],
+            "sport_level" => $data['sport_level'],
+            "vaccine_count" => $data['vaccine_count'],
+            "player_passport_photo" => $data['player_passport_photo'],
+            "player_medical_examination_photo" => $data['player_medical_examination_photo']
         ];
         $subscribe = Subscribe::create($subscribeData);
         if ($subscribe) {

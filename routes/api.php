@@ -68,6 +68,9 @@ Route::group(['middleware' => 'lang'], function () {
 
         Route::get('/regulations', [SettingController::class, 'getRegulations']); // get regulations
 
+        Route::post('/image/upload', [UserController::class, 'uploadImage']);
+        Route::post('/sport/subscribe', [UserController::class, 'subscribeSport']);
+
 //        Route::get('/get/home', [HomeController::class, 'getHome']); // get Home data
 
         Route::group(['middleware' => ['auth:api', 'authApi']], function () {
@@ -84,8 +87,7 @@ Route::group(['middleware' => 'lang'], function () {
             Route::get('/my/notifications', [UserController::class, 'getMyNotifications']); // get my notifications
             Route::get('/notifications/count', [UserController::class, 'getNotificationsCount']); // get my notifications
 
-            Route::post('/image/upload', [UserController::class, 'uploadImage']);
-            Route::post('/sport/subscribe', [UserController::class, 'subscribeSport']);
+
         });
     });
 });
