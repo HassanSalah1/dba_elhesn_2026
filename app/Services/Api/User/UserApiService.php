@@ -79,30 +79,31 @@ class UserApiService
     public static function subscribeSport(array $data)
     {
         $keys = [
+            'player_email' => 'required',
             "player_full_name_ar" => 'required',
             "player_full_name_en" => 'required',
-            "player_photo" => 'required',
             "birth_date" => 'required',
-            "birth_place" => 'required',
             "nationality" => 'required',
-            "parent_full_name_ar" => 'required',
-            "parent_full_name_en" => 'required',
-            "parent_email" => 'required',
-            "parent_category" => 'required',
-            "guardian_phone" => 'required',
-            "sport_id" => 'required',
-            "clothes_size" => 'required',
-            "shoe_size" => 'required',
+            "birth_place" => 'required',
+            "player_category" => 'required',
+            "player_id_number" => 'required',
+            "player_id_expire_date" => 'required',
+            "player_passport_number" => 'required',
+            "player_passport_expire_date" => 'required',
+            "address" => 'required',
+            'sport_id' => 'required',
+            "sport_level" => 'required',
             "weight" => 'required',
             "height" => 'required',
-            "player_id_number" => 'required',
-            "player_id_expire" => 'required',
-            "player_passport_number" => 'required',
-            "player_passport_expire" => 'required',
-            "sport_level" => 'required',
-            "vaccine_count" => 'required',
+            "clothes_size" => 'required',
+            "shoe_size" => 'required',
+            "parent_phone" => 'required',
+            "player_photo" => 'required',
+            "player_id_photo" => 'required',
             "player_passport_photo" => 'required',
-            "player_medical_examination_photo" => 'required'
+            "player_medical_examination_photo" => 'required',
+            "parent_id_photo" => 'required',
+            "parent_passport_photo" => 'required'
         ];
         $messages = [
             'required' => trans('api.required_error_message'),
@@ -118,7 +119,7 @@ class UserApiService
     public static function uploadImage(array $data)
     {
         $keys = [
-            'image' => 'required|mimes:jpg,jpeg,png|max:5120',
+            'image' => 'required|mimes:jpg,jpeg,png,pdf|max:6120',
         ];
         $messages = [
             'required' => trans('api.required_error_message'),

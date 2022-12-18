@@ -125,47 +125,42 @@ class UserApiRepository
     public static function subscribeSport(array $data)
     {
         $subscribeData = [
-            'user_id' => auth()->user() ? auth()->id() : null,
-            'player_full_name_ar' => $data['player_full_name_ar'],
-            'player_full_name_en' => $data['player_full_name_en'],
-            "player_photo" => $data['player_photo'] ?: null,
-            'parent_full_name_ar' => $data['parent_full_name_ar'],
-            'parent_full_name_en' => $data['parent_full_name_en'],
-            'birth_date' => date('Y-m-d', strtotime($data['birth_date'])),
-            'nationality' => $data['nationality'],
-            'birth_place' => $data['birth_place'],
-            'parent_email' => $data['parent_email'],
-            'parent_category' => $data['parent_category'],
-            'clothes_size' => $data['clothes_size'],
-            'shoe_size' => $data['shoe_size'],
-            'weight' => $data['weight'],
-            'height' => $data['height'],
-            "is_another_club" => $data['is_another_club'] == 1 ? 1 : 0,
-            "another_club_name" => $data['another_club_name'],
-            "parent_passport_photo" => $data['parent_passport_photo'] ?: null,
-            "parent_residence_photo" => $data['parent_residence_photo'] ?: null,
-            "parent_id_photo" => $data['parent_id_photo'] ?: null,
-            'guardian_phone' => $data['guardian_phone'],
-            'sport_id' => $data['sport_id'],
+            'user_id' => auth('api')->user() ? auth('api')->id() : null,
+            'player_email' => $data['player_email'],
+            "player_full_name_ar" => $data['player_full_name_ar'],
+            "player_full_name_en" => $data['player_full_name_en'],
+            "birth_date" => date('Y-m-d', strtotime($data['birth_date'])),
+            "nationality" => $data['nationality'],
+            "birth_place" => $data['birth_place'],
+            "player_category" => $data['player_category'],
             "player_id_number" => $data['player_id_number'],
-            "player_id_expire" => $data['player_id_expire'],
+            "player_id_expire_date" => date('Y-m-d', strtotime($data['player_id_expire_date'])),
             "player_passport_number" => $data['player_passport_number'],
-            "player_passport_expire" => $data['player_passport_expire'],
-            "sport_level" => $data['sport_level'],
-            "vaccine_count" => $data['vaccine_count'],
-            "player_passport_photo" => $data['player_passport_photo'],
-            "player_medical_examination_photo" => $data['player_medical_examination_photo'],
-            "player_birth_certificate_photo" => $data['player_birth_certificate_photo'],
+            "player_passport_expire_date" => date('Y-m-d', strtotime($data['player_passport_expire_date'])),
+            "address" => $data['address'],
             "player_phone" => isset($data['player_phone']) ? $data['player_phone'] : null,
             "player_school_name" => isset($data['player_school_name']) ? $data['player_school_name'] : null,
             "player_class_name" => isset($data['player_class_name']) ? $data['player_class_name'] : null,
-            "vaccine_1" => isset($data['vaccine_1']) ? $data['vaccine_1'] : null,
-            "vaccine_2" => isset($data['vaccine_2']) ? $data['vaccine_2'] : null,
-            "vaccine_3" => isset($data['vaccine_3']) ? $data['vaccine_3'] : null,
-            "player_mother_passport_photo" => isset($data['player_mother_passport_photo']) ?
-                $data['player_mother_passport_photo'] : null,
-            "player_kafel_passport_photo" => isset($data['player_kafel_passport_photo']) ?
-                $data['player_kafel_passport_photo'] : null
+            "another_club_name" => isset($data['another_club_name']) ? $data['another_club_name'] : null,
+            "sport_id"=> $data['sport_id'],
+            "sport_level" => $data['sport_level'],
+            "weight" => $data['weight'],
+            "height" => $data['height'],
+            "clothes_size" => $data['clothes_size'],
+            "shoe_size" => $data['shoe_size'],
+            "parent_phone" => $data['parent_phone'],
+            "parent_job" => isset($data['parent_job']) ? $data['parent_job'] : null,
+            "player_photo" => $data['player_photo'],
+            "player_id_photo" => $data['player_id_photo'],
+            "player_passport_photo" => $data['player_passport_photo'],
+            "player_medical_examination_photo" => $data['player_medical_examination_photo'],
+            "player_birth_certificate_photo" => isset($data['player_birth_certificate_photo']) ? $data['player_birth_certificate_photo'] : null,
+            "parent_id_photo" => $data['parent_id_photo'],
+            "parent_passport_photo" => $data['parent_passport_photo'],
+            "parent_residence_photo" => isset($data['parent_residence_photo']) ? $data['parent_residence_photo'] : null,
+            "parent_acknowledgment_file" => isset($data['parent_acknowledgment_file']) ? $data['parent_acknowledgment_file'] : null,
+            "player_mother_passport_photo" => isset($data['player_mother_passport_photo']) ? $data['player_mother_passport_photo'] : null,
+            "player_kafel_passport_photo" => isset($data['player_kafel_passport_photo']) ? $data['player_kafel_passport_photo'] : null,
         ];
         $subscribe = Subscribe::create($subscribeData);
         if ($subscribe) {
@@ -182,10 +177,10 @@ class UserApiRepository
 
     public static function uploadImage(array $data)
     {
-        $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+        $file_id = 'file_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
         $image_name = 'image';
         $image_path = 'uploads/subscribe/';
-        $image = UtilsRepository::createImage($data['request'], $image_name, $image_path, $file_id, 500, 600);
+        $image = UtilsRepository::uploadFiles($data['request'], $image_name, $image_path, $file_id);
         if ($image !== false) {
             return [
                 'data' => [
