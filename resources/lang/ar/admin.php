@@ -279,6 +279,7 @@ return [
     "weight"=> 'الوزن',
     "height"=> 'الطول',
     'resident' => 'مقيم',
-    'citizen' => 'مواطن'
+    'citizen' => 'مواطن',
+    "sport_level" => "مستوى الرياضة"
 ];
 ?>

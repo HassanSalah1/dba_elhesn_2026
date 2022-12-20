@@ -54,7 +54,7 @@
                                 <td>{{trans('admin.shoe_size')}}</td>
                                 <td>{{$subscribeObj->shoe_size}}</td>
 
-                                @if($subscribeObj->is_another_club)
+                                @if($subscribeObj->another_club_name)
                                     <td>{{trans('admin.is_another_club')}}</td>
                                     <td>{{$subscribeObj->another_club_name}}</td>
                                 @endif
@@ -69,11 +69,43 @@
                             </tr>
 
                             <tr>
-                                <td>{{trans('admin.parent_full_name_ar')}}</td>
-                                <td>{{$subscribeObj->parent_full_name_ar}}</td>
+                                <td>{{trans('admin.player_phone')}}</td>
+                                <td>{{$subscribeObj->player_phone}}</td>
 
-                                <td>{{trans('admin.parent_full_name_en')}}</td>
-                                <td>{{$subscribeObj->parent_full_name_en}}</td>
+                                <td>{{trans('admin.player_email')}}</td>
+                                <td>{{$subscribeObj->player_email}}</td>
+                            </tr>
+
+                            <tr>
+                                <td>{{trans('admin.parent_category')}}</td>
+                                <td>{{$subscribeObj->player_category}}</td>
+
+                                <td>{{trans('admin.address')}}</td>
+                                <td>{{$subscribeObj->address}}</td>
+                            </tr>
+
+                            <tr>
+                                <td>{{trans('admin.player_id_number')}}</td>
+                                <td>{{$subscribeObj->player_id_number}}</td>
+
+                                <td>{{trans('admin.player_id_expire_date')}}</td>
+                                <td>{{$subscribeObj->player_id_expire_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <td>{{trans('admin.player_passport_number')}}</td>
+                                <td>{{$subscribeObj->player_passport_number}}</td>
+
+                                <td>{{trans('admin.player_passport_expire_date')}}</td>
+                                <td>{{$subscribeObj->player_passport_expire_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <td>{{trans('admin.player_school_name')}}</td>
+                                <td>{{$subscribeObj->player_school_name}}</td>
+
+                                <td>{{trans('admin.player_class_name')}}</td>
+                                <td>{{$subscribeObj->player_class_name}}</td>
                             </tr>
 
                             <tr>
@@ -81,12 +113,16 @@
                                 <td>{{$subscribeObj->parent_email}}</td>
 
                                 <td>{{trans('admin.guardian_phone')}}</td>
-                                <td>{{$subscribeObj->guardian_phone}}</td>
+                                <td>{{$subscribeObj->parent_phone}}</td>
                             </tr>
 
                             <tr>
-                                <td>{{trans('admin.parent_category')}}</td>
-                                <td>{{trans('admin.' . ($subscribeObj->parent_category == 1 ? 'resident' : 'citizen'))}}</td>
+
+                                <td>{{trans('admin.parent_job')}}</td>
+                                <td>{{$subscribeObj->parent_job}}</td>
+                            </tr>
+
+                            <tr>
 
                                 {{--                                <td>{{trans('admin.guardian_phone')}}</td>--}}
                                 {{--                                <td>{{$subscribeObj->guardian_phone}}</td>--}}
