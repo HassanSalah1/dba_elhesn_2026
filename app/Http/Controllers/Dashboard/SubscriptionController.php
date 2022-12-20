@@ -19,9 +19,9 @@ class SubscriptionController extends Controller
         ];
         $data['title'] = trans('admin.subscription_title');
         $data['debatable_names'] = array(trans('admin.player_full_name_ar'),
-            trans('admin.parent_full_name_ar'), trans('admin.guardian_phone'),
-            trans('admin.parent_email'), trans('admin.nationality'),
-            trans('admin.sport_name'), trans('admin.actions'));
+            trans('admin.sport_name'),trans('admin.sport_level'),
+            trans('admin.guardian_phone'),
+            trans('admin.nationality') , trans('admin.actions'));
         return view('admin.subscription.index')->with($data);
     }
 

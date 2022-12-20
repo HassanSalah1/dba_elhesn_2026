@@ -46,8 +46,8 @@
         $(function () {
 
             loadDataTables('{{ url("/admin/sport/subscription/data") }}',
-                ['player_full_name_ar', 'parent_full_name_ar', 'guardian_phone',
-                    'parent_email', 'nationality', 'sport_name', 'actions'], '',
+                ['player_full_name_ar', 'sport_name' , 'sport_level', 'parent_phone',
+                     'nationality' , 'actions'], '',
                 {
                     'show': '{{trans('admin.show')}}',
                     'first': '{{trans('admin.first')}}',
