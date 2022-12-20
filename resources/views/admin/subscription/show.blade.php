@@ -109,14 +109,8 @@
                             </tr>
 
                             <tr>
-                                <td>{{trans('admin.parent_email')}}</td>
-                                <td>{{$subscribeObj->parent_email}}</td>
-
                                 <td>{{trans('admin.guardian_phone')}}</td>
                                 <td>{{$subscribeObj->parent_phone}}</td>
-                            </tr>
-
-                            <tr>
 
                                 <td>{{trans('admin.parent_job')}}</td>
                                 <td>{{$subscribeObj->parent_job}}</td>
@@ -124,8 +118,11 @@
 
                             <tr>
 
-                                {{--                                <td>{{trans('admin.guardian_phone')}}</td>--}}
-                                {{--                                <td>{{$subscribeObj->guardian_phone}}</td>--}}
+
+                            </tr>
+
+                            <tr>
+
                             </tr>
 
 

@@ -280,6 +280,22 @@ return [
     "height"=> 'الطول',
     'resident' => 'مقيم',
     'citizen' => 'مواطن',
-    "sport_level" => "مستوى الرياضة"
+    "sport_level" => "مستوى الرياضة",
+    "player_phone" => "رقم هاتف اللاعب",
+    "player_email" => "البريد الإلكترونى للاعب",
+    "player_id_number" => "رقم الهوية للاعب",
+    "player_id_expire_date" => "تاريخ انتهاء الهوية للاعب",
+    "player_passport_number" => "رقم جواز السفر للاعب",
+    "player_passport_expire_date" => "تاريخ انتهاء جواز السفر",
+    "player_school_name" => "إسم المدرسة",
+    "player_class_name" => "إسم الفصل",
+    "parent_job" => "وظيفة الأب",
+    "" => "",
+    "" => "",
+    "" => "",
+    "" => "",
+    "" => "",
+    "" => "",
+    "" => "",
 ];
 ?>
