@@ -117,12 +117,87 @@
                             </tr>
 
                             <tr>
+                                <td>
+                                    <a href="{{url($subscribeObj->player_photo)}}" download>
+                                        {{trans('admin.player_photo')}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{url($subscribeObj->player_id_photo)}}" download>
+                                        {{trans('admin.player_id_photo')}}
+                                    </a>
+                                </td>
 
+                                <td>
+                                    <a href="{{url($subscribeObj->player_passport_photo)}}" download>
+                                        {{trans('admin.player_passport_photo')}}
+                                    </a>
+                                </td>
 
+                                <td>
+                                    <a href="{{url($subscribeObj->player_medical_examination_photo)}}" download>
+                                        {{trans('admin.player_medical_examination_photo')}}
+                                    </a>
+                                </td>
                             </tr>
 
                             <tr>
 
+                                <td>
+                                    <a href="{{url($subscribeObj->parent_id_photo)}}" download>
+                                        {{trans('admin.parent_id_photo')}}
+                                    </a>
+                                </td>
+
+                                @if($subscribeObj->player_birth_certificate_photo)
+                                    <td>
+                                        <a href="{{url($subscribeObj->player_birth_certificate_photo)}}" download>
+                                            {{trans('admin.player_birth_certificate_photo')}}
+                                        </a>
+                                    </td>
+                                @endif
+
+                                @if($subscribeObj->parent_passport_photo)
+                                    <td>
+                                        <a href="{{url($subscribeObj->parent_passport_photo)}}" download>
+                                            {{trans('admin.parent_passport_photo')}}
+                                        </a>
+                                    </td>
+                                @endif
+
+                                @if($subscribeObj->parent_residence_photo)
+                                    <td>
+                                        <a href="{{url($subscribeObj->parent_residence_photo)}}" download>
+                                            {{trans('admin.parent_residence_photo')}}
+                                        </a>
+                                    </td>
+                                @endif
+
+                            </tr>
+
+                            <tr>
+                                @if($subscribeObj->parent_acknowledgment_file)
+                                    <td>
+                                        <a href="{{url($subscribeObj->parent_acknowledgment_file)}}" download>
+                                            {{trans('admin.parent_acknowledgment_file')}}
+                                        </a>
+                                    </td>
+                                @endif
+
+                                @if($subscribeObj->player_mother_passport_photo)
+                                    <td>
+                                        <a href="{{url($subscribeObj->player_mother_passport_photo)}}" download>
+                                            {{trans('admin.player_mother_passport_photo')}}
+                                        </a>
+                                    </td>
+                                @endif
+                                @if($subscribeObj->player_kafel_passport_photo)
+                                    <td>
+                                        <a href="{{url($subscribeObj->player_kafel_passport_photo)}}" download>
+                                            {{trans('admin.player_kafel_passport_photo')}}
+                                        </a>
+                                    </td>
+                                @endif
                             </tr>
 
 
