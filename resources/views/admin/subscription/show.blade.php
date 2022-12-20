@@ -69,6 +69,14 @@
                             </tr>
 
                             <tr>
+                                <td>{{trans('admin.sport_name')}}</td>
+                                <td>{{$subscribeObj->sport->name}}</td>
+
+                                <td>{{trans('admin.sport_level')}}</td>
+                                <td>{{$subscribeObj->sport_level}}</td>
+                            </tr>
+
+                            <tr>
                                 <td>{{trans('admin.player_phone')}}</td>
                                 <td>{{$subscribeObj->player_phone}}</td>
 
