@@ -3,8 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Entities/UserRoles.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Entities/UserRoles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" beforeDir="false" afterPath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/lang/ar/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/ar/admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/subscription/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/subscription/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/panels/sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/panels/sidebar.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/panels/submenu.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/panels/submenu.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/panel.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/panel.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,16 +173,16 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Entities" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\work_projects\laravel\milestone\dba_elhesn\resources\views\admin\subscription" />
-      <recent name="E:\work_projects\laravel\milestone\dba_elhesn\app\Http\Resources" />
       <recent name="E:\work_projects\laravel\milestone\dba_elhesn\app\Entities" />
-      <recent name="E:\work_projects\laravel\milestone\dba_elhesn\resources\views\admin\settings" />
-      <recent name="E:\work_projects\laravel\milestone\dba_elhesn\app\Repositories\Dashboard\Setting" />
+      <recent name="E:\work_projects\laravel\milestone\dba_elhesn\database\migrations" />
+      <recent name="E:\work_projects\laravel\milestone\dba_elhesn\app\Models" />
+      <recent name="E:\work_projects\laravel\milestone\dba_elhesn\app\Repositories\Dashboard" />
+      <recent name="E:\work_projects\laravel\milestone\dba_elhesn\app\Services\Dashboard" />
     </key>
   </component>
   <component name="RunManager">
@@ -239,7 +244,11 @@
       <workItem from="1671345338621" duration="2839000" />
       <workItem from="1671397603191" duration="22000" />
       <workItem from="1671559589073" duration="1323000" />
-      <workItem from="1671573627482" duration="1840000" />
+      <workItem from="1671573627482" duration="2765000" />
+      <workItem from="1671637444734" duration="1056000" />
+      <workItem from="1672091578933" duration="687000" />
+      <workItem from="1672609346219" duration="668000" />
+      <workItem from="1673084244689" duration="4204000" />
     </task>
     <servers />
   </component>
@@ -251,17 +260,17 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="167" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1536.824@0.0.1536.824" timestamp="1667841664518" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1671568751165">
+    <state x="430" y="43" key="#phpunit.xml" timestamp="1673097830057">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1671568751165" />
+    <state x="430" y="43" key="#phpunit.xml/0.0.1536.824@0.0.1536.824" timestamp="1673097830057" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1673084366404">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1673084366404" />
     <state x="479" y="129" width="577" height="566" key="find.popup" timestamp="1671575026667">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="479" y="129" width="577" height="566" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1671575026667" />
-    <state x="425" y="187" key="run.anything.popup" timestamp="1663011195155">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="425" y="187" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1663011195155" />
   </component>
 </project>

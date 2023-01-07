@@ -23,49 +23,71 @@
                     "icon": "circle",
                     "slug": "dashboard-setting"
                 }
-            ]
+            ],
+            "permission": "settings"
+        },
+        {
+            "name": "permissions_title",
+            "icon": "alert-circle",
+            "url": "admin/permissions",
+            "slug": "dashboard-permissions",
+            "permission": "permissions"
+        },
+        {
+            "name": "employees_title",
+            "icon": "user-x",
+            "url": "admin/employees",
+            "slug": "dashboard-employees",
+            "permission": "employees"
         },
         {
             "name": "users_title",
             "icon": "users",
             "url": "admin/users",
-            "slug": "dashboard-users"
+            "slug": "dashboard-users",
+            "permission": "users"
         },
         {
             "name": "teams_title",
             "icon": "box",
             "url": "admin/teams",
-            "slug": "dashboard-teams"
+            "slug": "dashboard-teams",
+            "permission": "teams"
         },
         {
             "name": "gallery_title",
             "icon": "image",
             "url": "admin/galleries",
-            "slug": "dashboard-galleries"
+            "slug": "dashboard-galleries",
+            "permission": "galleries"
         },
         {
             "name": "committees_title",
             "icon": "circle",
             "url": "admin/committees",
-            "slug": "dashboard-committees"
+            "slug": "dashboard-committees",
+            "permission": "committees"
         },
         {
             "name": "history_title",
             "icon": "info",
             "url": "admin/history",
-            "slug": "dashboard-history"
+            "slug": "dashboard-history",
+            "permission": "history"
         },
         {
             "name": "about_title",
             "icon": "info",
             "url": "admin/about",
-            "slug": "dashboard-about"
+            "slug": "dashboard-about",
+            "permission": "about"
         },
         {
             "name": "terms_title",
             "url": "admin/terms",
             "icon": "info",
-            "slug": "dashboard-terms"
+            "slug": "dashboard-terms",
+            "permission": "terms"
         },
         {
             "name": "manage_news_title",
@@ -84,43 +106,50 @@
                     "url": "admin/news",
                     "slug": "dashboard-news"
                 }
-            ]
+            ],
+            "permission": "news"
         },
         {
             "name": "actions_title",
             "icon": "file",
             "url": "admin/actions",
-            "slug": "dashboard-actions"
+            "slug": "dashboard-actions",
+            "permission": "actions"
         },
         {
             "name": "contacts_title",
             "icon": "message-circle",
             "url": "admin/contacts",
-            "slug": "dashboard-contacts"
+            "slug": "dashboard-contacts",
+            "permission": "contacts"
         },
         {
             "name": "sport_games_title",
             "icon": "box",
             "url": "admin/sportGames",
-            "slug": "dashboard-sportGames"
+            "slug": "dashboard-sportGames",
+            "permission": "sport_games"
         },
         {
             "name": "subscription_title",
             "icon": "box",
             "url": "admin/sport/subscription",
-            "slug": "dashboard-subscription"
+            "slug": "dashboard-subscription",
+            "permission": "subscription"
         },
         {
             "name": "regulations_title",
             "icon": "box",
             "url": "admin/regulations",
-            "slug": "dashboard-regulation"
+            "slug": "dashboard-regulation",
+            "permission": "regulations"
         },
         {
             "name": "notifications_title",
             "icon": "box",
             "url": "admin/notification",
-            "slug": "dashboard-show_send_notification"
+            "slug": "dashboard-show_send_notification",
+            "permission": "notification"
         }
     ]
 }

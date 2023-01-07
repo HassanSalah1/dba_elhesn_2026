@@ -8,6 +8,7 @@ class UserRoles extends Enum
 {
     const ADMIN = 'admin';
     const FAN = 'fan';
+    const EMPLOYEE = 'employee';
 }
 
 ?>

@@ -3,6 +3,8 @@
 use App\Http\Controllers\Dashboard\Action\ActionController;
 use App\Http\Controllers\Dashboard\Auth\AuthenticationController;
 use App\Http\Controllers\Dashboard\Contact\ContactController;
+use App\Http\Controllers\Dashboard\Employee\EmployeeController;
+use App\Http\Controllers\Dashboard\Employee\PermissionController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\News\CategoryController;
 use App\Http\Controllers\Dashboard\News\NewController;
@@ -33,6 +35,27 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout'); // logout current user
 
         Route::get('/home', [HomeController::class, 'showHome'])->name('dashboard-home'); // show home page
+
+
+        ////////////////////////////////////////////////////////////
+
+        Route::get('/permissions', [PermissionController::class, 'showPermissions'])->name('dashboard-permissions'); // show Index page that control all permissions
+        Route::get('/permissions/data', [PermissionController::class, 'getPermissionsData']); // get all Permissions data for DataTable
+        Route::post('/permission/add', [PermissionController::class, 'addPermission']); // add Permission
+        Route::post('/permission/data', [PermissionController::class, 'getPermissionData']); // get Permission data
+        Route::post('/permission/edit', [PermissionController::class, 'editPermission']); // edit Permission
+        Route::post('/permission/delete', [PermissionController::class, 'deletePermission']); // delete Permission
+
+        ////////////////////////////////////////////////////////////
+
+        Route::get('/employees', [EmployeeController::class, 'showEmployees'])->name('dashboard-employees'); // show Index page that control all employees
+        Route::get('/employees/data', [EmployeeController::class, 'getEmployeesData']); // get all Employees data for DataTable
+        Route::post('/employee/add', [EmployeeController::class, 'addEmployee']); // add Employee
+        Route::post('/employee/data', [EmployeeController::class, 'getEmployeeData']); // get Employee data
+        Route::post('/employee/edit', [EmployeeController::class, 'editEmployee']); // edit Employee
+        Route::post('/employee/delete', [EmployeeController::class, 'deleteEmployee']); // delete Employee
+
+
         ////////////////////////////////////////////////////////////
         Route::get('/intros', [IntroController::class, 'showIntros'])->name('dashboard-intros'); // show Index page that control all Intros
         Route::get('/intros/data', [IntroController::class, 'getIntrosData']); // get all Intros data for DataTable

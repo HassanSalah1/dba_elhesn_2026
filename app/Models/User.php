@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name', 'phone', 'email', 'password', 'role', 'status', 'lang',
-        'image', 'edited_email'
+        'image', 'edited_email' , 'group_id'
     ];
 
     /**
@@ -80,6 +80,23 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
+    function isEmployeeAuth()
+    {
+        if ($this->role === UserRoles::EMPLOYEE) {
+            return true;
+        }
+        return false;
+    }
+
+
+    function isActiveEmployeeAuth()
+    {
+        if ($this->role === UserRoles::EMPLOYEE && $this->status === Status::ACTIVE) {
+            return true;
+        }
+        return false;
+    }
+
     function isActiveUser()
     {
         if ($this->status === Status::ACTIVE) {
@@ -112,5 +129,15 @@ class User extends Authenticatable implements MustVerifyEmail
     function contacts()
     {
         return $this->hasMany(Contact::class);
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Permission::class);
+    }
+
+    public function checkPermission($permission)
+    {
+        return $this->group()->where([$permission => 1])->first() || $this->role === UserRoles::ADMIN;
     }
 }
