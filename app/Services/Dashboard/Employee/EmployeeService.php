@@ -18,7 +18,7 @@ class EmployeeService
     {
         $rules = [
             'name' => 'required',
-            'phone' => 'required|unique:users|phone:SA,mobile|max:9',
+            'phone' => 'required|unique:users',
             'password' => 'required',
             'image' => 'mimes:jpg,jpeg',
             'group_id' => 'required',
@@ -61,7 +61,7 @@ class EmployeeService
     {
         $rules = [
             'name' => 'required',
-            'phone' => 'required|phone:SA,mobile|max:9',
+            'phone' => 'required',
             'image' => 'mimes:jpg,jpeg',
             'group_id' => 'required',
         ];

@@ -3,13 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Entities/UserRoles.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Entities/UserRoles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" beforeDir="false" afterPath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lang/ar/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/ar/admin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/panels/sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/panels/sidebar.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/panels/submenu.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/panels/submenu.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/panel.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/panel.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +241,7 @@
       <workItem from="1671637444734" duration="1056000" />
       <workItem from="1672091578933" duration="687000" />
       <workItem from="1672609346219" duration="668000" />
-      <workItem from="1673084244689" duration="4204000" />
+      <workItem from="1673084244689" duration="4469000" />
     </task>
     <servers />
   </component>
