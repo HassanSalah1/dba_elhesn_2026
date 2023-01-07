@@ -22,9 +22,8 @@ class AuthRepository
     {
         if (Auth::attempt(['email' => $arr['email'], 'password' => $arr['password']], true)) {
             $user = auth()->user();
-            if ($user->status === Status::ACTIVE) {
-                if ($user->role === UserRoles::ADMIN)
-                    return true;
+            if ($user && $user->status === Status::ACTIVE && ($user->isDashboardAuth() || $user->isEmployeeAuth())) {
+                return true;
             } else {
                 return trans('admin.blocked_user_error_message');
             }

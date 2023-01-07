@@ -19,7 +19,7 @@ class AuthenticationController extends Controller
     public function showLogin()
     {
         $user = auth()->user();
-        if ($user && $user->isDashboardAuth()) {
+        if ($user && ($user->isDashboardAuth() || $user->isEmployeeAuth())) {
             return redirect()->to(url('/admin/home'));
         }
         $pageConfigs = [
