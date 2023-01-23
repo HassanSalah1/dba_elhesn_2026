@@ -222,6 +222,5 @@ class SqlServerApiRepository
             }
             sqlsrv_close($conn);
         }
-
-
     }
+}
