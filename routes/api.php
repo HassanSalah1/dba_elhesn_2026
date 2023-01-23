@@ -88,6 +88,9 @@ Route::group(['middleware' => 'lang'], function () {
             Route::get('/notifications/count', [UserController::class, 'getNotificationsCount']); // get my notifications
 
 
+            Route::get('/my/teams', [UserController::class, 'getMyTeams']);
+            Route::post('/administrative_report', [UserController::class, 'administrativeReport']);
+
         });
     });
 });

@@ -134,4 +134,33 @@ class UserApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getMyTeams(array $data)
+    {
+        $response = UserApiRepository::getMyTeams($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function administrativeReport(array $data)
+    {
+        $keys = [
+            'team_id' => 'required',
+            'date' => 'required',
+            'subject' => 'required',
+            'events' => 'required',
+            'pros' => 'required',
+            'cons' => 'required',
+            'recommendations' => 'required',
+            'location' => 'required',
+        ];
+        $messages = [
+            'required' => trans('api.required_error_message'),
+        ];
+        $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);
+        if ($validated !== true) {
+            return $validated;
+        }
+        $response = UserApiRepository::administrativeReport($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
 }

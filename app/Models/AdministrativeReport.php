@@ -10,5 +10,14 @@ class AdministrativeReport extends Model
     use HasFactory;
 
     protected $table = 'administrative_reports';
-    protected $fillable = [''];
+    protected $fillable = [
+        'user_team_id',
+        'date',
+        'subject',
+        'events',
+        'pros',
+        'cons',
+        'recommendations',
+        'location'
+    ];
 }

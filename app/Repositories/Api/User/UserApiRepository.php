@@ -6,8 +6,11 @@ namespace App\Repositories\Api\User;
 use App\Entities\HttpCode;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserTeamResource;
+use App\Models\AdministrativeReport;
 use App\Models\Notification;
 use App\Models\Subscribe;
+use App\Models\UserTeam;
 use App\Repositories\Api\Auth\AuthApiRepository;
 use App\Repositories\General\UtilsRepository;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
@@ -142,7 +145,7 @@ class UserApiRepository
             "player_school_name" => isset($data['player_school_name']) ? $data['player_school_name'] : null,
             "player_class_name" => isset($data['player_class_name']) ? $data['player_class_name'] : null,
             "another_club_name" => isset($data['another_club_name']) ? $data['another_club_name'] : null,
-            "sport_id"=> $data['sport_id'],
+            "sport_id" => $data['sport_id'],
             "sport_level" => $data['sport_level'],
             "weight" => $data['weight'],
             "height" => $data['height'],
@@ -188,6 +191,42 @@ class UserApiRepository
                     'image_url' => url($image)
                 ],
                 'message' => 'success',
+                'code' => HttpCode::SUCCESS
+            ];
+        }
+        return [
+            'message' => trans('api.general_error_message'),
+            'code' => HttpCode::ERROR
+        ];
+    }
+
+    public static function getMyTeams(array $data)
+    {
+        $user = auth()->user();
+        $teams = UserTeam::where(['user_id' => $user->id])->get();
+        return [
+            'data' => UserTeamResource::collection($teams),
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function administrativeReport(array $data)
+    {
+        $created = AdministrativeReport::create([
+            'user_team_id' => $data['team_id'],
+            'date' => date('Y-md-d', strtotime($data['date'])),
+            'subject' => $data['subject'],
+            'events' => $data['subject'],
+            'pros' => $data['subject'],
+            'cons' => $data['cons'],
+            'recommendations' => $data['recommendations'],
+            'location' => $data['location'],
+        ]);
+
+        if ($created) {
+            return [
+                'message' => trans('api.success_message'),
                 'code' => HttpCode::SUCCESS
             ];
         }

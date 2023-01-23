@@ -210,14 +210,17 @@ class SqlServerApiRepository
             $sql = "SELECT UserID , TeamsRowID , FullTeamNames FROM dbo.MobileApp_Officials_Teams";
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
-                    UserTeam::updateOrCreate([
-                        'user_id' => $object->UserID
-                    ], [
-                        'user_id' => $object->UserID,
-                        'TeamsRowID' => $object->TeamsRowID,
-                        'full_team_name' => $object->full_team_name,
-                    ]);
-
+                    $user = User::where(['user_id' => $object->UserID,])->first();
+                    $sportTeam = SportTeam::where(['team_id' => $object->TeamsRowID,])->first();
+                    if ($user && $sportTeam) {
+                        UserTeam::updateOrCreate([
+                            'user_id' => $user->id
+                        ], [
+                            'user_id' => $user->id,
+                            'team_id' => $sportTeam->id,
+                            'full_team_name' => $object->full_team_name,
+                        ]);
+                    }
                 }
             }
             sqlsrv_close($conn);

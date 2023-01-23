@@ -38,7 +38,6 @@ Route::group(['prefix' => 'admin'], function () {
 
 
         ////////////////////////////////////////////////////////////
-
         Route::get('/permissions', [PermissionController::class, 'showPermissions'])->name('dashboard-permissions'); // show Index page that control all permissions
         Route::get('/permissions/data', [PermissionController::class, 'getPermissionsData']); // get all Permissions data for DataTable
         Route::post('/permission/add', [PermissionController::class, 'addPermission']); // add Permission

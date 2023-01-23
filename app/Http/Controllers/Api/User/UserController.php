@@ -56,6 +56,19 @@ class UserController extends Controller
         return UserApiService::uploadImage($data);
     }
 
+    public function getMyTeams(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::getMyTeams($data);
+    }
+
+    public function administrativeReport(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::administrativeReport($data);
+    }
+
+
 
 }
 
