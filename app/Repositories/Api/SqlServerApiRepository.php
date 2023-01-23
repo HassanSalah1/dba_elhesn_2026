@@ -5,6 +5,7 @@ namespace App\Repositories\Api;
 use App\Entities\HttpCode;
 use App\Entities\ImageType;
 use App\Entities\Key;
+use App\Entities\Status;
 use App\Http\Resources\ActionDetailsResource;
 use App\Http\Resources\ActionResource;
 use App\Http\Resources\CategoryResource;
@@ -29,9 +30,12 @@ use App\Models\SportGame;
 use App\Models\SportTeam;
 use App\Models\Team;
 use App\Models\TeamPlayer;
+use App\Models\User;
+use App\Models\UserTeam;
 use App\Repositories\General\UtilsRepository;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class SqlServerApiRepository
 {
@@ -175,5 +179,49 @@ class SqlServerApiRepository
         return null;
     }
 
+    public static function getUsers()
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        if ($conn) {
+            $sql = "SELECT UserID , UserEN , UserAR , Username , Password , Role FROM dbo.MobileApp_Users";
+            if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+                while ($object = sqlsrv_fetch_object($result)) {
+                    User::updateOrCreate([
+                        'user_id' => $object->UserID
+                    ], [
+                        'user_id' => $object->UserID,
+                        'name' => $object->UserEN,
+                        'email' => $object->Username . '@dhclubapp.xyz',
+                        'password' => Hash::make($object->Password),
+                        'role' => Status::ACTIVE,
+                        'lang' => 'en'
+                    ]);
 
-}
+                }
+            }
+            sqlsrv_close($conn);
+        }
+    }
+
+    public static function getUserTeams()
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        if ($conn) {
+            $sql = "SELECT UserID , TeamsRowID , FullTeamNames FROM dbo.MobileApp_Officials_Teams";
+            if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+                while ($object = sqlsrv_fetch_object($result)) {
+                    UserTeam::updateOrCreate([
+                        'user_id' => $object->UserID
+                    ], [
+                        'user_id' => $object->UserID,
+                        'TeamsRowID' => $object->TeamsRowID,
+                        'full_team_name' => $object->full_team_name,
+                    ]);
+
+                }
+            }
+            sqlsrv_close($conn);
+        }
+
+
+    }
