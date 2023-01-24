@@ -219,7 +219,7 @@ class SqlServerApiRepository
                         ], [
                             'user_id' => $user->id,
                             'team_id' => $sportTeam->id,
-                            'full_team_name' => $object->full_team_name,
+                            'full_team_name' => $object->FullTeamNames,
                         ]);
                     }
                 }
