@@ -51,7 +51,7 @@
     <script>
         $(function () {
 
-            loadDataTables('{{ url("/admin/advance_requests/data", [] , env('APP_ENV') === 'local' ?  false : true)}}',
+            loadDataTables('{{ url("/admin/presence_absence/data", [] , env('APP_ENV') === 'local' ?  false : true)}}',
                 [
                     'team_name',
                     'employee_name',
