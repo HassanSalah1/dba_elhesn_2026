@@ -104,7 +104,7 @@ class AuthApiRepository
         }
 
 
-        if ($user && $user->role === UserRoles::FAN) {
+        if ($user && in_array( $user->role , [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL])) {
             if ($user && $user->isBlocked()) {
                 return Response()->json([
                     'message' => trans('api.block_status_error_message')

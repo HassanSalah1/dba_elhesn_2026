@@ -17,14 +17,15 @@ class UserRepository
     // get Users and create datatable data.
     public static function getUsersData(array $data)
     {
-        $users = User::whereIn('role', [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL])->select([
-            'id',
-            'name',
-            'email',
-            'status',
-            'created_at',
-            'phone'
-        ])->orderBy('id', 'DESC');
+        $users = User::whereIn('role', [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL])
+            ->select([
+                'id',
+                'name',
+                'email',
+                'status',
+                'created_at',
+                'phone'
+            ])->orderBy('id', 'DESC');
         return DataTables::of($users)
             ->addColumn('registration_date', function ($user) {
                 return $user->created_at->format('Y-m-d h:i a');
