@@ -193,7 +193,8 @@ class SqlServerApiRepository
                         'name' => $object->UserEN,
                         'email' => $object->Username . '@dhclubapp.xyz',
                         'password' => Hash::make($object->Password),
-                        'role' => Status::ACTIVE,
+                        'role' => $object->Role,
+                        'status' => Status::ACTIVE,
                         'lang' => 'en'
                     ]);
 
