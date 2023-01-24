@@ -33,7 +33,6 @@ class ReportController extends Controller
     }
 
 
-
     public function showAdvanceRequests()
     {
         $data['pageConfigs'] = [
@@ -45,8 +44,8 @@ class ReportController extends Controller
         $data['debatable_names'] = array(trans('admin.employee_name'), trans('admin.team'),
             trans('admin.players_count'), trans('admin.escorts_count'), trans('admin.cost'),
             trans('admin.location'), trans('admin.statement'), trans('admin.tournament'),
-            trans('admin.match_timing') , trans('admin.move_date') , trans('admin.return_date'),
-            trans('admin.breakfast') , trans('admin.lunch') , trans('admin.dinner') ,
+            trans('admin.match_timing'), trans('admin.move_date'), trans('admin.return_date'),
+            trans('admin.breakfast'), trans('admin.lunch'), trans('admin.dinner'),
             trans('admin.snacks'));
 
         return view('admin.report.advance_requests')->with($data);
@@ -57,5 +56,26 @@ class ReportController extends Controller
         $data = $request->all();
         return ReportService::getAdvanceRequestsData($data);
     }
+
+    public function showPresenceAbsence()
+    {
+        $data['pageConfigs'] = [
+            'pageHeader' => false,
+            'defaultLanguage' => 'ar',
+            'direction' => 'rtl'
+        ];
+        $data['title'] = trans('admin.presence_absence_title');
+        $data['debatable_names'] = array(trans('admin.employee_name'), trans('admin.team'),
+            trans('admin.date'), trans('admin.period'),);
+
+        return view('admin.report.presence_absence')->with($data);
+    }
+
+    public function getPresenceAbsenceData(Request $request)
+    {
+        $data = $request->all();
+        return ReportService::getPresenceAbsenceData($data);
+    }
+
 
 }

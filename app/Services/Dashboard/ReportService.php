@@ -17,4 +17,9 @@ class ReportService
     {
         return ReportRepository::getAdvanceRequestsData($data);
     }
+
+    public static function getPresenceAbsenceData(array $data)
+    {
+        return ReportRepository::getPresenceAbsenceData($data);
+    }
 }
