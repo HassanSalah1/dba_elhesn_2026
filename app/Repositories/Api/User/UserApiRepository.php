@@ -305,9 +305,9 @@ class UserApiRepository
                 foreach ($data['players'] as $key => $player) {
                     PresenceAbsencePlayer::create([
                         'presence_absence_id' => $created->id,
-                        'player_id' => $player,
-                        'attendance_status' => $data['players'][$key]['attendance_status'],
-                        'notes' => isset($data['players'][$key]['notes']) ? $data['players'][$key]['notes'] : null
+                        'player_id' => $player['player_id'],
+                        'attendance_status' => $player['attendance_status'],
+                        'notes' => $player['notes']
                     ]);
                 }
             }
