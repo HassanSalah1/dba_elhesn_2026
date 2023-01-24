@@ -16,13 +16,14 @@ class CreateAdministrativeReportsTable extends Migration
         Schema::create('administrative_reports', function (Blueprint $table) {
             $table->id();
             $table->integer('user_team_id');
+            $table->integer('user_id');
             $table->date('date');
             $table->text('subject')->nullable();
             $table->text('events')->nullable();
             $table->text('pros')->nullable();
             $table->text('cons')->nullable();
             $table->text('recommendations')->nullable();
-            $table->string('location')->nullable();
+            $table->text('location')->nullable();
             $table->timestamps();
         });
     }

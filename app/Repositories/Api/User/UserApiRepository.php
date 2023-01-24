@@ -8,6 +8,7 @@ use App\Http\Resources\NotificationResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserTeamResource;
 use App\Models\AdministrativeReport;
+use App\Models\AdvanceRequest;
 use App\Models\Notification;
 use App\Models\Subscribe;
 use App\Models\UserTeam;
@@ -213,15 +214,50 @@ class UserApiRepository
 
     public static function administrativeReport(array $data)
     {
+        $user = auth()->user();
         $created = AdministrativeReport::create([
             'user_team_id' => $data['team_id'],
+            'user_id' => $user->id,
             'date' => date('Y-md-d', strtotime($data['date'])),
             'subject' => $data['subject'],
-            'events' => $data['subject'],
-            'pros' => $data['subject'],
-            'cons' => $data['cons'],
-            'recommendations' => $data['recommendations'],
-            'location' => $data['location'],
+            'events' => isset($data['events']) ? $data['events'] : null,
+            'pros' => isset($data['pros']) ? $data['pros'] : null,
+            'cons' => isset($data['cons']) ? $data['cons'] : null,
+            'recommendations' => isset($data['recommendations']) ? $data['recommendations'] : null,
+            'location' => isset($data['location']) ? $data['location'] : null
+        ]);
+
+        if ($created) {
+            return [
+                'message' => trans('api.success_message'),
+                'code' => HttpCode::SUCCESS
+            ];
+        }
+        return [
+            'message' => trans('api.general_error_message'),
+            'code' => HttpCode::ERROR
+        ];
+    }
+
+    public static function advanceRequests(array $data)
+    {
+        $user = auth()->user();
+        $created = AdvanceRequest::create([
+            'user_team_id' => $data['team_id'],
+            'user_id' => $user->id,
+            'players_count' => $data['players_count'],
+            'escorts_count' => $data['escorts_count'],
+            'cost' => $data['cost'],
+            'location' => isset($data['location']) ? $data['location'] : null,
+            'statement' => isset($data['statement']) ? $data['statement'] : null,
+            'tournament' => isset($data['tournament']) ? $data['tournament'] : null,
+            'match_timing' => isset($data['match_timing']) ? $data['match_timing'] : null,
+            'move_date' => isset($data['move_date']) ? $data['move_date'] : null,
+            'return_date' => isset($data['return_date']) ? $data['return_date'] : null,
+            'breakfast' => isset($data['breakfast']) ? $data['breakfast'] : null,
+            'lunch' => isset($data['lunch']) ? $data['lunch'] : null,
+            'dinner' => isset($data['dinner']) ? $data['dinner'] : null,
+            'snacks' => isset($data['snacks']) ? $data['snacks'] : null,
         ]);
 
         if ($created) {

@@ -145,12 +145,7 @@ class UserApiService
         $keys = [
             'team_id' => 'required',
             'date' => 'required',
-            'subject' => 'required',
-            'events' => 'required',
-            'pros' => 'required',
-            'cons' => 'required',
-            'recommendations' => 'required',
-            'location' => 'required',
+            'subject' => 'required'
         ];
         $messages = [
             'required' => trans('api.required_error_message'),
@@ -160,6 +155,25 @@ class UserApiService
             return $validated;
         }
         $response = UserApiRepository::administrativeReport($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function advanceRequests(array $data)
+    {
+        $keys = [
+            'team_id' => 'required',
+            'players_count' => 'required',
+            'escorts_count' => 'required',
+            'cost' => 'required',
+        ];
+        $messages = [
+            'required' => trans('api.required_error_message'),
+        ];
+        $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);
+        if ($validated !== true) {
+            return $validated;
+        }
+        $response = UserApiRepository::advanceRequests($data);
         return UtilsRepository::handleResponseApi($response);
     }
 

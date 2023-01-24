@@ -12,6 +12,7 @@ class AdministrativeReport extends Model
     protected $table = 'administrative_reports';
     protected $fillable = [
         'user_team_id',
+        'user_id',
         'date',
         'subject',
         'events',

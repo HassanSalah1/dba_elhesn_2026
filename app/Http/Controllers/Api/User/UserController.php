@@ -69,6 +69,12 @@ class UserController extends Controller
     }
 
 
+    public function advanceRequests(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::advanceRequests($data);
+    }
+
 
 }
 
