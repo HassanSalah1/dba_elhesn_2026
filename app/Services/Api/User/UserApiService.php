@@ -177,4 +177,23 @@ class UserApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function presenceAbsence(array $data)
+    {
+        $keys = [
+            'team_id' => 'required',
+            'date' => 'required',
+            'period' => 'required',
+            'players' => 'required',
+        ];
+        $messages = [
+            'required' => trans('api.required_error_message'),
+        ];
+        $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);
+        if ($validated !== true) {
+            return $validated;
+        }
+        $response = UserApiRepository::presenceAbsence($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
 }

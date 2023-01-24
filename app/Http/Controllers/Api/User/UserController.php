@@ -76,6 +76,12 @@ class UserController extends Controller
     }
 
 
+    public function presenceAbsence(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::presenceAbsence($data);
+    }
+
 }
 
 ?>

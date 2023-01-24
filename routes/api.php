@@ -91,6 +91,7 @@ Route::group(['middleware' => 'lang'], function () {
             Route::get('/my/teams', [UserController::class, 'getMyTeams']);
             Route::post('/administrative_report', [UserController::class, 'administrativeReport']);
             Route::post('/advance_requests', [UserController::class, 'advanceRequests']);
+            Route::post('/presence_absence', [UserController::class, 'presenceAbsence']);
         });
     });
 });

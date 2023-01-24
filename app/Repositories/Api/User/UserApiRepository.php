@@ -10,6 +10,8 @@ use App\Http\Resources\UserTeamResource;
 use App\Models\AdministrativeReport;
 use App\Models\AdvanceRequest;
 use App\Models\Notification;
+use App\Models\PresenceAbsence;
+use App\Models\PresenceAbsencePlayer;
 use App\Models\Subscribe;
 use App\Models\UserTeam;
 use App\Repositories\Api\Auth\AuthApiRepository;
@@ -261,6 +263,38 @@ class UserApiRepository
         ]);
 
         if ($created) {
+            return [
+                'message' => trans('api.success_message'),
+                'code' => HttpCode::SUCCESS
+            ];
+        }
+        return [
+            'message' => trans('api.general_error_message'),
+            'code' => HttpCode::ERROR
+        ];
+    }
+
+    public static function presenceAbsence(array $data)
+    {
+        $user = auth()->user();
+        $created = PresenceAbsence::create([
+            'user_team_id' => $data['team_id'],
+            'user_id' => $user->id,
+            'date' => date('Y-m-d', strtotime($data['date'])),
+            'period' => $data['period']
+        ]);
+
+        if ($created) {
+            if (is_array($data['players'])) {
+                foreach ($data['players'] as $key => $player) {
+                    PresenceAbsencePlayer::create([
+                        'presence_absence_id' => $created->id,
+                        'player_id' => $player,
+                        'attendance_status' => $data['players'][$key]['attendance_status'],
+                        'notes' => $data['players'][$key]['notes']
+                    ]);
+                }
+            }
             return [
                 'message' => trans('api.success_message'),
                 'code' => HttpCode::SUCCESS
