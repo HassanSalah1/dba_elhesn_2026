@@ -6,6 +6,7 @@ use App\Interfaces\Enum;
 
 class AttendanceStatus extends Enum
 {
+
     const present = 'present';
     const match = 'match';
     const lateness = 'lateness';
@@ -16,7 +17,7 @@ class AttendanceStatus extends Enum
     const violation_instructions = 'violation_instructions';
     const no_fingerprint_registration = 'no_fingerprint_registration';
     const delete_player_from_list = 'delete_player_from_list';
-    
+
 }
 
 ?>

@@ -21,4 +21,14 @@ class AdministrativeReport extends Model
         'recommendations',
         'location'
     ];
+
+    public function user_team()
+    {
+        return $this->belongsTo(UserTeam::class, 'user_team_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

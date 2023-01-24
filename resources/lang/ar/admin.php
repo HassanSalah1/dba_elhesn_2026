@@ -325,5 +325,8 @@ return [
     "regulations_permission" => "اللوائح والأنظمة",
     "notification_permission" => "الإشعارات",
     "galleries_permission" => "معرض الصور والفيديوهات",
+    "administrative_report_title" => "تقرير الإدارى",
+    "advance_requests_title" => "طلب سلفه",
+    "presence_absence_title" => "حضور وانصراف اللاعبين",
 ];
 ?>

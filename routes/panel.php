@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\News\CategoryController;
 use App\Http\Controllers\Dashboard\News\NewController;
 use App\Http\Controllers\Dashboard\Notification\NotificationController;
+use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\Dashboard\Setting\CommitteeController;
 use App\Http\Controllers\Dashboard\Setting\GalleryController;
 use App\Http\Controllers\Dashboard\Setting\IntroController;
@@ -176,6 +177,16 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/notification', [NotificationController::class, 'showSendNotification'])->name('dashboard-show_send_notification'); // show send notification page
         Route::post('/notification/send', [NotificationController::class, 'sendNotification']); // send Notification
 
+
+        ////////////////////////////////
+        Route::get('/administrative_report', [ReportController::class, 'showAdministrativeReport'])->name('dashboard-administrative_report'); // show Index page that control all Teams
+        Route::get('/administrative_report/data', [ReportController::class, 'getAdministrativeReportData']); // get all Teams data for DataTable
+        ////////////////////////////////
+        Route::get('/advance_requests', [ReportController::class, 'showAdvanceRequests'])->name('dashboard-advance_requests'); // show Index page that control all Teams
+        Route::get('/advance_requests/data', [ReportController::class, 'getAdvanceRequestsData']); // get all Teams data for DataTable
+        ////////////////////////////////
+        Route::get('/presence_absence', [ReportController::class, 'showPresenceAbsence'])->name('dashboard-presence_absence'); // show Index page that control all Teams
+        Route::get('/presence_absence/data', [ReportController::class, 'getPresenceAbsenceData']); // get all Teams data for DataTable
 
     });
 });
