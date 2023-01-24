@@ -187,7 +187,8 @@ class SqlServerApiRepository
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
                     User::updateOrCreate([
-                        'user_id' => $object->UserID
+                        'user_id' => $object->UserID,
+                        'email' => $object->Username . '@dhclubapp.xyz'
                     ], [
                         'user_id' => $object->UserID,
                         'name' => $object->UserEN,
