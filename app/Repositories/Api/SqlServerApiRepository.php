@@ -188,11 +188,10 @@ class SqlServerApiRepository
                 while ($object = sqlsrv_fetch_object($result)) {
                     User::updateOrCreate([
                         'user_id' => $object->UserID,
-                        'email' => $object->Username . '@dhclubapp.xyz'
                     ], [
                         'user_id' => $object->UserID,
                         'name' => $object->UserEN,
-                        'email' => $object->Username . '@dhclubapp.xyz',
+                        'email' => $object->Username.$object->UserID. '@dhclubapp.xyz',
                         'password' => Hash::make($object->Password),
                         'role' => $object->Role,
                         'status' => Status::ACTIVE,
