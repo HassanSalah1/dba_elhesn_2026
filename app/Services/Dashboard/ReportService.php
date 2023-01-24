@@ -12,4 +12,9 @@ class ReportService
     {
         return ReportRepository::getAdministrativeReportData($data);
     }
+
+    public static function getAdvanceRequestsData(array $data)
+    {
+        return ReportRepository::getAdvanceRequestsData($data);
+    }
 }
