@@ -307,7 +307,7 @@ class UserApiRepository
                         'presence_absence_id' => $created->id,
                         'player_id' => $player,
                         'attendance_status' => $data['players'][$key]['attendance_status'],
-                        'notes' => $data['players'][$key]['notes']
+                        'notes' => isset($data['players'][$key]['notes']) ? $data['players'][$key]['notes'] : null
                     ]);
                 }
             }
