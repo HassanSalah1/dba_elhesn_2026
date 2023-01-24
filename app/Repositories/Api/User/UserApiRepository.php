@@ -5,6 +5,7 @@ namespace App\Repositories\Api\User;
 
 use App\Entities\HttpCode;
 use App\Http\Resources\NotificationResource;
+use App\Http\Resources\TeamPlayerResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserTeamResource;
 use App\Models\AdministrativeReport;
@@ -12,7 +13,9 @@ use App\Models\AdvanceRequest;
 use App\Models\Notification;
 use App\Models\PresenceAbsence;
 use App\Models\PresenceAbsencePlayer;
+use App\Models\SportTeam;
 use App\Models\Subscribe;
+use App\Models\TeamPlayer;
 use App\Models\UserTeam;
 use App\Repositories\Api\Auth\AuthApiRepository;
 use App\Repositories\General\UtilsRepository;
@@ -271,6 +274,19 @@ class UserApiRepository
         return [
             'message' => trans('api.general_error_message'),
             'code' => HttpCode::ERROR
+        ];
+    }
+
+
+    public static function getTeamPlayers(array $data)
+    {
+        $team = UserTeam::where(['id' => $data['id']])->first();
+        $team = SportTeam::find($team ? $team->team_id : null);
+        $players = TeamPlayer::where(['team_id' => $team ? $team->team_id : null])->get();
+        return [
+            'data' => TeamPlayerResource::collection($players),
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
         ];
     }
 

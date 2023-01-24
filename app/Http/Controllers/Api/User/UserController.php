@@ -75,6 +75,13 @@ class UserController extends Controller
         return UserApiService::advanceRequests($data);
     }
 
+    public function getTeamPlayers(Request $request, $id)
+    {
+        $data = $request->all();
+        $data['id'] = $id;
+        return UserApiService::getTeamPlayers($data);
+    }
+
 
     public function presenceAbsence(Request $request)
     {

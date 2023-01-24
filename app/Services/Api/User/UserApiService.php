@@ -177,6 +177,13 @@ class UserApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+
+    public static function getTeamPlayers(array $data)
+    {
+        $response = UserApiRepository::getTeamPlayers($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
     public static function presenceAbsence(array $data)
     {
         $keys = [
