@@ -108,5 +108,6 @@ return [
     'hello_user' => 'hello',
     'account_verification_message' => 'Enter the following verification code to activate your account : {code}',
     'max_size_error_message' => 'File size should not be more than 6MB',
+    'success_message' => 'done successfully'
 ];
 ?>

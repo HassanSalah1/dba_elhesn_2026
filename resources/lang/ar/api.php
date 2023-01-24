@@ -107,5 +107,6 @@ return [
     'hello_user' => 'مرحبا',
     'account_verification_message' => 'أدخل رمز التحقق التالى لتفعيل حسابك : {code}',
     'max_size_error_message' => 'يجب ألا يزيد حجم الملف عن 6 ميجا',
+    'success_message' => 'تم بنجاح'
 ];
 ?>
