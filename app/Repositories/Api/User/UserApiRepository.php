@@ -218,7 +218,7 @@ class UserApiRepository
         $created = AdministrativeReport::create([
             'user_team_id' => $data['team_id'],
             'user_id' => $user->id,
-            'date' => date('Y-md-d', strtotime($data['date'])),
+            'date' => date('Y-m-d', strtotime($data['date'])),
             'subject' => $data['subject'],
             'events' => isset($data['events']) ? $data['events'] : null,
             'pros' => isset($data['pros']) ? $data['pros'] : null,
