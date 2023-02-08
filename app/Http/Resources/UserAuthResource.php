@@ -20,8 +20,9 @@ class UserAuthResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'image' => ($this->image !== null) ? url($this->image, [] , true) : null,
+            'image' => ($this->image !== null) ? url($this->image, [], true) : null,
             'token' => $this->createToken('damain')->accessToken,
+            'role' => $this->role,
         ];
     }
 }

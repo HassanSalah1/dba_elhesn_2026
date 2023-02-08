@@ -10,7 +10,6 @@ class UserRoles extends Enum
     const FAN = 'fan';
     const EMPLOYEE = 'employee';
 
-
     const OFFICIAL = 'Official';
     const CoachGK = 'CoachGK';
     const CoachGKJunior = 'CoachGKJunior';

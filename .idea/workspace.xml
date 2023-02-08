@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Models/AdvanceRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/AdvanceRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/PresenceAbsence.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/PresenceAbsence.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Entities/UserRoles.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Entities/UserRoles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Resources/UserAuthResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/UserAuthResource.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,7 +168,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/views/admin/report" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
@@ -250,7 +251,9 @@
       <workItem from="1674456776510" duration="4286000" />
       <workItem from="1674493737530" duration="1176000" />
       <workItem from="1674515389248" duration="7177000" />
-      <workItem from="1674588210688" duration="14777000" />
+      <workItem from="1674588210688" duration="14921000" />
+      <workItem from="1675023679764" duration="738000" />
+      <workItem from="1675708708386" duration="847000" />
     </task>
     <servers />
   </component>
@@ -266,10 +269,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="430" y="43" key="#phpunit.xml/0.0.1536.824@0.0.1536.824" timestamp="1673097830057" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1674548693637">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1674604203389">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1674548693637" />
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1674604203389" />
     <state x="479" y="129" width="577" height="566" key="find.popup" timestamp="1674591684955">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
