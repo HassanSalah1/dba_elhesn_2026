@@ -377,7 +377,7 @@ class UserApiRepository
         }
 
         return [
-            'data' => $result,
+            'data' => $resultData,
             'message' => 'success',
             'code' => HttpCode::SUCCESS
         ];
