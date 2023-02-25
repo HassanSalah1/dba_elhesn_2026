@@ -430,8 +430,8 @@ class UserApiRepository
                         date('Y-m-d H:i:s', strtotime($data['date'])),
                         $player['player_id'],
                         $user->user_id,
-                        null,
-                        null,
+                        date('Y-m-d H:i:s'),
+                        $player['notes'],
                         null,
                         $visit
                     ];
