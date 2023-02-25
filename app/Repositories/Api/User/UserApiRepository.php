@@ -16,8 +16,10 @@ use App\Models\PresenceAbsencePlayer;
 use App\Models\SportTeam;
 use App\Models\Subscribe;
 use App\Models\TeamPlayer;
+use App\Models\User;
 use App\Models\UserTeam;
 use App\Repositories\Api\Auth\AuthApiRepository;
+use App\Repositories\Api\SqlServerApiRepository;
 use App\Repositories\General\UtilsRepository;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Illuminate\Support\Facades\App;
@@ -220,23 +222,39 @@ class UserApiRepository
     public static function administrativeReport(array $data)
     {
         $user = auth()->user();
-        $created = AdministrativeReport::create([
-            'user_team_id' => $data['team_id'],
-            'user_id' => $user->id,
-            'date' => date('Y-m-d', strtotime($data['date'])),
-            'subject' => $data['subject'],
-            'events' => isset($data['events']) ? $data['events'] : null,
-            'pros' => isset($data['pros']) ? $data['pros'] : null,
-            'cons' => isset($data['cons']) ? $data['cons'] : null,
-            'recommendations' => isset($data['recommendations']) ? $data['recommendations'] : null,
-            'location' => isset($data['location']) ? $data['location'] : null
-        ]);
+//        $created = AdministrativeReport::create([
+//            'user_team_id' => $data['team_id'],
+//            'user_id' => $user->id,
+//            'date' => date('Y-m-d', strtotime($data['date'])),
+//            'subject' => $data['subject'],
+//            'events' => isset($data['events']) ? $data['events'] : null,
+//            'pros' => isset($data['pros']) ? $data['pros'] : null,
+//            'cons' => isset($data['cons']) ? $data['cons'] : null,
+//            'recommendations' => isset($data['recommendations']) ? $data['recommendations'] : null,
+//            'location' => isset($data['location']) ? $data['location'] : null
+//        ]);
 
-        if ($created) {
-            return [
-                'message' => trans('api.success_message'),
-                'code' => HttpCode::SUCCESS
+        $conn = SqlServerApiRepository::startConnection();
+        if ($conn) {
+            $sql = "INSERT INTO dbo.tblOfficial_Actions (OfficialID,UserID,InsertedDateTime,Topic,ActionDate,ActionPlace,TheEvents,Negativity,Positivity,Recommendations) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $params = [
+                0,
+                $user->user_id,
+                date('Y-m-d H:i:s'),
+                $data['subject'], date('Y-m-d H:i:s', strtotime($data['date'])),
+                isset($data['location']) ? $data['location'] : null,
+                isset($data['events']) ? $data['events'] : null,
+                isset($data['cons']) ? $data['cons'] : null,
+                isset($data['pros']) ? $data['pros'] : null,
+                isset($data['recommendations']) ? $data['recommendations'] : null,
             ];
+            $stmt = sqlsrv_query($conn, $sql, $params);
+            if ($stmt) {
+                return [
+                    'message' => trans('api.success_message'),
+                    'code' => HttpCode::SUCCESS
+                ];
+            }
         }
         return [
             'message' => trans('api.general_error_message'),

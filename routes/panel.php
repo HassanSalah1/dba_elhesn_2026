@@ -191,4 +191,32 @@ Route::group(['prefix' => 'admin'], function () {
     });
 });
 
+/****************
+ * {
+ * "name": "reports_title",
+ * "icon": "activity",
+ * "slug": "",
+ * "submenu": [
+ * {
+ * "name": "administrative_report_title",
+ * "url": "/admin/administrative_report",
+ * "icon": "circle",
+ * "slug": "dashboard-administrative_report"
+ * },
+ * {
+ * "name": "advance_requests_title",
+ * "url": "admin/advance_requests",
+ * "icon": "circle",
+ * "slug": "dashboard-advance_requests"
+ * },
+ * {
+ * "name": "presence_absence_title",
+ * "url": "admin/presence_absence",
+ * "icon": "circle",
+ * "slug": "dashboard-presence_absence"
+ * }
+ * ],
+ * "permission": "reports"
+ * },
+ ******************/
 ?>
