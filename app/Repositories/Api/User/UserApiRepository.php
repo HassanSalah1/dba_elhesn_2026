@@ -373,7 +373,6 @@ class UserApiRepository
                     ];
                 }
             }
-            dd(sqlsrv_errors());
             sqlsrv_close($conn);
         }
 
