@@ -249,6 +249,8 @@ class UserApiRepository
                 isset($data['recommendations']) ? $data['recommendations'] : null,
             ];
             $stmt = sqlsrv_query($conn, $sql, $params);
+            echo $stmt;
+            sqlsrv_close($conn);
             if ($stmt) {
                 return [
                     'message' => trans('api.success_message'),

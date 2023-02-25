@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/Api/User/UserApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/User/UserApiRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" beforeDir="false" afterPath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/panel.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/panel.php" afterDir="false" />
-    </list>
+    <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -255,7 +250,7 @@
       <workItem from="1674588210688" duration="14921000" />
       <workItem from="1675023679764" duration="738000" />
       <workItem from="1675708708386" duration="847000" />
-      <workItem from="1677323973057" duration="1673000" />
+      <workItem from="1677323973057" duration="2058000" />
     </task>
     <servers />
   </component>
