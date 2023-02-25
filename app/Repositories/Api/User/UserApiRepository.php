@@ -415,7 +415,7 @@ class UserApiRepository
             if (is_array($data['players'])) {
                 $execute = false;
                 foreach ($data['players'] as $key => $player) {
-                    $sql = "INSERT INTO dbo.tbl_Players_Attendance (SeasonTeamPlayerRowID,ReasonKey,TheDate,PlayerRowID,UserID,WhenInserted,Comments,Relief,Visit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $sql = "INSERT INTO dbo.tbl_Players_Attendance (SeasonTeamPlayerRowID,ReasonKey,TheDate,PlayerRowID,UserID,WhenInserted,Comments,Relief,Visit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $visit = '';
                     if ($data['period'] === Period::one_period_day) {
                         $visit = 'يوم فترة واحدة';
