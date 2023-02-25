@@ -364,7 +364,7 @@ class UserApiRepository
         $conn = SqlServerApiRepository::startConnection();
         $resultData = [];
         if ($conn) {
-            $sql = "SELECT ReasonKey AS id, TheReason AS reason FROM dbo.tbl_Attend_Reasons SORT BY TheOrder ASC";
+            $sql = "SELECT ReasonKey AS id, TheReason AS reason FROM dbo.tbl_Attend_Reasons ORDER BY TheOrder ASC";
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
                     $resultData[] = [
