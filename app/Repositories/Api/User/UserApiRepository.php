@@ -248,9 +248,10 @@ class UserApiRepository
                 isset($data['pros']) ? $data['pros'] : null,
                 isset($data['recommendations']) ? $data['recommendations'] : null,
             ];
-            $stmt = sqlsrv_query($conn, $sql, $params);
+            $stmt = sqlsrv_prepare($conn, $sql, $params);
+            $execute = sqlsrv_execute($stmt);
             sqlsrv_close($conn);
-            if ($stmt) {
+            if ($execute) {
                 return [
                     'message' => trans('api.success_message'),
                     'code' => HttpCode::SUCCESS
