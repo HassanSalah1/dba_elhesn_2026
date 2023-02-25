@@ -4,6 +4,7 @@ namespace App\Repositories\Api\User;
 
 
 use App\Entities\HttpCode;
+use App\Entities\Period;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\TeamPlayerResource;
 use App\Http\Resources\UserResource;
@@ -292,23 +293,23 @@ class UserApiRepository
             $sql = "INSERT INTO dbo.tbl_RequestRelease (TeamRowID,Players,Officials,TheCost,Details,WhoInsert,WhenInsert,Match,TheDate,Place,MatchTime,LeaveTime,ReturnTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $details = '';
-            if (isset($data['breakfast']) && intval($data['breakfast']) > 0){
+            if (isset($data['breakfast']) && intval($data['breakfast']) > 0) {
                 $details .= 'فطار';
             }
-            if (isset($data['snacks']) && intval($data['snacks']) > 0){
-                if (isset($data['breakfast']) && intval($data['breakfast']) > 0){
+            if (isset($data['snacks']) && intval($data['snacks']) > 0) {
+                if (isset($data['breakfast']) && intval($data['breakfast']) > 0) {
                     $details .= ' + ';
                 }
                 $details .= 'سناكس';
             }
-            if (isset($data['lunch']) && intval($data['lunch']) > 0){
-                if (isset($data['snacks']) && intval($data['snacks']) > 0){
+            if (isset($data['lunch']) && intval($data['lunch']) > 0) {
+                if (isset($data['snacks']) && intval($data['snacks']) > 0) {
                     $details .= ' + ';
                 }
                 $details .= 'غداء';
             }
-            if (isset($data['dinner']) && intval($data['dinner']) > 0){
-                if (isset($data['lunch']) && intval($data['lunch']) > 0){
+            if (isset($data['dinner']) && intval($data['dinner']) > 0) {
+                if (isset($data['lunch']) && intval($data['lunch']) > 0) {
                     $details .= ' + ';
                 }
                 $details .= 'عشاء';
@@ -358,32 +359,95 @@ class UserApiRepository
         ];
     }
 
+    public static function getReasons(array $data)
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $result = [];
+        if ($conn) {
+            $sql = "SELECT ReasonKey AS id, TheReason AS reason FROM dbo.tbl_Attend_Reasons SORT BY TheOrder ASC";
+            if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+                while ($object = sqlsrv_fetch_object($result)) {
+                    $data[] = [
+                        'id' => $object->id,
+                        'reason' => $object->reason,
+                    ];
+                }
+            }
+            sqlsrv_close($conn);
+        }
+
+        return [
+            'data' => $result,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
     public static function presenceAbsence(array $data)
     {
         $user = auth()->user();
-        $created = PresenceAbsence::create([
-            'user_team_id' => $data['team_id'],
-            'user_id' => $user->id,
-            'date' => date('Y-m-d', strtotime($data['date'])),
-            'period' => $data['period']
-        ]);
+//        $created = PresenceAbsence::create([
+//            'user_team_id' => $data['team_id'],
+//            'user_id' => $user->id,
+//            'date' => date('Y-m-d', strtotime($data['date'])),
+//            'period' => $data['period']
+//        ]);
+//
+//        if ($created) {
+//            if (is_array($data['players'])) {
+//                foreach ($data['players'] as $key => $player) {
+//                    PresenceAbsencePlayer::create([
+//                        'presence_absence_id' => $created->id,
+//                        'player_id' => $player['player_id'],
+//                        'attendance_status' => $player['attendance_status'],
+//                        'notes' => $player['notes']
+//                    ]);
+//                }
+//            }
+//            return [
+//                'message' => trans('api.success_message'),
+//                'code' => HttpCode::SUCCESS
+//            ];
+//        }
 
-        if ($created) {
+        $conn = SqlServerApiRepository::startConnection();
+        if ($conn) {
             if (is_array($data['players'])) {
+                $execute = false;
                 foreach ($data['players'] as $key => $player) {
-                    PresenceAbsencePlayer::create([
-                        'presence_absence_id' => $created->id,
-                        'player_id' => $player['player_id'],
-                        'attendance_status' => $player['attendance_status'],
-                        'notes' => $player['notes']
-                    ]);
+                    $sql = "INSERT INTO dbo.tbl_Players_Attendance (SeasonTeamPlayerRowID,ReasonKey,TheDate,PlayerRowID,UserID,WhenInserted,Comments,Relief,Visit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $visit = '';
+                    if ($data['period'] === Period::one_period_day) {
+                        $visit = 'يوم فترة واحدة';
+                    } else if ($data['period'] === Period::evening_another_period) {
+                        $visit = 'مسائى فترة تانيه';
+                    } else if ($data['period'] === Period::my_first_morning) {
+                        $visit = 'صباحى فترة اولى';
+                    }
+                    $params = [
+                        SqlServerApiRepository::getSeasonTeamPlayerId($conn, $player['player_id']),
+                        $player['attendance_status'],
+                        date('Y-m-d H:i:s', strtotime($data['date'])),
+                        $player['player_id'],
+                        $user->user_id,
+                        null,
+                        null,
+                        null,
+                        $visit
+                    ];
+                    $stmt = sqlsrv_prepare($conn, $sql, $params);
+                    $execute = sqlsrv_execute($stmt);
+                }
+                sqlsrv_close($conn);
+                if ($execute) {
+                    return [
+                        'message' => trans('api.success_message'),
+                        'code' => HttpCode::SUCCESS
+                    ];
                 }
             }
-            return [
-                'message' => trans('api.success_message'),
-                'code' => HttpCode::SUCCESS
-            ];
         }
+
         return [
             'message' => trans('api.general_error_message'),
             'code' => HttpCode::ERROR

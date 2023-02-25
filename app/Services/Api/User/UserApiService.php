@@ -184,6 +184,12 @@ class UserApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getReasons(array $data)
+    {
+        $response = UserApiRepository::getReasons($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
     public static function presenceAbsence(array $data)
     {
         $keys = [

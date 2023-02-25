@@ -25,7 +25,7 @@ class TeamPlayerResource extends JsonResource
         $using = $this->merge(static::$using);
         $description = isset($using->data['description']) && $using->data['description'] ?: '';
         return [
-            'id' => $this->id,
+            'id' => $this->player_id,
             'name' => $this->name,
             'image' => $this->image_url,
             'description' => $description

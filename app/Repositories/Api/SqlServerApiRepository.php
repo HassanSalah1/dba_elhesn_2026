@@ -227,4 +227,16 @@ class SqlServerApiRepository
             sqlsrv_close($conn);
         }
     }
+
+    public static function getSeasonTeamPlayerId($conn, $player_id)
+    {
+        $sql = "SELECT TOP 1 SeasonTeamPlayerRowID FROM dbo.QSeasonTeamPlayer WHERE PlayerRowID=$player_id";
+        if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+            $object = sqlsrv_fetch_object($result);
+            if ($object) {
+                return $object->SeasonTeamPlayerRowID;
+            }
+        }
+        return 0;
+    }
 }

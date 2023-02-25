@@ -88,10 +88,13 @@ Route::group(['middleware' => 'lang'], function () {
             Route::get('/notifications/count', [UserController::class, 'getNotificationsCount']); // get my notifications
 
 
+
             Route::get('/my/teams', [UserController::class, 'getMyTeams']);
             Route::post('/administrative_report', [UserController::class, 'administrativeReport']);
             Route::post('/advance_requests', [UserController::class, 'advanceRequests']);
             Route::get('/my/team/players/{id}', [UserController::class, 'getTeamPlayers']);
+
+            Route::get('/reasons', [UserController::class, 'getReasons']);
             Route::post('/presence_absence', [UserController::class, 'presenceAbsence']);
         });
     });

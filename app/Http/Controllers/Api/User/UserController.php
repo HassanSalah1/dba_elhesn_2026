@@ -83,6 +83,12 @@ class UserController extends Controller
     }
 
 
+    public function getReasons(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::getReasons($data);
+    }
+
     public function presenceAbsence(Request $request)
     {
         $data = $request->all();
