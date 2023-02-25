@@ -249,7 +249,6 @@ class UserApiRepository
                 isset($data['recommendations']) ? $data['recommendations'] : null,
             ];
             $stmt = sqlsrv_query($conn, $sql, $params);
-            echo $stmt;
             sqlsrv_close($conn);
             if ($stmt) {
                 return [
@@ -257,6 +256,8 @@ class UserApiRepository
                     'code' => HttpCode::SUCCESS
                 ];
             }
+            var_dump(sqlsrv_errors());
+
         }
         return [
             'message' => trans('api.general_error_message'),
