@@ -472,7 +472,7 @@ class UserApiRepository
                 $user->user_id,
                 date('Y-m-d H:i:s'),
                 isset($data['position']) ? $data['position'] : null,
-                isset($data['behavior']) ? $data['Behavior'] : null,
+                isset($data['behavior']) ? $data['behavior'] : null,
                 isset($data['commitment']) ? $data['commitment'] : null,
                 isset($data['technical']) ? $data['technical'] : null,
                 isset($data['physical']) ? $data['physical'] : null,
