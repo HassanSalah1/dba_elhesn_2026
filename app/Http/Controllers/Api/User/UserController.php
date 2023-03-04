@@ -95,6 +95,30 @@ class UserController extends Controller
         return UserApiService::presenceAbsence($data);
     }
 
+    public function generalEvaluation(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::generalEvaluation($data);
+    }
+
+    public function getSports(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::getSports($data);
+    }
+
+    public function coachEvaluation(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::coachEvaluation($data);
+    }
+    public function getSeasons(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::getSeasons($data);
+    }
+
+
 }
 
 ?>

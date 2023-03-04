@@ -3,6 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/User/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositories/Api/User/UserApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/User/UserApiRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/Api/User/UserApiService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/Api/User/UserApiService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +170,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../egsc" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
@@ -253,6 +257,8 @@
       <workItem from="1675023679764" duration="738000" />
       <workItem from="1675708708386" duration="847000" />
       <workItem from="1677323973057" duration="9247000" />
+      <workItem from="1677927230505" duration="774000" />
+      <workItem from="1677966923582" duration="2094000" />
     </task>
     <servers />
   </component>
@@ -260,21 +266,21 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="499" y="167" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1674600764186">
+    <state x="499" y="167" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1677967977961">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="499" y="167" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1536.824@0.0.1536.824" timestamp="1674600764186" />
+    <state x="499" y="167" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1536.824@0.0.1536.824" timestamp="1677967977961" />
     <state x="430" y="43" key="#phpunit.xml" timestamp="1673097830057">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="430" y="43" key="#phpunit.xml/0.0.1536.824@0.0.1536.824" timestamp="1673097830057" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1677350412048">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1677928012727">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1677350412048" />
-    <state x="479" y="129" width="577" height="566" key="find.popup" timestamp="1674591684955">
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1677928012727" />
+    <state x="479" y="129" width="577" height="566" key="find.popup" timestamp="1677967967765">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="479" y="129" width="577" height="566" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1674591684955" />
+    <state x="479" y="129" width="577" height="566" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1677967967765" />
   </component>
 </project>

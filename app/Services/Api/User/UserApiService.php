@@ -209,4 +209,56 @@ class UserApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function generalEvaluation(array $data)
+    {
+        $keys = [
+            'team_id' => 'required',
+            'player_id' => 'required'
+        ];
+        $messages = [
+            'required' => trans('api.required_error_message'),
+        ];
+        $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);
+        if ($validated !== true) {
+            return $validated;
+        }
+        $response = UserApiRepository::generalEvaluation($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+
+    public static function getSports(array $data)
+    {
+        $response = UserApiRepository::getSports($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function coachEvaluation(array $data)
+    {
+        $keys = [
+            'sport_id' => 'required',
+            'season' => 'required',
+            'category' => 'required',
+            'comp' => 'required',
+            'date' => 'required',
+            'participants'=> 'required',
+            'difficulty'
+        ];
+        $messages = [
+            'required' => trans('api.required_error_message'),
+        ];
+        $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);
+        if ($validated !== true) {
+            return $validated;
+        }
+        $response = UserApiRepository::coachEvaluation($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function getSeasons(array $data)
+    {
+        $response = UserApiRepository::getSeasons($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
 }

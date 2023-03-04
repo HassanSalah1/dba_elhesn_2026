@@ -96,6 +96,10 @@ Route::group(['middleware' => 'lang'], function () {
 
             Route::get('/reasons', [UserController::class, 'getReasons']);
             Route::post('/presence_absence', [UserController::class, 'presenceAbsence']);
+            Route::post('/general_evaluation', [UserController::class, 'generalEvaluation']);
+            Route::post('/coach_evaluation/sports', [UserController::class, 'getSports']);
+            Route::post('/coach_evaluation', [UserController::class, 'coachEvaluation']);
+            Route::post('/coach_evaluation/seasons', [UserController::class, 'getSeasons']);
         });
     });
 });

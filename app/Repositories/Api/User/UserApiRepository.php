@@ -6,6 +6,7 @@ namespace App\Repositories\Api\User;
 use App\Entities\HttpCode;
 use App\Entities\Period;
 use App\Http\Resources\NotificationResource;
+use App\Http\Resources\SportGameResource;
 use App\Http\Resources\TeamPlayerResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserTeamResource;
@@ -14,6 +15,7 @@ use App\Models\AdvanceRequest;
 use App\Models\Notification;
 use App\Models\PresenceAbsence;
 use App\Models\PresenceAbsencePlayer;
+use App\Models\SportGame;
 use App\Models\SportTeam;
 use App\Models\Subscribe;
 use App\Models\TeamPlayer;
@@ -451,6 +453,126 @@ class UserApiRepository
         return [
             'message' => trans('api.general_error_message'),
             'code' => HttpCode::ERROR
+        ];
+    }
+
+    public static function generalEvaluation(array $data)
+    {
+        $user = auth()->user();
+        $userTeam = UserTeam::find($data['team_id']);
+
+        $conn = SqlServerApiRepository::startConnection();
+        if ($conn) {
+            $sql = "INSERT INTO dbo.tbl_Evaluations_Global (TeamRowID,PlayerRowID,SeasonTeamPlayerRowID,UserID,Eval_DateTime,Position,Behavior,Commitment,Technical,Physical,Participations,Recommendation,Comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $params = [
+                $userTeam->team_id,
+                $data['player_id'],
+                SqlServerApiRepository::getSeasonTeamPlayerId($conn, $data['player_id']),
+                $user->user_id,
+                date('Y-m-d H:i:s'),
+                isset($data['position']) ? $data['position'] : null,
+                isset($data['behavior']) ? $data['Behavior'] : null,
+                isset($data['commitment']) ? $data['commitment'] : null,
+                isset($data['technical']) ? $data['technical'] : null,
+                isset($data['physical']) ? $data['physical'] : null,
+                isset($data['participations']) ? $data['participations'] : null,
+                isset($data['recommendation']) ? $data['recommendation'] : null,
+                isset($data['comments']) ? $data['comments'] : null,
+            ];
+            $stmt = sqlsrv_prepare($conn, $sql, $params);
+            $execute = sqlsrv_execute($stmt);
+            sqlsrv_close($conn);
+            if ($execute) {
+                return [
+                    'message' => trans('api.success_message'),
+                    'code' => HttpCode::SUCCESS
+                ];
+            }
+        }
+        return [
+            'message' => trans('api.general_error_message'),
+            'code' => HttpCode::ERROR
+        ];
+    }
+
+    public static function coachEvaluation(array $data)
+    {
+        $user = auth()->user();
+        $conn = SqlServerApiRepository::startConnection();
+        if ($conn) {
+            $sql = "INSERT INTO dbo.tbl_Coach_Match_Evaluation_OG (Season,SportID,Category,Comp,TheDate,Participants,Difficulty,Results,Team_Performance,Weakness,Strength,Abbsents,Injuries,Comments,UserID,InsertedDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $params = [
+                $data['season'],
+                $data['sport_id'],
+                $data['category'],
+                $data['comp'],
+                date('Y-m-d H:i:s', strtotime($data['date'])),
+                $data['participants'],
+                $data['difficulty'],
+                isset($data['results']) ? $data['results'] : null,
+                isset($data['team_performance']) ? $data['team_performance'] : null,
+                isset($data['weakness']) ? $data['weakness'] : null,
+                isset($data['strength']) ? $data['strength'] : null,
+                isset($data['physical']) ? $data['physical'] : null,
+                isset($data['abbsents']) ? $data['abbsents'] : null,
+                isset($data['injuries']) ? $data['injuries'] : null,
+                isset($data['comments']) ? $data['comments'] : null,
+                $user->user_id,
+                date('Y-m-d H:i:s')
+            ];
+            $stmt = sqlsrv_prepare($conn, $sql, $params);
+            $execute = sqlsrv_execute($stmt);
+            sqlsrv_close($conn);
+            if ($execute) {
+                return [
+                    'message' => trans('api.success_message'),
+                    'code' => HttpCode::SUCCESS
+                ];
+            }
+        }
+        return [
+            'message' => trans('api.general_error_message'),
+            'code' => HttpCode::ERROR
+        ];
+    }
+
+    public static function getSports(array $data)
+    {
+        $games = SportGame::orderBy('order', 'ASC')
+            ->select('game_id AS id', 'title_ar', 'title_en', 'description_ar', 'description_en',
+                'image', 'order')
+            ->get();
+        $games = SportGameResource::collection($games);
+        // return success response
+        return [
+            'data' => $games,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getSeasons(array $data)
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $resultData = [];
+        if ($conn) {
+            $sql = "SELECT SName AS season FROM dbo.tblSeasons";
+            if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+                while ($object = sqlsrv_fetch_object($result)) {
+                    $resultData[] = [
+                        'season' => $object->season,
+                    ];
+                }
+            }
+            sqlsrv_close($conn);
+        }
+
+        return [
+            'data' => $resultData,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
         ];
     }
 }
