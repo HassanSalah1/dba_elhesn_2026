@@ -23,7 +23,7 @@ class TeamPlayerResource extends JsonResource
     {
         ini_set('serialize_precision', -1);
         $using = $this->merge(static::$using);
-        $description = isset($using->data['description']) && $using->data['description'] ?: '';
+        $description = isset($using->data['description']) && $using->data['description'] ? $using->data['description'] : '';
         return [
             'id' => $this->player_id,
             'name' => $this->name,
