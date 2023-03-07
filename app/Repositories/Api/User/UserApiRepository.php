@@ -501,7 +501,7 @@ class UserApiRepository
         $user = auth()->user();
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $sql = "INSERT INTO dbo.tbl_Coach_Match_Evaluation_OG (Season,SportID,Category,Comp,TheDate,Participants,Difficulty,Results,Team_Performance,Weakness,Strength,Abbsents,Injuries,Comments,UserID,InsertedDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO dbo.tbl_Coach_Match_Evaluation_OG (Season,SportID,Category,Comp,TheDate,Participants,Difficulty,Results,Team_Performance,Weakness,Strength,Abbsents,Injuries,Comments,UserID,InsertedDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
 
             $params = [
                 $data['season'],
