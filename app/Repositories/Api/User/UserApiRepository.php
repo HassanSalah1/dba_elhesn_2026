@@ -515,7 +515,6 @@ class UserApiRepository
                 isset($data['team_performance']) ? $data['team_performance'] : null,
                 isset($data['weakness']) ? $data['weakness'] : null,
                 isset($data['strength']) ? $data['strength'] : null,
-                isset($data['physical']) ? $data['physical'] : null,
                 isset($data['abbsents']) ? $data['abbsents'] : null,
                 isset($data['injuries']) ? $data['injuries'] : null,
                 isset($data['comments']) ? $data['comments'] : null,
