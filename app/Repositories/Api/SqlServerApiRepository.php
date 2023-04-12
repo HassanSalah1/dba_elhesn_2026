@@ -134,8 +134,9 @@ class SqlServerApiRepository
             foreach ($players as $player) {
                 $playerId = $player->player_id;
                 $sql = "SELECT TeamRowID, PNameAR, PNameEN, PlayerRowID FROM dbo.MobileApp_Players WHERE PlayerRowID=$playerId";
-                if (($result = \sqlsrv_query($conn, $sql)) === false || !sqlsrv_fetch_object($result)) {
-                    $player->forceDelete();
+                if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+                    Log::alert(sqlsrv_fetch_object($result));
+//                    $player->forceDelete();
                 }
             }
             sqlsrv_close($conn);
