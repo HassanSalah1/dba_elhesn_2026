@@ -39,6 +39,16 @@ class UtilsRepository
         ], strtolower($date));
     }
 
+    public static function sendReportEmail($subject, $email)
+    {
+        $data = [
+            'email' => $email,
+            'template' => 'general.email.report_email',
+            'subject' => $subject
+        ];
+        self::sendEmail($data);
+    }
+
     public function sortByDate($array)
     {
         usort($array, [$this, 'date_compare']);

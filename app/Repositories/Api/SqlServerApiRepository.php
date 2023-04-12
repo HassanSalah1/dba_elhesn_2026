@@ -89,7 +89,7 @@ class SqlServerApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $sql = "SELECT SportID, TeamAR, TeamEN, TeamRowID FROM dbo.MobileApp_Teams";
+            $sql = "SELECT SportID, TeamAR, TeamEN, TeamRowID, Email FROM dbo.MobileApp_Teams";
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
                     SportTeam::updateOrCreate([
@@ -98,6 +98,7 @@ class SqlServerApiRepository
                         'sport_id' => $object->SportID,
                         'name_en' => $object->TeamEN,
                         'name_ar' => $object->TeamAR,
+                        'email' => $object->Email
                     ]);
 
                 }

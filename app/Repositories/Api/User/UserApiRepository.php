@@ -244,6 +244,10 @@ class UserApiRepository
             $execute = sqlsrv_execute($stmt);
             sqlsrv_close($conn);
             if ($execute) {
+                if ($userTeam->team->email) {
+                    UtilsRepository::sendReportEmail('تقرير الإدارى:' . $userTeam->full_team_name,
+                        $userTeam->team->email);
+                }
                 return [
                     'message' => trans('api.success_message'),
                     'code' => HttpCode::SUCCESS
@@ -308,6 +312,10 @@ class UserApiRepository
             $execute = sqlsrv_execute($stmt);
             sqlsrv_close($conn);
             if ($execute) {
+                if ($userTeam->team->email) {
+                    UtilsRepository::sendReportEmail('طلب سلفة:' . $userTeam->full_team_name,
+                        $userTeam->team->email);
+                }
                 return [
                     'message' => trans('api.success_message'),
                     'code' => HttpCode::SUCCESS
@@ -436,6 +444,10 @@ class UserApiRepository
             $execute = sqlsrv_execute($stmt);
             sqlsrv_close($conn);
             if ($execute) {
+                if ($userTeam->team->email) {
+                    UtilsRepository::sendReportEmail('تقييم العام للاعبين:' . $userTeam->full_team_name,
+                        $userTeam->team->email);
+                }
                 return [
                     'message' => trans('api.success_message'),
                     'code' => HttpCode::SUCCESS

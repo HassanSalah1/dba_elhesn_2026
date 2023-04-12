@@ -12,7 +12,7 @@ class SportTeam extends Model
     use HasFactory;
 
     protected $table = 'sport_teams';
-    protected $fillable = ['sport_id', 'team_id', 'name_ar', 'name_en', 'image'];
+    protected $fillable = ['sport_id', 'team_id', 'name_ar', 'name_en', 'image' , 'email'];
     protected $appends = ['name'];
 
     public function getImageUrlAttribute()
