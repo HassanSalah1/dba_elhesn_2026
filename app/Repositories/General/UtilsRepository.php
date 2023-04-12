@@ -5,6 +5,7 @@ namespace App\Repositories\General;
 use App\Entities\DeviceType;
 use App\Entities\HttpCode;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Intervention\Image\Exception\ImageException;
 use Intervention\Image\Facades\Image;
@@ -138,6 +139,7 @@ class UtilsRepository
                 $message->subject($data['subject']);
             });
         } catch (\Exception $ex) {
+            Log::alert($ex->getMessage());
         }
     }
 
