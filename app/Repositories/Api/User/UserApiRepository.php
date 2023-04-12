@@ -246,7 +246,7 @@ class UserApiRepository
             if ($execute) {
                 if ($userTeam->team->email) {
                     UtilsRepository::sendReportEmail('تقرير الإدارى:' . $userTeam->team->name,
-                        $userTeam->team->email);
+                        'qc.milestone.apps@gmail.com'); //$userTeam->team->email
                 }
                 return [
                     'message' => trans('api.success_message'),

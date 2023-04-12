@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Models/TeamPlayer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/TeamPlayer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/Api/User/UserApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/User/UserApiRepository.php" afterDir="false" />
-    </list>
+    <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -268,7 +265,7 @@
       <workItem from="1681223851558" duration="988000" />
       <workItem from="1681284175990" duration="7426000" />
       <workItem from="1681293247915" duration="1328000" />
-      <workItem from="1681308187507" duration="1396000" />
+      <workItem from="1681308187507" duration="1880000" />
     </task>
     <servers />
   </component>
