@@ -9,5 +9,5 @@ class UserTeam extends Model
 {
     use HasFactory;
     protected $table = 'user_teams';
-    protected $fillable = ['user_id' , 'team_id' , 'full_team_name'];
+    protected $fillable = ['user_id' , 'team_id' , 'full_team_name' , 'official_id'];
 }

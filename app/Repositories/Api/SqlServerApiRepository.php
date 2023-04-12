@@ -230,15 +230,16 @@ class SqlServerApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $sql = "SELECT UserID , TeamsRowID , FullTeamNames FROM dbo.MobileApp_Officials_Teams";
+            $sql = "SELECT UserID , TeamsRowID , FullTeamNames, OfficialID FROM dbo.MobileApp_Officials_Teams";
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
                     $user = User::where(['user_id' => $object->UserID,])->first();
                     $sportTeam = SportTeam::where(['team_id' => $object->TeamsRowID,])->first();
                     if ($user && $sportTeam) {
                         UserTeam::updateOrCreate([
-                            'user_id' => $user->id
+                            'official_id' => $object->OfficialID,
                         ], [
+                            'official_id' => $object->OfficialID,
                             'user_id' => $user->id,
                             'team_id' => $sportTeam->id,
                             'full_team_name' => $object->FullTeamNames,

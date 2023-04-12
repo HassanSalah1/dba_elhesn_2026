@@ -225,23 +225,12 @@ class UserApiRepository
     public static function administrativeReport(array $data)
     {
         $user = auth()->user();
-//        $created = AdministrativeReport::create([
-//            'user_team_id' => $data['team_id'],
-//            'user_id' => $user->id,
-//            'date' => date('Y-m-d', strtotime($data['date'])),
-//            'subject' => $data['subject'],
-//            'events' => isset($data['events']) ? $data['events'] : null,
-//            'pros' => isset($data['pros']) ? $data['pros'] : null,
-//            'cons' => isset($data['cons']) ? $data['cons'] : null,
-//            'recommendations' => isset($data['recommendations']) ? $data['recommendations'] : null,
-//            'location' => isset($data['location']) ? $data['location'] : null
-//        ]);
-
+        $userTeam = UserTeam::find($data['team_id']);
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
             $sql = "INSERT INTO dbo.tblOfficial_Actions (OfficialID,UserID,InsertedDateTime,Topic,ActionDate,ActionPlace,TheEvents,Negativity,Positivity,Recommendations) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $params = [
-                0,
+                $userTeam->official_id,
                 $user->user_id,
                 date('Y-m-d H:i:s'),
                 $data['subject'], date('Y-m-d H:i:s', strtotime($data['date'])),
@@ -270,23 +259,6 @@ class UserApiRepository
     public static function advanceRequests(array $data)
     {
         $user = auth()->user();
-//        $created = AdvanceRequest::create([
-//            'user_team_id' => $data['team_id'],
-//            'user_id' => $user->id,
-//            'players_count' => $data['players_count'],
-//            'escorts_count' => $data['escorts_count'],
-//            'cost' => $data['cost'],
-//            'location' => isset($data['location']) ? $data['location'] : null,
-//            'statement' => isset($data['statement']) ? $data['statement'] : null,
-//            'tournament' => isset($data['tournament']) ? $data['tournament'] : null,
-//            'match_timing' => isset($data['match_timing']) ? $data['match_timing'] : null,
-//            'move_date' => isset($data['move_date']) ? $data['move_date'] : null,
-//            'return_date' => isset($data['return_date']) ? $data['return_date'] : null,
-//            'breakfast' => isset($data['breakfast']) ? $data['breakfast'] : null,
-//            'lunch' => isset($data['lunch']) ? $data['lunch'] : null,
-//            'dinner' => isset($data['dinner']) ? $data['dinner'] : null,
-//            'snacks' => isset($data['snacks']) ? $data['snacks'] : null,
-//        ]);
 
         $userTeam = UserTeam::find($data['team_id']);
 
@@ -391,29 +363,6 @@ class UserApiRepository
     public static function presenceAbsence(array $data)
     {
         $user = auth()->user();
-//        $created = PresenceAbsence::create([
-//            'user_team_id' => $data['team_id'],
-//            'user_id' => $user->id,
-//            'date' => date('Y-m-d', strtotime($data['date'])),
-//            'period' => $data['period']
-//        ]);
-//
-//        if ($created) {
-//            if (is_array($data['players'])) {
-//                foreach ($data['players'] as $key => $player) {
-//                    PresenceAbsencePlayer::create([
-//                        'presence_absence_id' => $created->id,
-//                        'player_id' => $player['player_id'],
-//                        'attendance_status' => $player['attendance_status'],
-//                        'notes' => $player['notes']
-//                    ]);
-//                }
-//            }
-//            return [
-//                'message' => trans('api.success_message'),
-//                'code' => HttpCode::SUCCESS
-//            ];
-//        }
 
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
