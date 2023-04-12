@@ -248,6 +248,7 @@ class SqlServerApiRepository
                     }
                 }
             }
+            Log::alert(sqlsrv_errors());
             sqlsrv_close($conn);
         }
     }
