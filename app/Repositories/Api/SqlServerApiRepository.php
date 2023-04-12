@@ -135,8 +135,11 @@ class SqlServerApiRepository
                 $playerId = $player->player_id;
                 $sql = "SELECT TeamRowID, PNameAR, PNameEN, PlayerRowID FROM dbo.MobileApp_Players WHERE PlayerRowID=$playerId";
                 if (($result = \sqlsrv_query($conn, $sql)) !== false) {
-                    Log::alert(sqlsrv_fetch_object($result));
-//                    $player->forceDelete();
+                    $object = sqlsrv_fetch_object($result);
+                    Log::alert(json_encode($object));
+                    if (!$object) {
+                        $player->forceDelete();
+                    }
                 }
             }
             sqlsrv_close($conn);
