@@ -130,7 +130,7 @@ class SqlServerApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $players = TeamPlayer::limit(50)->get();
+            $players = TeamPlayer::get();
             foreach ($players as $player) {
                 $playerId = $player->player_id;
                 $sql = "SELECT TeamRowID, PNameAR, PNameEN, PlayerRowID FROM dbo.MobileApp_Players WHERE PlayerRowID=$playerId";
