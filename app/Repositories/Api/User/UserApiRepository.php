@@ -290,7 +290,7 @@ class UserApiRepository
             }
 
             $params = [
-                $userTeam->team_id,
+                $userTeam->team->team_id,
                 $data['players_count'],
                 $data['escorts_count'],
                 $data['cost'],
@@ -418,7 +418,7 @@ class UserApiRepository
             $sql = "INSERT INTO dbo.tbl_Evaluations_Global (TeamRowID,PlayerRowID,SeasonTeamPlayerRowID,UserID,Eval_DateTime,Position,Behavior,Commitment,Technical,Physical,Participations,Recommendation,Comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $params = [
-                $userTeam->team_id,
+                $userTeam->team->team_id,
                 $data['player_id'],
                 SqlServerApiRepository::getSeasonTeamPlayerId($conn, $data['player_id']),
                 $user->user_id,
