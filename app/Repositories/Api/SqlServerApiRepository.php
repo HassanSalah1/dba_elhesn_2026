@@ -254,7 +254,9 @@ class SqlServerApiRepository
 
     public static function getSeasonTeamPlayerId($conn, $player_id)
     {
-        $sql = "SELECT TOP 1 SeasonTeamPlayerRowID FROM dbo.QSeasonTeamPlayer WHERE PlayerRowID=$player_id";
+        $player = TeamPlayer::where(['player_id' => $player_id])->first();
+        $teamId = $player->team_id;
+        $sql = "SELECT TOP 1 SeasonTeamPlayerRowID FROM dbo.QSeasonTeamPlayer WHERE PlayerRowID=".$player_id." AND TeamRowID=".$teamId;
         if (($result = \sqlsrv_query($conn, $sql)) !== false) {
             $object = sqlsrv_fetch_object($result);
             if ($object) {
