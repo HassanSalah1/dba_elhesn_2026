@@ -233,6 +233,7 @@ class SqlServerApiRepository
             $sql = "SELECT UserID , TeamsRowID , FullTeamNames, OfficialID FROM dbo.MobileApp_Officials_Teams";
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
+                    Log::alert(json_encode($object));
                     $user = User::where(['user_id' => $object->UserID,])->first();
                     $sportTeam = SportTeam::where(['team_id' => $object->TeamsRowID,])->first();
                     if ($user && $sportTeam) {
