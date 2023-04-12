@@ -245,7 +245,7 @@ class UserApiRepository
             sqlsrv_close($conn);
             if ($execute) {
                 if ($userTeam->team->email) {
-                    UtilsRepository::sendReportEmail('تقرير الإدارى:' . $userTeam->full_team_name,
+                    UtilsRepository::sendReportEmail('تقرير الإدارى:' . $userTeam->team->name,
                         $userTeam->team->email);
                 }
                 return [
@@ -313,7 +313,7 @@ class UserApiRepository
             sqlsrv_close($conn);
             if ($execute) {
                 if ($userTeam->team->email) {
-                    UtilsRepository::sendReportEmail('طلب سلفة:' . $userTeam->full_team_name,
+                    UtilsRepository::sendReportEmail('طلب سلفة:' . $userTeam->team->name,
                         $userTeam->team->email);
                 }
                 return [
@@ -402,6 +402,11 @@ class UserApiRepository
                 }
                 sqlsrv_close($conn);
                 if ($execute) {
+                    $playerObj = TeamPlayer::where(['player_id' => $data['players'][0]['player_id']])->first();
+                    if ($playerObj->team->email) {
+                        UtilsRepository::sendReportEmail('تقييم العام للاعبين:' . $playerObj->name,
+                            $playerObj->team->email);
+                    }
                     return [
                         'message' => trans('api.success_message'),
                         'code' => HttpCode::SUCCESS
@@ -445,7 +450,7 @@ class UserApiRepository
             sqlsrv_close($conn);
             if ($execute) {
                 if ($userTeam->team->email) {
-                    UtilsRepository::sendReportEmail('تقييم العام للاعبين:' . $userTeam->full_team_name,
+                    UtilsRepository::sendReportEmail('تقييم العام للاعبين:' . $userTeam->team->name,
                         $userTeam->team->email);
                 }
                 return [

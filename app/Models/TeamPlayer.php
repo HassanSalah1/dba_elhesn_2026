@@ -25,4 +25,8 @@ class TeamPlayer extends Model
         $lang = App::getLocale();
         return $lang === 'en' ? $this->name_en : $this->name_ar;
     }
+
+    public function team(){
+        return $this->belongsTo(SportTeam::class , 'team_id');
+    }
 }
