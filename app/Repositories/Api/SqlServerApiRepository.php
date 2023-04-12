@@ -36,6 +36,7 @@ use App\Repositories\General\UtilsRepository;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class SqlServerApiRepository
 {
@@ -125,6 +126,22 @@ class SqlServerApiRepository
         }
     }
 
+    public static function deleteTeamPlayers()
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        if ($conn) {
+            $players = TeamPlayer::limit(50)->get();
+            foreach ($players as $player) {
+                $playerId = $player->player_id;
+                $sql = "SELECT TeamRowID, PNameAR, PNameEN, PlayerRowID FROM dbo.MobileApp_Players WHERE PlayerRowID=$playerId";
+                if (($result = \sqlsrv_query($conn, $sql)) === false || !sqlsrv_fetch_object($result)) {
+                    $player->forceDelete();
+                }
+            }
+            sqlsrv_close($conn);
+        }
+    }
+
     public static function getPlayerImage($conn, $playerId)
     {
         $sql = "SELECT TOP 1 PlayerPhoto FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID=$playerId";
@@ -143,7 +160,7 @@ class SqlServerApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $players = TeamPlayer::where('image', '=', null)->get();
+            $players = TeamPlayer::where('image', '=', null)->limit(300)->get();
             foreach ($players as $player) {
                 $player->update([
                     'image' => self::getPlayerImage($conn, $player->player_id)
@@ -235,6 +252,7 @@ class SqlServerApiRepository
         if (($result = \sqlsrv_query($conn, $sql)) !== false) {
             $object = sqlsrv_fetch_object($result);
             if ($object) {
+                Log::alert($object->SeasonTeamPlayerRowID);
                 return $object->SeasonTeamPlayerRowID;
             }
         }

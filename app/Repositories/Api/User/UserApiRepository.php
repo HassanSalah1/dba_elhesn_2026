@@ -326,7 +326,7 @@ class UserApiRepository
                 $user->user_id,
                 date('Y-m-d H:i:s'),
                 isset($data['tournament']) ? $data['tournament'] : null,
-                isset($data['move_date']) ? date('Y-m-d H:i:s', strtotime($data['move_date'])) : null,
+                isset($data['date']) ? date('Y-m-d H:i:s', strtotime($data['date'])) : null,
                 isset($data['location']) ? $data['location'] : null,
                 isset($data['match_timing']) ? $data['match_timing'] : null,
                 isset($data['move_date']) ? $data['move_date'] : null,
@@ -353,9 +353,12 @@ class UserApiRepository
     {
         $team = UserTeam::where(['id' => $data['id']])->first();
         $team = SportTeam::find($team ? $team->team_id : null);
-        $players = TeamPlayer::where(['team_id' => $team ? $team->team_id : null])->get();
+        $players = TeamPlayer::where(['team_id' => $team ? $team->team_id : null])
+//            ->select('player_id' , 'image' , 'name_'.App::getLocale().' AS name')
+//            ->orderBy('name' , 'ASC')
+            ->get();
         return [
-            'data' => TeamPlayerResource::collection($players),
+            'data' => array_values(collect(TeamPlayerResource::collection($players))->sortBy('name')->toArray()),
             'message' => 'success',
             'code' => HttpCode::SUCCESS
         ];
