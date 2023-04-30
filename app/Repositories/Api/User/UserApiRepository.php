@@ -543,4 +543,25 @@ class UserApiRepository
             'code' => HttpCode::SUCCESS
         ];
     }
+
+    public static function getCompetitions(array $data)
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $resultData = [];
+        if ($conn) {
+            $sql = "SELECT * FROM dbo.MobileApp_Competition_Sport_".$data['id'];
+            if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+                while ($object = sqlsrv_fetch_object($result)) {
+                    $resultData[] = $object;
+                }
+            }
+            sqlsrv_close($conn);
+        }
+
+        return [
+            'data' => $resultData,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
 }

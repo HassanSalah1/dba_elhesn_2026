@@ -261,4 +261,10 @@ class UserApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getCompetitions(array $data)
+    {
+        $response = UserApiRepository::getCompetitions($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
 }

@@ -118,6 +118,12 @@ class UserController extends Controller
         return UserApiService::getSeasons($data);
     }
 
+    public function getCompetitions(Request $request , $id)
+    {
+        $data = $request->all();
+        $data['id'] = $id;
+        return UserApiService::getCompetitions($data);
+    }
 
 }
 
