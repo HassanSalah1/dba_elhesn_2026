@@ -125,6 +125,19 @@ class UserController extends Controller
         return UserApiService::getCompetitions($data);
     }
 
+    public function getMatches(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::getMatches($data);
+    }
+
+    public function updateMatcheResult(Request $request , $id)
+    {
+        $data = $request->all();
+        $data['id'] = $id;
+        return UserApiService::updateMatcheResult($data);
+    }
+
 }
 
 ?>

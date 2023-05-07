@@ -241,7 +241,7 @@ class UserApiService
             'category' => 'required',
             'comp' => 'required',
             'date' => 'required',
-            'participants'=> 'required',
+            'participants' => 'required',
             'difficulty'
         ];
         $messages = [
@@ -264,6 +264,29 @@ class UserApiService
     public static function getCompetitions(array $data)
     {
         $response = UserApiRepository::getCompetitions($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function getMatches(array $data)
+    {
+        $response = UserApiRepository::getMatches($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function updateMatcheResult(array $data)
+    {
+        $keys = [
+            'result1' => 'required',
+            'result2' => 'required',
+        ];
+        $messages = [
+            'required' => trans('api.required_error_message'),
+        ];
+        $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);
+        if ($validated !== true) {
+            return $validated;
+        }
+        $response = UserApiRepository::updateMatcheResult($data);
         return UtilsRepository::handleResponseApi($response);
     }
 
