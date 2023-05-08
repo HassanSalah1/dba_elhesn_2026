@@ -276,8 +276,7 @@ class UserApiService
     public static function updateMatcheResult(array $data)
     {
         $keys = [
-            'result1' => 'required',
-            'result2' => 'required',
+            'matches' => 'required',
         ];
         $messages = [
             'required' => trans('api.required_error_message'),

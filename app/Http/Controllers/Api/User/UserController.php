@@ -131,10 +131,9 @@ class UserController extends Controller
         return UserApiService::getMatches($data);
     }
 
-    public function updateMatcheResult(Request $request , $id)
+    public function updateMatcheResult(Request $request)
     {
         $data = $request->all();
-        $data['id'] = $id;
         return UserApiService::updateMatcheResult($data);
     }
 

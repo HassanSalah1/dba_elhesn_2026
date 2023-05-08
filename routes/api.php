@@ -104,7 +104,7 @@ Route::group(['middleware' => 'lang'], function () {
             Route::get('/competitions/{id}', [UserController::class, 'getCompetitions']);
 
             Route::get('/matches', [UserController::class, 'getMatches']);
-            Route::post('/match/{id}', [UserController::class, 'updateMatcheResult']);
+            Route::post('/match/update', [UserController::class, 'updateMatcheResult']);
 
         });
     });

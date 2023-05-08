@@ -590,21 +590,21 @@ class UserApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $params = [
-                $data['result1'] ,
-                $data['result2'],
-                $data['id']
-            ];
-            $sql = "UPDATE dbo.tblMatches SET Team1Result=? , Team2Result=? WHERE RowID=?";
-            $stmt = sqlsrv_prepare($conn, $sql, $params);
-            $execute = sqlsrv_execute($stmt);
-            sqlsrv_close($conn);
-            if ($execute) {
-                return [
-                    'message' => trans('api.success_message'),
-                    'code' => HttpCode::SUCCESS
+            foreach ($data['matches'] as $match){
+                $params = [
+                    $match['result1'] ,
+                    $match['result2'],
+                    $match['id']
                 ];
+                $sql = "UPDATE dbo.tblMatches SET Team1Result=? , Team2Result=? WHERE RowID=?";
+                $stmt = sqlsrv_prepare($conn, $sql, $params);
+                $execute = sqlsrv_execute($stmt);
             }
+            sqlsrv_close($conn);
+            return [
+                'message' => trans('api.success_message'),
+                'code' => HttpCode::SUCCESS
+            ];
         }
         return [
             'message' => trans('api.general_error_message'),
