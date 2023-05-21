@@ -549,10 +549,33 @@ class UserApiRepository
         $conn = SqlServerApiRepository::startConnection();
         $resultData = [];
         if ($conn) {
-            $sql = "SELECT * FROM dbo.MobileApp_Competition_Sport_".$data['id'];
+            $sql = "SELECT * FROM dbo.MobileApp_Competition_Sport_" . $data['id'];
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+                $id = intval($data['id']);
                 while ($object = sqlsrv_fetch_object($result)) {
-                    $resultData[] = $object;
+                    if (in_array($id, [1,2, 7, 9])) {
+                        $objectArr = [
+                            'name' => $object->CompetitionAR . '(' . $object->HomeAR . '-' . $object->AgainstAR . ')',
+                            'name_en' => $object->CompetitionEN . '(' . $object->HomeEN . '-' . $object->AgainstEN . ')',
+                            'date' => $object->Date_and_Time,
+                            'result' => $object->Result,
+                        ];
+                    } else if (in_array($id, [4, 5,6, 8])) {
+                        $objectArr = [
+                            'name' => $object->CompetitionAR,
+                            'name_en' => $object->CompetitionEN,
+                            'date' => date('Y-m-d' , strtotime($object->DateFrom->date)) .'-'.date('Y-m-d' , strtotime($object->DateTo->date)),
+                            'result' => $object->Rank,
+                        ];
+                    } else {
+                        $objectArr = [
+                            'name' => $object->CompetitionAR,
+                            'name_en' => $object->CompetitionEN,
+                            'date' => date('Y-m-d' , strtotime($object->TheDate->date)),
+                            'result' => $object->Rank,
+                        ];
+                    }
+                    $resultData[] = $objectArr;
                 }
             }
             sqlsrv_close($conn);
@@ -570,7 +593,7 @@ class UserApiRepository
         $conn = SqlServerApiRepository::startConnection();
         $resultData = [];
         if ($conn) {
-            $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate='".date('Y-m-d')."'";
+            $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate='" . date('Y-m-d') . "'";
             $result = \sqlsrv_query($conn, $sql);
             if ($result !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
@@ -591,9 +614,9 @@ class UserApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            foreach ($data['matches'] as $match){
+            foreach ($data['matches'] as $match) {
                 $params = [
-                    $match['result1'] ,
+                    $match['result1'],
                     $match['result2'],
                     $match['id']
                 ];
