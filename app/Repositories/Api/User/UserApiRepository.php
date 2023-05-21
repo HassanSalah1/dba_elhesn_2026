@@ -570,9 +570,8 @@ class UserApiRepository
         $conn = SqlServerApiRepository::startConnection();
         $resultData = [];
         if ($conn) {
-            $sql = "SELECT * FROM dbo.tblMatches WHERE DATE(Matchdate)='".date('Y-m-d')."'";
+            $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate='".date('Y-m-d')."'";
             $result = \sqlsrv_query($conn, $sql);
-            dd(sqlsrv_errors());
             if ($result !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
                     $resultData[] = $object;
