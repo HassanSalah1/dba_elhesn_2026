@@ -564,8 +564,8 @@ class UserApiRepository
                         $objectArr = [
                             'name' => $object->CompetitionAR,
                             'name_en' => $object->CompetitionEN,
-                            'date' => (new \DateTime($object->DateFrom))->format('Y-m-d') .'-'
-                                .(new \DateTime($object->DateTo))->format('Y-m-d') ,
+                            'date' => ($object->DateFrom)->format('Y-m-d') .'-'
+                                .($object->DateTo)->format('Y-m-d') ,
                             'result' => $object->Rank,
                         ];
                     } else {
