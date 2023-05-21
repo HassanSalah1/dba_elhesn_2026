@@ -561,7 +561,6 @@ class UserApiRepository
                             'result' => $object->Result,
                         ];
                     } else if (in_array($id, [4, 5,6, 8])) {
-                        var_dump();
                         $objectArr = [
                             'name' => $object->CompetitionAR,
                             'name_en' => $object->CompetitionEN,
