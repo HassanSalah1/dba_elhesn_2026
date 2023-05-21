@@ -561,10 +561,11 @@ class UserApiRepository
                             'result' => $object->Result,
                         ];
                     } else if (in_array($id, [4, 5,6, 8])) {
+                        var_dump($object->DateFrom);
                         $objectArr = [
                             'name' => $object->CompetitionAR,
                             'name_en' => $object->CompetitionEN,
-                            'date' => date('Y-m-d' , strtotime($object->DateFrom)) .'-'.date('Y-m-d' , strtotime($object->DateTo)),
+                            'date' => date('Y-m-d' , strtotime()) .'-'.date('Y-m-d' , strtotime($object->DateTo)),
                             'result' => $object->Rank,
                         ];
                     } else {
