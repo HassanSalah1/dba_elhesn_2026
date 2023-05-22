@@ -568,7 +568,7 @@ class UserApiRepository
                             'team1' => null,
                             'team2' => null,
                             'date' => ($object->DateFrom)->format('Y-m-d'),
-                            'result' => $object->Rank,
+                            'result' => $object->Rank?$object->Rank.'':null,
                         ];
                     } else {
                         $objectArr = [
@@ -576,7 +576,7 @@ class UserApiRepository
                             'team1' => null,
                             'team2' => null,
                             'date' => ($object->TheDate)->format('Y-m-d'),
-                            'result' => $object->Rank,
+                            'result' => $object->Rank?$object->Rank.'':null,
                         ];
                     }
                     $resultData[] = $objectArr;
