@@ -550,28 +550,31 @@ class UserApiRepository
         $resultData = [];
         if ($conn) {
             $sql = "SELECT * FROM dbo.MobileApp_Competition_Sport_" . $data['id'];
+            $lang = App::getLocale();
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 $id = intval($data['id']);
                 while ($object = sqlsrv_fetch_object($result)) {
-                    if (in_array($id, [1,2, 7, 9])) {
+                    if (in_array($id, [1, 2, 7, 9])) {
                         $objectArr = [
-                            'name' => $object->CompetitionAR . '(' . $object->HomeAR . '-' . $object->AgainstAR . ')',
-                            'name_en' => $object->CompetitionEN . '(' . $object->HomeEN . '-' . $object->AgainstEN . ')',
+                            'competition_name' => $lang == 'ar' ? $object->CompetitionAR : $object->CompetitionEN,
+                            'team1' => $lang == 'ar' ? $object->HomeAR : $object->HomeEN,
+                            'team2' => $lang == 'ar' ? $object->AgainstAR : $object->AgainstEN,
                             'date' => $object->Date_and_Time,
                             'result' => $object->Result,
                         ];
-                    } else if (in_array($id, [4, 5,6, 8])) {
+                    } else if (in_array($id, [4, 5, 6, 8])) {
                         $objectArr = [
-                            'name' => $object->CompetitionAR,
-                            'name_en' => $object->CompetitionEN,
-                            'date' => ($object->DateFrom)->format('Y-m-d') .' / '
-                                .($object->DateTo)->format('Y-m-d') ,
+                            'competition_name' => $lang == 'ar' ? $object->CompetitionAR : $object->CompetitionEN,
+                            'team1' => null,
+                            'team2' => null,
+                            'date' => ($object->DateFrom)->format('Y-m-d'),
                             'result' => $object->Rank,
                         ];
                     } else {
                         $objectArr = [
-                            'name' => $object->CompetitionAR,
-                            'name_en' => $object->CompetitionEN,
+                            'competition_name' => $lang == 'ar' ? $object->CompetitionAR : $object->CompetitionEN,
+                            'team1' => null,
+                            'team2' => null,
                             'date' => ($object->TheDate)->format('Y-m-d'),
                             'result' => $object->Rank,
                         ];
