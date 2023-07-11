@@ -5,6 +5,7 @@ namespace App\Repositories\Api\User;
 
 use App\Entities\HttpCode;
 use App\Entities\Period;
+use App\Entities\UserRoles;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SportGameResource;
 use App\Http\Resources\TeamPlayerResource;
@@ -27,6 +28,7 @@ use App\Repositories\General\UtilsRepository;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Illuminate\Support\Facades\App;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 
 
 class UserApiRepository
@@ -548,13 +550,20 @@ class UserApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         $resultData = [];
+        $page = isset($data['page']) ? $data['page'] : 1;
+        $pageSize = 20;
+        $offset = ($page - 1) * $pageSize;
         if ($conn) {
-            $sql = "SELECT * FROM dbo.MobileApp_Competition_Sport_" . $data['id'];
+            $id = $data['id'];
+            $queryFilter = "";
+            if (in_array($id, [1, 2, 7, 9, '1_And_9']) && isset($data['date'])) {
+                $queryFilter = " WHERE Date_and_Time='" . date('Y-m-d', strtotime($data['date'])) . "'";
+            }
+            $sql = "SELECT * FROM dbo.MobileApp_Competition_Sport_" . $data['id'] . $queryFilter . " ORDER BY CompetitionEN OFFSET " . $offset . " ROWS FETCH NEXT " . $pageSize . " ROWS ONLY";
             $lang = App::getLocale();
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
-                $id = intval($data['id']);
                 while ($object = sqlsrv_fetch_object($result)) {
-                    if (in_array($id, [1, 2, 7, 9])) {
+                    if (in_array($id, [1, 2, 7, 9, '1_And_9'])) {
                         $objectArr = [
                             'competition_name' => $lang == 'ar' ? $object->CompetitionAR : $object->CompetitionEN,
                             'team1' => $lang == 'ar' ? $object->HomeAR : $object->HomeEN,
@@ -568,7 +577,7 @@ class UserApiRepository
                             'team1' => null,
                             'team2' => null,
                             'date' => ($object->DateFrom)->format('Y-m-d'),
-                            'result' => $object->Rank?$object->Rank.'':null,
+                            'result' => $object->Rank ? $object->Rank . '' : null,
                         ];
                     } else {
                         $objectArr = [
@@ -576,7 +585,7 @@ class UserApiRepository
                             'team1' => null,
                             'team2' => null,
                             'date' => ($object->TheDate)->format('Y-m-d'),
-                            'result' => $object->Rank?$object->Rank.'':null,
+                            'result' => $object->Rank ? $object->Rank . '' : null,
                         ];
                     }
                     $resultData[] = $objectArr;
@@ -584,16 +593,34 @@ class UserApiRepository
             }
             sqlsrv_close($conn);
         }
-
-        return [
-            'data' => $resultData,
-            'message' => 'success',
-            'code' => HttpCode::SUCCESS
-        ];
+        if (isset($data['page'])) {
+            return [
+                'data' => [
+                    'results' => $resultData,
+                    'page' => intval($page),
+                    'more_pages' => count($resultData) > 0
+                ],
+                'message' => 'success',
+                'code' => HttpCode::SUCCESS
+            ];
+        } else {
+            return [
+                'data' => $resultData,
+                'message' => 'success',
+                'code' => HttpCode::SUCCESS
+            ];
+        }
     }
 
     public static function getMatches(array $data)
     {
+        $user = auth()->user();
+        if (!in_array($user->role, [UserRoles::Foot])) {
+            return [
+                'message' => trans('api.not_login_message'),
+                'code' => HttpCode::AUTH_ERROR
+            ];
+        }
         $conn = SqlServerApiRepository::startConnection();
         $resultData = [];
         if ($conn) {

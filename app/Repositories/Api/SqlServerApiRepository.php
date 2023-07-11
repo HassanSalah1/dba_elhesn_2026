@@ -111,12 +111,16 @@ class SqlServerApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $sql = "SELECT TeamRowID, PNameAR, PNameEN, PlayerRowID FROM dbo.MobileApp_Players ";
-            if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+            $sql = "SELECT TeamRowID, PNameAR, PNameEN, PlayerRowID FROM dbo.MobileApp_Players ORDER BY PlayerRowID DESC";
+            $result = \sqlsrv_query($conn, $sql);
+            if ($result !== false) {
+                $count = 0;
                 while ($object = sqlsrv_fetch_object($result)) {
                     TeamPlayer::updateOrCreate([
-                        'player_id' => $object->PlayerRowID
+                        'player_id' => $object->PlayerRowID,
+                        'team_id' => $object->TeamRowID,
                     ], [
+                        'player_id' => $object->PlayerRowID,
                         'team_id' => $object->TeamRowID,
                         'name_en' => $object->PNameEN,
                         'name_ar' => $object->PNameAR,
@@ -149,13 +153,15 @@ class SqlServerApiRepository
 
     public static function getPlayerImage($conn, $playerId)
     {
-        $sql = "SELECT TOP 1 PlayerPhoto FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID=$playerId";
+        $sql = "SELECT TOP 1 PlayerPhoto,PlayerRowID FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID=$playerId AND PlayerPhoto IS NOT NULL";
         $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
         $image_path = 'uploads/players/';
-        if (($result = \sqlsrv_query($conn, $sql)) !== false) {
+        $result = \sqlsrv_query($conn, $sql);
+        if ($result !== false) {
             $object = sqlsrv_fetch_object($result);
             if ($object) {
-                return UtilsRepository::createImageBase64(base64_encode($object->PlayerPhoto), $image_path, $file_id, 282, 561);
+                $base64 = base64_encode($object->PlayerPhoto);
+                return UtilsRepository::createImageBase64($base64, $image_path, $file_id, 282, 561);
             }
         }
         return null;
@@ -165,9 +171,10 @@ class SqlServerApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $players = TeamPlayer::where('image', '=', null)->limit(300)->get();
+            $players = TeamPlayer::where('image', '=', null)
+                ->inRandomOrder()->limit(50)->get();
             foreach ($players as $player) {
-                $player->update([
+                TeamPlayer::where(['player_id' => $player->player_id])->update([
                     'image' => self::getPlayerImage($conn, $player->player_id)
                 ]);
             }
@@ -178,7 +185,7 @@ class SqlServerApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $teams = SportTeam::where('image', '=', null)->get();
+            $teams = SportTeam::where('image', '=', null)->limit(1)->get();
             foreach ($teams as $team) {
                 $team->update([
                     'image' => self::getTeamImage($conn, $team->team_id)

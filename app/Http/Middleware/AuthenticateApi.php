@@ -15,7 +15,7 @@ class AuthenticateApi
     {
         $user = auth()->user();
 
-        if (!$user || !in_array( $user->role , [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL])
+        if (!$user || !in_array($user->role, [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL, UserRoles::Foot])
             || $user->status === Status::INACTIVE) {
             return UtilsRepository::handleResponseApi([
                 'message' => trans('api.not_login_message'),

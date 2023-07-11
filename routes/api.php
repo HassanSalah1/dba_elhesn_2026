@@ -71,6 +71,8 @@ Route::group(['middleware' => 'lang'], function () {
         Route::post('/image/upload', [UserController::class, 'uploadImage']);
         Route::post('/sport/subscribe', [UserController::class, 'subscribeSport']);
 
+        Route::get('/competitions/{id}', [UserController::class, 'getCompetitions']);
+
 //        Route::get('/get/home', [HomeController::class, 'getHome']); // get Home data
 
         Route::group(['middleware' => ['auth:api', 'authApi']], function () {
@@ -101,7 +103,7 @@ Route::group(['middleware' => 'lang'], function () {
             Route::post('/coach_evaluation', [UserController::class, 'coachEvaluation']);
             Route::post('/coach_evaluation/seasons', [UserController::class, 'getSeasons']);
 
-            Route::get('/competitions/{id}', [UserController::class, 'getCompetitions']);
+
 
             Route::get('/matches', [UserController::class, 'getMatches']);
             Route::post('/match/update', [UserController::class, 'updateMatcheResult']);

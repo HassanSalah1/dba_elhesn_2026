@@ -14,6 +14,7 @@ class UserRoles extends Enum
     const CoachGK = 'CoachGK';
     const CoachGKJunior = 'CoachGKJunior';
     const COACH = 'Coach';
+    const Foot = 'Foot';
 }
 
 ?>

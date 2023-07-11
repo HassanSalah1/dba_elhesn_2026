@@ -642,11 +642,11 @@
                             style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
 
 
-                            <img align="center" alt=""
-                                 src="{{url('assets/images/elconnova.png')}}"
-                                 width="100"
-                                 style="max-width:100px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
-                                 class="mcnImage">
+                            {{--                            <img align="center" alt=""--}}
+                            {{--                                 src="{{url('assets/images/elconnova.png')}}"--}}
+                            {{--                                 width="100"--}}
+                            {{--                                 style="max-width:100px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"--}}
+                            {{--                                 class="mcnImage">--}}
 
 
                         </td>
@@ -688,8 +688,8 @@
                                                     <div class="leafContainer">
 
                                                         {{--<img src="https://gallery.mailchimp.com/27aac8a65e64c994c4416d6b8/images/notepad_left_vert_40x400.png"--}}
-                                                             {{--height="400" width="40" class="mobileHide"--}}
-                                                             {{--style="display:block;">--}}
+                                                        {{--height="400" width="40" class="mobileHide"--}}
+                                                        {{--style="display:block;">--}}
                                                     </div>
                                                 </td>
                                                 <td valign="top" width="100%" class="bodyContainer"
@@ -807,7 +807,7 @@
                                                                             class="mcnTextContent"
                                                                             style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
                                                                             <p style="font-size: 17px;text-align: left; margin: 0px;font-weight: bold;">
-                                                                                — <a href="https://dhclub.ae">DHclub</a> team</p>
+                                                                                — DHclub team</p>
                                                                         </td>
                                                                     </tr>
                                                                     </tbody>
