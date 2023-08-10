@@ -66,6 +66,10 @@ Route::group(['prefix' => 'admin'], function () {
         ////////////////////////////////
         Route::get('/terms', [HomeController::class, 'showTerms'])->name('dashboard-terms'); // about page
         Route::post('/terms/save', [HomeController::class, 'saveTerms']);
+
+        ////////////////////////////////
+        Route::get('/magles', [HomeController::class, 'showMagles'])->name('dashboard-magles'); // about page
+        Route::post('/magles/save', [HomeController::class, 'saveMagles']);
         ////////////////////////////////
         Route::post('/upload/image', [HomeController::class, 'uploadEditorImages']); // upload editor images inside text
         //////////////////////////////////

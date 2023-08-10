@@ -63,6 +63,31 @@ class HomeRepository
             , '');
     }
 
+    public static function saveMagles(array $data)
+    {
+        // terms ar
+        if (isset($data[Key::MAGLES_AR])) {
+            $terms_ar = Setting::where(['key' => Key::MAGLES_AR])->first();
+            if ($terms_ar) {
+                $terms_ar->update(['value' => $data[Key::MAGLES_AR]]);
+            } else {
+                Setting::create(['key' => Key::MAGLES_AR, 'value' => $data[Key::MAGLES_AR]]);
+            }
+        }
+
+        // terms en
+        if (isset($data[Key::MAGLES_EN])) {
+            $terms_en = Setting::where(['key' => Key::MAGLES_EN])->first();
+            if ($terms_en) {
+                $terms_en->update(['value' => $data[Key::MAGLES_EN]]);
+            } else {
+                Setting::create(['key' => Key::MAGLES_EN, 'value' => $data[Key::MAGLES_EN]]);
+            }
+        }
+
+        return UtilsRepository::response(true, trans('admin.process_success_message')
+            , '');
+    }
 
     public static function saveHistory(array $data)
 

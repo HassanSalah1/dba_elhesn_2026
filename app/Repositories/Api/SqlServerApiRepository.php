@@ -212,7 +212,7 @@ class SqlServerApiRepository
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $sql = "SELECT UserID , UserEN , UserAR , Username , Password , Role FROM dbo.MobileApp_Users";
+            $sql = "SELECT UserID , UserEN , UserAR , Username , Password , Role FROM dbo.MobileApp_Users ORDER BY UserID DESC";
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
                     if (User::where(['email' => $object->Username . '@dhclubapp.xyz',])->first()) {

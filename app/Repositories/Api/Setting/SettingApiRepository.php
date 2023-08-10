@@ -58,6 +58,23 @@ class SettingApiRepository
         ];
     }
 
+    public static function getMagles(array $data)
+    {
+
+        $lang = App::getLocale();
+        $setting = Setting::where(['key' => ($lang === 'en') ?
+            Key::MAGLES_EN : Key::MAGLES_AR])->first();
+
+        // return success response
+        return [
+            'data' => [
+                'magles' => $setting ? $setting->value : null,
+            ],
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
     public static function getTerms(array $data)
     {
 

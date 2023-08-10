@@ -3,8 +3,17 @@
   <component name="ChangeListManager">
     <list default="true" id="2c8a92d6-8389-422f-83cd-75ca4ed11af5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Entities/Key.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Entities/Key.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/Setting/SettingController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/Setting/SettingController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositories/Api/Setting/SettingApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/Setting/SettingApiRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Repositories/Api/SqlServerApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/SqlServerApiRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/Api/User/UserApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/User/UserApiRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositories/Dashboard/HomeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Dashboard/HomeRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/Api/Setting/SettingApiService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/Api/Setting/SettingApiService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" beforeDir="false" afterPath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lang/ar/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/ar/admin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/panel.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/panel.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -294,6 +303,7 @@
       <workItem from="1690731373433" duration="402000" />
       <workItem from="1690732013637" duration="2711000" />
       <workItem from="1690740256556" duration="71000" />
+      <workItem from="1691707748234" duration="1753000" />
     </task>
     <servers />
   </component>
@@ -301,10 +311,6 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="519" y="202" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1681308642208">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="519" y="202" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1681308642208" />
     <state x="413" y="119" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1689107154493">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -313,11 +319,13 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="488" y="148" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1689914804813" />
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1682886518262" />
-    <state x="426" y="114" width="555" height="566" key="find.popup" timestamp="1689107140077">
+    <state x="426" y="114" width="555" height="566" key="find.popup" timestamp="1691708314827">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="426" y="114" width="555" height="566" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1689107140077" />
-    <state x="479" y="129" width="577" height="566" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1681383057011" />
+    <state x="426" y="114" width="555" height="566" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1691708314827" />
+    <state x="339" y="162" key="run.anything.popup" timestamp="1691708277193">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1691708277193" />
   </component>
 </project>

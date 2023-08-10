@@ -20,6 +20,8 @@ class Key
     const CLUB_HISTORY_EN = 'club_history_en';
     const TEAM_DESCRIPTION_AR = 'team_description_ar';
     const TEAM_DESCRIPTION_EN = 'team_description_en';
+    const MAGLES_AR = 'MAGLES_AR';
+    const MAGLES_EN = 'MAGLES_EN';
 
 }
 

@@ -74,6 +74,28 @@ class HomeController extends Controller
         return HomeRepository::saveTerms($data);
     }
 
+
+// show terms page
+    public function showMagles()
+    {
+        $data['pageConfigs'] = [
+            'pageHeader' => false,
+            'defaultLanguage' => 'ar',
+            'direction' => 'rtl'
+        ];
+        $data['magles_ar'] = Setting::where(['key' => Key::MAGLES_AR])->first();
+        $data['magles_en'] = Setting::where(['key' => Key::MAGLES_EN])->first();
+        $data['title'] = trans('admin.magles_title');
+        return view('admin.settings.magles')->with($data);
+    }
+
+    // save terms POST request
+    public function saveMagles(Request $request)
+    {
+        $data = $request->all();
+        return HomeRepository::saveMagles($data);
+    }
+
     // show setting page
     public function showSetting()
     {

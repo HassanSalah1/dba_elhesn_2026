@@ -22,6 +22,12 @@ class SettingApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getMagles(array $data)
+    {
+        $response = SettingApiRepository::getMagles($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
     public static function getTerms(array $data)
     {
         $response = SettingApiRepository::getTerms($data);

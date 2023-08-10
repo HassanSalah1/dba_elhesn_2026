@@ -83,6 +83,13 @@
             "permission": "about"
         },
         {
+            "name": "magles_title",
+            "icon": "info",
+            "url": "admin/magles",
+            "slug": "dashboard-magles",
+            "permission": "about"
+        },
+        {
             "name": "terms_title",
             "url": "admin/terms",
             "icon": "info",

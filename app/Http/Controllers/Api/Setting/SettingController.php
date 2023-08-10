@@ -27,6 +27,11 @@ class SettingController extends Controller
         return SettingApiService::getAbout($data);
     }
 
+    public function getMagles(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getMagles($data);
+    }
 
     public function getTerms(Request $request)
     {
