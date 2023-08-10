@@ -215,19 +215,20 @@ class SqlServerApiRepository
             $sql = "SELECT UserID , UserEN , UserAR , Username , Password , Role FROM dbo.MobileApp_Users";
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
-                    if (User::where(['email' => $object->Username . '@dhclubapp.xyz'])->first()) {
-                        User::updateOrCreate([
-                            'user_id' => $object->UserID,
-                        ], [
-                            'user_id' => $object->UserID,
-                            'name' => $object->UserEN,
-                            'email' => $object->Username . '@dhclubapp.xyz',
-                            'password' => Hash::make($object->Password),
-                            'role' => $object->Role,
-                            'status' => Status::ACTIVE,
-                            'lang' => 'en'
-                        ]);
+                    if (User::where(['email' => $object->Username . '@dhclubapp.xyz',])->first()) {
+                        continue;
                     }
+                    User::updateOrCreate([
+                        'user_id' => $object->UserID,
+                    ], [
+                        'user_id' => $object->UserID,
+                        'name' => $object->UserEN,
+                        'email' => $object->Username . '@dhclubapp.xyz',
+                        'password' => Hash::make($object->Password),
+                        'role' => $object->Role,
+                        'status' => Status::ACTIVE,
+                        'lang' => 'en'
+                    ]);
                 }
             }
             sqlsrv_close($conn);
@@ -264,7 +265,7 @@ class SqlServerApiRepository
     {
         $player = TeamPlayer::where(['player_id' => $player_id])->first();
         $teamId = $player->team_id;
-        $sql = "SELECT TOP 1 SeasonTeamPlayerRowID FROM dbo.QSeasonTeamPlayer WHERE PlayerRowID=".$player_id." AND TeamRowID=".$teamId;
+        $sql = "SELECT TOP 1 SeasonTeamPlayerRowID FROM dbo.QSeasonTeamPlayer WHERE PlayerRowID=" . $player_id . " AND TeamRowID=" . $teamId;
         if (($result = \sqlsrv_query($conn, $sql)) !== false) {
             $object = sqlsrv_fetch_object($result);
             if ($object) {

@@ -11,24 +11,18 @@ use App\Http\Resources\SportGameResource;
 use App\Http\Resources\TeamPlayerResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserTeamResource;
-use App\Models\AdministrativeReport;
-use App\Models\AdvanceRequest;
 use App\Models\Notification;
-use App\Models\PresenceAbsence;
-use App\Models\PresenceAbsencePlayer;
 use App\Models\SportGame;
 use App\Models\SportTeam;
 use App\Models\Subscribe;
 use App\Models\TeamPlayer;
-use App\Models\User;
 use App\Models\UserTeam;
 use App\Repositories\Api\Auth\AuthApiRepository;
 use App\Repositories\Api\SqlServerApiRepository;
 use App\Repositories\General\UtilsRepository;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Illuminate\Support\Facades\App;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Log;
 
 
 class UserApiRepository
@@ -405,7 +399,7 @@ class UserApiRepository
                 sqlsrv_close($conn);
                 if ($execute) {
                     $playerObj = TeamPlayer::where(['player_id' => $data['players'][0]['player_id']])->first();
-                    if ($playerObj->team->email) {
+                    if (@$playerObj->team->email) {
                         UtilsRepository::sendReportEmail('تقييم العام للاعبين:' . $playerObj->name,
                             $playerObj->team->email);
                     }
@@ -553,13 +547,21 @@ class UserApiRepository
         $page = isset($data['page']) ? $data['page'] : 1;
         $pageSize = 20;
         $offset = ($page - 1) * $pageSize;
+        $total = 0;
         if ($conn) {
             $id = $data['id'];
             $queryFilter = "";
             if (in_array($id, [1, 2, 7, 9, '1_And_9']) && isset($data['date'])) {
-                $queryFilter = " WHERE Date_and_Time='" . date('Y-m-d', strtotime($data['date'])) . "'";
+                $orderBy = 'convert(datetime, Date_and_Time,103)';
+                $queryFilter = " WHERE Date_and_Time LIKE '%" . date('d/m/Y', strtotime($data['date'])) . "%'";
+            } else if (in_array($id, [1, 2, 7, 9, '1_And_9'])) {
+                $orderBy = 'convert(datetime, Date_and_Time,103)';
+            } else if (in_array($id, [4, 5, 6, 8])) {
+                $orderBy = 'DateFrom';
+            } else {
+                $orderBy = 'TheDate';
             }
-            $sql = "SELECT * FROM dbo.MobileApp_Competition_Sport_" . $data['id'] . $queryFilter . " ORDER BY CompetitionEN OFFSET " . $offset . " ROWS FETCH NEXT " . $pageSize . " ROWS ONLY";
+            $sql = "SELECT * FROM dbo.MobileApp_Competition_Sport_" . $data['id'] . $queryFilter . " ORDER BY " . $orderBy . " DESC OFFSET " . $offset . " ROWS FETCH NEXT " . $pageSize . " ROWS ONLY";
             $lang = App::getLocale();
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
@@ -569,7 +571,9 @@ class UserApiRepository
                             'team1' => $lang == 'ar' ? $object->HomeAR : $object->HomeEN,
                             'team2' => $lang == 'ar' ? $object->AgainstAR : $object->AgainstEN,
                             'date' => $object->Date_and_Time,
+                            'to_date' => null,
                             'result' => $object->Result,
+                            'points' => null,
                         ];
                     } else if (in_array($id, [4, 5, 6, 8])) {
                         $objectArr = [
@@ -577,7 +581,9 @@ class UserApiRepository
                             'team1' => null,
                             'team2' => null,
                             'date' => ($object->DateFrom)->format('Y-m-d'),
+                            'to_date' => ($object->DateTo)->format('Y-m-d'),
                             'result' => $object->Rank ? $object->Rank . '' : null,
+                            'points' => isset($object->Points) ? $object->Points . '' : null,
                         ];
                     } else {
                         $objectArr = [
@@ -585,24 +591,29 @@ class UserApiRepository
                             'team1' => null,
                             'team2' => null,
                             'date' => ($object->TheDate)->format('Y-m-d'),
+                            'to_date' => null,
                             'result' => $object->Rank ? $object->Rank . '' : null,
+                            'points' => isset($object->Points) ? $object->Points . '' : null,
                         ];
                     }
                     $resultData[] = $objectArr;
                 }
+
+                $sql = "SELECT COUNT(*) AS myCounter FROM dbo.MobileApp_Competition_Sport_" . $data['id'] . $queryFilter;
+                $result = \sqlsrv_query($conn, $sql);
+                $object = sqlsrv_fetch_object($result);
+                $total = $object->myCounter;
             }
             sqlsrv_close($conn);
         }
         if (isset($data['page'])) {
-            return [
-                'data' => [
-                    'results' => $resultData,
-                    'page' => intval($page),
-                    'more_pages' => count($resultData) > 0
-                ],
+            return ['data' => ['results' => $resultData,
+                'total' => isset($object) && $object ? $object->myCounter : 0,
+                'page_size' => $pageSize,
+                'page' => intval($page),
+                'more_pages' => count($resultData) > 0],
                 'message' => 'success',
-                'code' => HttpCode::SUCCESS
-            ];
+                'code' => HttpCode::SUCCESS];
         } else {
             return [
                 'data' => $resultData,
@@ -612,7 +623,8 @@ class UserApiRepository
         }
     }
 
-    public static function getMatches(array $data)
+    public
+    static function getMatches(array $data)
     {
         $user = auth()->user();
         if (!in_array($user->role, [UserRoles::Foot])) {
@@ -641,7 +653,8 @@ class UserApiRepository
         ];
     }
 
-    public static function updateMatcheResult(array $data)
+    public
+    static function updateMatcheResult(array $data)
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
