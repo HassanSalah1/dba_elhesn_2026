@@ -28,6 +28,12 @@ class SettingApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getClubStructure(array $data)
+    {
+        $response = SettingApiRepository::getClubStructure($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
     public static function getTerms(array $data)
     {
         $response = SettingApiRepository::getTerms($data);

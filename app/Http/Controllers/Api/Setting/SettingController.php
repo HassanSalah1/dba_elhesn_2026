@@ -33,6 +33,12 @@ class SettingController extends Controller
         return SettingApiService::getMagles($data);
     }
 
+    public function getClubStructure(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getClubStructure($data);
+    }
+
     public function getTerms(Request $request)
     {
         $data = $request->all();

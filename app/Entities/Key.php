@@ -23,6 +23,8 @@ class Key
     const MAGLES_AR = 'MAGLES_AR';
     const MAGLES_EN = 'MAGLES_EN';
 
+
+    const CLUB_STRUCTURE = 'club_structure';
 }
 
 ?>

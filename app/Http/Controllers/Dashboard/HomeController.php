@@ -112,6 +112,8 @@ class HomeController extends Controller
         $data['phone'] = Setting::where(['key' => Key::PHONE])->first();
         $data['latitude'] = Setting::where(['key' => Key::LATITUDE])->first();
         $data['longitude'] = Setting::where(['key' => Key::LONGITUDE])->first();
+
+        $data['CLUB_STRUCTURE'] = Setting::where(['key' => Key::CLUB_STRUCTURE])->first();
         $data['title'] = trans('admin.settings_title');
         return view('admin.settings.setting')->with($data);
     }
@@ -121,6 +123,7 @@ class HomeController extends Controller
     public function saveSetting(Request $request)
     {
         $data = $request->all();
+        $data['request'] = $request;
         return HomeRepository::saveSetting($data);
     }
 

@@ -91,6 +91,16 @@
                                     </div>
                                 </div>
 
+                                <div class="col-xl-6 col-md-6 col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label"
+                                               for="{{\App\Entities\Key::CLUB_STRUCTURE}}">هيكل النادي من اعضاء مجلس ادارة وموظفين</label>
+                                        <input type="file" class="form-control" id="{{\App\Entities\Key::CLUB_STRUCTURE}}" accept="application/pdf"
+                                               name="{{\App\Entities\Key::CLUB_STRUCTURE}}" @if(isset($CLUB_STRUCTURE) && $CLUB_STRUCTURE) value="{{$CLUB_STRUCTURE->value}}" @endif
+                                               placeholder="{{trans('admin.'.\App\Entities\Key::CLUB_STRUCTURE)}}"/>
+                                    </div>
+                                </div>
+
                                 <input type="hidden" name="latitude"
                                        @if(isset($latitude) && $latitude) value="{{$latitude->value}}" @endif>
                                 <input type="hidden" name="longitude"

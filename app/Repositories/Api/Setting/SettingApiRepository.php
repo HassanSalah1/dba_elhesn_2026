@@ -10,7 +10,6 @@ use App\Http\Resources\ActionResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CommitteeResource;
 use App\Http\Resources\GalleryResource;
-use App\Http\Resources\ImageResource;
 use App\Http\Resources\IntroResource;
 use App\Http\Resources\NewDetailsResource;
 use App\Http\Resources\NewResource;
@@ -35,7 +34,6 @@ use App\Models\Team;
 use App\Models\TeamPlayer;
 use App\Repositories\General\UtilsRepository;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
 
 class SettingApiRepository
 {
@@ -69,6 +67,20 @@ class SettingApiRepository
         return [
             'data' => [
                 'magles' => $setting ? $setting->value : null,
+            ],
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getClubStructure(array $data)
+    {
+        $setting = Setting::where(['key' => Key::CLUB_STRUCTURE])->first();
+
+        // return success response
+        return [
+            'data' => [
+                'pdf' => $setting ? url($setting->value) : null,
             ],
             'message' => 'success',
             'code' => HttpCode::SUCCESS

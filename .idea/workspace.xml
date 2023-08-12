@@ -7,13 +7,10 @@
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/Setting/SettingController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/Setting/SettingController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/HomeController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Repositories/Api/Setting/SettingApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/Setting/SettingApiRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/Api/SqlServerApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/SqlServerApiRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Repositories/Dashboard/HomeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Dashboard/HomeRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Services/Api/Setting/SettingApiService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/Api/Setting/SettingApiService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" beforeDir="false" afterPath="$PROJECT_DIR$/resources/data/menu-data/verticalMenu.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lang/ar/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/ar/admin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/settings/setting.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/settings/setting.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/panel.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/panel.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,16 +174,16 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/views/admin/settings" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\work_projects\laravel\milestone\dba_elhesn\resources\views\admin\settings" />
       <recent name="D:\work_projects\laravel\milestone\dba_elhesn\app\Console\Commands" />
       <recent name="D:\work_projects\laravel\milestone\dba_elhesn\resources\views\admin\report" />
       <recent name="D:\work_projects\laravel\milestone\dba_elhesn\app\Http\Resources" />
       <recent name="E:\work_projects\laravel\milestone\dba_elhesn\app\Entities" />
-      <recent name="E:\work_projects\laravel\milestone\dba_elhesn\database\migrations" />
     </key>
   </component>
   <component name="RunManager">
@@ -303,7 +300,8 @@
       <workItem from="1690731373433" duration="402000" />
       <workItem from="1690732013637" duration="2711000" />
       <workItem from="1690740256556" duration="71000" />
-      <workItem from="1691707748234" duration="1753000" />
+      <workItem from="1691707748234" duration="3003000" />
+      <workItem from="1691848006153" duration="1949000" />
     </task>
     <servers />
   </component>
@@ -315,14 +313,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="119" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1689107154493" />
-    <state x="488" y="148" key="FileChooserDialogImpl" timestamp="1689914804813">
+    <state x="488" y="148" key="FileChooserDialogImpl" timestamp="1691711534324">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="488" y="148" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1689914804813" />
-    <state x="426" y="114" width="555" height="566" key="find.popup" timestamp="1691708314827">
+    <state x="488" y="148" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1691711534324" />
+    <state x="426" y="114" width="555" height="566" key="find.popup" timestamp="1691849112894">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="426" y="114" width="555" height="566" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1691708314827" />
+    <state x="426" y="114" width="555" height="566" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1691849112894" />
     <state x="339" y="162" key="run.anything.popup" timestamp="1691708277193">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

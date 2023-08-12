@@ -223,6 +223,29 @@ class HomeRepository
             ]);
         }
 
+        if ($data['request']->has(Key::CLUB_STRUCTURE)){
+            $CLUB_STRUCTURE = Setting::where(['key' => Key::CLUB_STRUCTURE])->first();
+            $file_id = 'File_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+            $file_name = Key::CLUB_STRUCTURE;
+            $file_path = 'uploads/pdf/';
+            $file = UtilsRepository::uploadFiles($data['request'] ,  $file_name, $file_path, $file_id);
+            if ($file !== false){
+                if ($CLUB_STRUCTURE){
+                    if (file_exists($CLUB_STRUCTURE->value)){
+                        unlink($CLUB_STRUCTURE->value);
+                    }
+                    $longitude->update([
+                        'value' => $file
+                    ]);
+                }else{
+                    Setting::create([
+                        'key' => Key::CLUB_STRUCTURE,
+                        'value' => $file
+                    ]);
+                }
+            }
+        }
+
         return UtilsRepository::response(true, trans('admin.process_success_message')
             , '');
     }
