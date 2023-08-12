@@ -39,6 +39,12 @@ class SettingController extends Controller
         return SettingApiService::getClubStructure($data);
     }
 
+    public function getElders(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getElders($data);
+    }
+
     public function getTerms(Request $request)
     {
         $data = $request->all();

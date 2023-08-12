@@ -59,6 +59,8 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('/magles', [SettingController::class, 'getMagles']); // get about
         Route::get('/club_structure', [SettingController::class, 'getClubStructure']); // get about
 
+        Route::get('/elders', [SettingController::class, 'getElders']);
+
         Route::post('/signup', [AuthController::class, 'register']); // register new user
         Route::get('/get/verification/code', [AuthController::class, 'getVerificationCode']); // get verification code'Auth\@getVerificationCode'); // get verification code
         Route::post('/verify/check', [AuthController::class, 'checkVerificationCode']); // get verification code'Auth\@checkVerificationCode'); // check verification code

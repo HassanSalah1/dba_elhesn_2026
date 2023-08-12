@@ -34,6 +34,12 @@ class SettingApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getElders(array $data)
+    {
+        $response = SettingApiRepository::getElders($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
     public static function getTerms(array $data)
     {
         $response = SettingApiRepository::getTerms($data);

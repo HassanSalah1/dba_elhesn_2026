@@ -5,11 +5,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Entities/Key.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Entities/Key.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/Setting/SettingController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/Setting/SettingController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Dashboard/HomeController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Repositories/Api/Setting/SettingApiRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Api/Setting/SettingApiRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repositories/Dashboard/HomeRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/Dashboard/HomeRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Services/Api/Setting/SettingApiService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/Api/Setting/SettingApiService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/settings/setting.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/settings/setting.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -301,7 +298,7 @@
       <workItem from="1690732013637" duration="2711000" />
       <workItem from="1690740256556" duration="71000" />
       <workItem from="1691707748234" duration="3003000" />
-      <workItem from="1691848006153" duration="1949000" />
+      <workItem from="1691848006153" duration="3573000" />
     </task>
     <servers />
   </component>

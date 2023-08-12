@@ -483,5 +483,49 @@ class SettingApiRepository
         ];
     }
 
+    public static function getElders(array $data)
+    {
+        $setting_image1 = Setting::where(['key' => Key::Image_1])->first();
+        $setting_name1 = Setting::where(['key' => Key::name_1])->first();
+        $setting_position1 = Setting::where(['key' => Key::position_1])->first();
+        $setting_image2 = Setting::where(['key' => Key::Image_2])->first();
+        $setting_name2 = Setting::where(['key' => Key::name_2])->first();
+        $setting_position2 = Setting::where(['key' => Key::position_2])->first();
+        $setting_image3 = Setting::where(['key' => Key::Image_3])->first();
+        $setting_name3 = Setting::where(['key' => Key::name_3])->first();
+        $setting_position3 = Setting::where(['key' => Key::position_3])->first();
+        $setting_image4 = Setting::where(['key' => Key::Image_4])->first();
+        $setting_name4 = Setting::where(['key' => Key::name_4])->first();
+        $setting_position4 = Setting::where(['key' => Key::position_4])->first();
+
+        // return success response
+        return [
+            'data' => [
+                [
+                    'image' => $setting_image1 ? url($setting_image1->value) : null,
+                    'name' => $setting_name1 ? $setting_name1->value : null,
+                    'position' => $setting_position1 ? $setting_position1->value : null,
+                ],
+                [
+                    'image' => $setting_image2 ? url($setting_image2->value) : null,
+                    'name' => $setting_name2 ? $setting_name2->value : null,
+                    'position' => $setting_position2 ? $setting_position2->value : null,
+                ],
+                [
+                    'image' => $setting_image3 ? url($setting_image3->value) : null,
+                    'name' => $setting_name3 ? $setting_name3->value : null,
+                    'position' => $setting_position3 ? $setting_position3->value : null,
+                ],
+                [
+                    'image' => $setting_image4 ? url($setting_image4->value) : null,
+                    'name' => $setting_name4 ? $setting_name4->value : null,
+                    'position' => $setting_position4 ? $setting_position4->value : null,
+                ]
+            ],
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
 
 }
