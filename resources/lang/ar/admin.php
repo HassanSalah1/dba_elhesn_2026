@@ -353,7 +353,7 @@ return [
     'my_first_morning' => 'صباحى فترة أولى',
     'evening_another_period' => 'مسائى فترة تانيه',
     'magles_title' => 'مجلس الشارقة الرياضي',
-    '' => '',
+    'elders_title' => 'صور الشيوخ ومناصبهم',
     '' => '',
     '' => '',
     '' => '',
