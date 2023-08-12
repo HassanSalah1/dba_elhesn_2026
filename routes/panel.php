@@ -75,6 +75,11 @@ Route::group(['prefix' => 'admin'], function () {
         //////////////////////////////////
         Route::get('/setting', [HomeController::class, 'showSetting'])->name('dashboard-setting'); // about page
         Route::post('/setting/save', [HomeController::class, 'saveSetting']);
+
+        //////////////////////////////////
+        Route::get('/elders', [HomeController::class, 'showElders'])->name('dashboard-elders'); // about page
+        Route::post('/elders/save', [HomeController::class, 'saveElders']);
+
         ////////////////////////////////
         Route::get('/contacts', [ContactController::class, 'showContacts'])->name('dashboard-contacts'); // show Index page that control all Contacts
         Route::get('/contacts/data', [ContactController::class, 'getContactsData']); // get all Contacts data for DataTable

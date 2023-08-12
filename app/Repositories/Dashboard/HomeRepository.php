@@ -223,21 +223,21 @@ class HomeRepository
             ]);
         }
 
-        if ($data['request']->has(Key::CLUB_STRUCTURE)){
+        if ($data['request']->has(Key::CLUB_STRUCTURE)) {
             $CLUB_STRUCTURE = Setting::where(['key' => Key::CLUB_STRUCTURE])->first();
             $file_id = 'File_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
             $file_name = Key::CLUB_STRUCTURE;
             $file_path = 'uploads/pdf/';
-            $file = UtilsRepository::uploadFiles($data['request'] ,  $file_name, $file_path, $file_id);
-            if ($file !== false){
-                if ($CLUB_STRUCTURE){
-                    if (file_exists($CLUB_STRUCTURE->value)){
+            $file = UtilsRepository::uploadFiles($data['request'], $file_name, $file_path, $file_id);
+            if ($file !== false) {
+                if ($CLUB_STRUCTURE) {
+                    if (file_exists($CLUB_STRUCTURE->value)) {
                         unlink($CLUB_STRUCTURE->value);
                     }
-                    $longitude->update([
+                    $CLUB_STRUCTURE->update([
                         'value' => $file
                     ]);
-                }else{
+                } else {
                     Setting::create([
                         'key' => Key::CLUB_STRUCTURE,
                         'value' => $file
@@ -245,6 +245,204 @@ class HomeRepository
                 }
             }
         }
+
+        return UtilsRepository::response(true, trans('admin.process_success_message')
+            , '');
+    }
+
+    public static function saveElders($data)
+    {
+        if ($data['request']->has(Key::Image_1)) {
+            $image1 = Setting::where(['key' => Key::Image_1])->first();
+            $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+            $file_name = Key::Image_1;
+            $file_path = 'uploads/elders/';
+            $file = UtilsRepository::uploadFiles($data['request'], $file_name, $file_path, $file_id);
+            if ($file !== false) {
+                if ($image1) {
+                    if (file_exists($image1->value)) {
+                        unlink($image1->value);
+                    }
+                    $image1->update([
+                        'value' => $file
+                    ]);
+                } else {
+                    Setting::create([
+                        'key' => Key::Image_1,
+                        'value' => $file
+                    ]);
+                }
+            }
+        }
+
+        $name_1 = Setting::where(['key' => Key::name_1])->first();
+        if ($name_1) {
+            $name_1->update([
+                'value' => (isset($data[Key::name_1])) ? $data[Key::name_1] : null
+            ]);
+        } else {
+            Setting::create([
+                'key' => Key::name_1,
+                'value' => (isset($data[Key::name_1])) ? $data[Key::name_1] : null
+            ]);
+        }
+
+        $position_1 = Setting::where(['key' => Key::position_1])->first();
+        if ($position_1) {
+            $position_1->update([
+                'value' => (isset($data[Key::position_1])) ? $data[Key::position_1] : null
+            ]);
+        } else {
+            Setting::create([
+                'key' => Key::position_1,
+                'value' => (isset($data[Key::position_1])) ? $data[Key::position_1] : null
+            ]);
+        }
+
+        /////////////////////////////
+        if ($data['request']->has(Key::Image_2)) {
+            $image2 = Setting::where(['key' => Key::Image_2])->first();
+            $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+            $file_name = Key::Image_2;
+            $file_path = 'uploads/elders/';
+            $file = UtilsRepository::uploadFiles($data['request'], $file_name, $file_path, $file_id);
+            if ($file !== false) {
+                if ($image2) {
+                    if (file_exists($image2->value)) {
+                        unlink($image2->value);
+                    }
+                    $image2->update([
+                        'value' => $file
+                    ]);
+                } else {
+                    Setting::create([
+                        'key' => Key::Image_2,
+                        'value' => $file
+                    ]);
+                }
+            }
+        }
+
+        $name_2 = Setting::where(['key' => Key::name_2])->first();
+        if ($name_2) {
+            $name_2->update([
+                'value' => (isset($data[Key::name_2])) ? $data[Key::name_2] : null
+            ]);
+        } else {
+            Setting::create([
+                'key' => Key::name_2,
+                'value' => (isset($data[Key::name_2])) ? $data[Key::name_2] : null
+            ]);
+        }
+
+        $position_2 = Setting::where(['key' => Key::position_2])->first();
+        if ($position_2) {
+            $position_2->update([
+                'value' => (isset($data[Key::position_2])) ? $data[Key::position_2] : null
+            ]);
+        } else {
+            Setting::create([
+                'key' => Key::position_2,
+                'value' => (isset($data[Key::position_2])) ? $data[Key::position_2] : null
+            ]);
+        }
+
+        /////////////////////////////
+        if ($data['request']->has(Key::Image_3)) {
+            $image3 = Setting::where(['key' => Key::Image_3])->first();
+            $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+            $file_name = Key::Image_3;
+            $file_path = 'uploads/elders/';
+            $file = UtilsRepository::uploadFiles($data['request'], $file_name, $file_path, $file_id);
+            if ($file !== false) {
+                if ($image3) {
+                    if (file_exists($image3->value)) {
+                        unlink($image3->value);
+                    }
+                    $image3->update([
+                        'value' => $file
+                    ]);
+                } else {
+                    Setting::create([
+                        'key' => Key::Image_3,
+                        'value' => $file
+                    ]);
+                }
+            }
+        }
+
+        $name_3 = Setting::where(['key' => Key::name_3])->first();
+        if ($name_3) {
+            $name_3->update([
+                'value' => (isset($data[Key::name_3])) ? $data[Key::name_3] : null
+            ]);
+        } else {
+            Setting::create([
+                'key' => Key::name_3,
+                'value' => (isset($data[Key::name_3])) ? $data[Key::name_3] : null
+            ]);
+        }
+
+        $position_3 = Setting::where(['key' => Key::position_3])->first();
+        if ($position_3) {
+            $position_3->update([
+                'value' => (isset($data[Key::position_3])) ? $data[Key::position_3] : null
+            ]);
+        } else {
+            Setting::create([
+                'key' => Key::position_3,
+                'value' => (isset($data[Key::position_3])) ? $data[Key::position_3] : null
+            ]);
+        }
+
+        /////////////////////////////
+        if ($data['request']->has(Key::Image_4)) {
+            $image4 = Setting::where(['key' => Key::Image_4])->first();
+            $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+            $file_name = Key::Image_4;
+            $file_path = 'uploads/elders/';
+            $file = UtilsRepository::uploadFiles($data['request'], $file_name, $file_path, $file_id);
+            if ($file !== false) {
+                if ($image4) {
+                    if (file_exists($image4->value)) {
+                        unlink($image4->value);
+                    }
+                    $image4->update([
+                        'value' => $file
+                    ]);
+                } else {
+                    Setting::create([
+                        'key' => Key::Image_4,
+                        'value' => $file
+                    ]);
+                }
+            }
+        }
+
+        $name_4 = Setting::where(['key' => Key::name_4])->first();
+        if ($name_4) {
+            $name_4->update([
+                'value' => (isset($data[Key::name_4])) ? $data[Key::name_4] : null
+            ]);
+        } else {
+            Setting::create([
+                'key' => Key::name_4,
+                'value' => (isset($data[Key::name_4])) ? $data[Key::name_4] : null
+            ]);
+        }
+
+        $position_4 = Setting::where(['key' => Key::position_4])->first();
+        if ($position_4) {
+            $position_4->update([
+                'value' => (isset($data[Key::position_4])) ? $data[Key::position_4] : null
+            ]);
+        } else {
+            Setting::create([
+                'key' => Key::position_4,
+                'value' => (isset($data[Key::position_4])) ? $data[Key::position_4] : null
+            ]);
+        }
+
 
         return UtilsRepository::response(true, trans('admin.process_success_message')
             , '');

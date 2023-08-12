@@ -128,6 +128,47 @@ class HomeController extends Controller
     }
 
 
+
+    // show setting page
+    public function showElders()
+    {
+        $data['pageConfigs'] = [
+            'pageHeader' => false,
+            'defaultLanguage' => 'ar',
+            'direction' => 'rtl'
+        ];
+
+        $data['image1'] = Setting::where(['key' => Key::Image_1])->first();
+        $data['name_1'] = Setting::where(['key' => Key::name_1])->first();
+        $data['position_1'] = Setting::where(['key' => Key::position_1])->first();
+
+        $data['image2'] = Setting::where(['key' => Key::Image_2])->first();
+        $data['name_2'] = Setting::where(['key' => Key::name_2])->first();
+        $data['position_2'] = Setting::where(['key' => Key::position_2])->first();
+
+        $data['image3'] = Setting::where(['key' => Key::Image_3])->first();
+        $data['name_3'] = Setting::where(['key' => Key::name_3])->first();
+        $data['position_3'] = Setting::where(['key' => Key::position_3])->first();
+
+        $data['image4'] = Setting::where(['key' => Key::Image_4])->first();
+        $data['name_4'] = Setting::where(['key' => Key::name_4])->first();
+        $data['position_4'] = Setting::where(['key' => Key::position_4])->first();
+
+        $data['title'] = trans('admin.elders_title');
+        return view('admin.settings.elders')->with($data);
+    }
+
+
+    // save setting POST request
+    public function saveElders(Request $request)
+    {
+        $data = $request->all();
+        $data['request'] = $request;
+        return HomeRepository::saveElders($data);
+    }
+
+
+
     // show about page
     public function showAbout()
     {

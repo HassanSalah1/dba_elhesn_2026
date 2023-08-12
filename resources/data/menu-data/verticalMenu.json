@@ -90,6 +90,13 @@
             "permission": "about"
         },
         {
+            "name": "elders_title",
+            "icon": "info",
+            "url": "admin/elders",
+            "slug": "dashboard-elders",
+            "permission": "about"
+        },
+        {
             "name": "terms_title",
             "url": "admin/terms",
             "icon": "info",
