@@ -4,15 +4,12 @@ namespace App\Repositories\General;
 
 use App\Entities\DeviceType;
 use App\Entities\HttpCode;
+use App\Models\Notification;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Intervention\Image\Exception\ImageException;
-use Intervention\Image\Facades\Image;
-use LaravelFCM\Facades\FCM;
-use LaravelFCM\Message\OptionsBuilder;
-use LaravelFCM\Message\PayloadDataBuilder;
-use LaravelFCM\Message\PayloadNotificationBuilder;
+use Intervention\Image\Laravel\Facades\Image;
 
 class UtilsRepository
 {
@@ -184,36 +181,40 @@ class UtilsRepository
                 mkdir(public_path($image_path), 0755, true);
             }
             try {
-                // finally we save the image as a new file
-                $img = Image::make($image);
+                $img = Image::read($image);
                 if ($width != 0 && $height != 0) {
                     $img->resize($width, $height);
                 }
-                $img->save($image_path . $file_name);
+                $img->save(public_path($image_path . $file_name));
                 return $image_path . $file_name;
-            } catch (ImageException $ex) {
+            } catch (\Throwable $ex) {
+                Log::error('createImage failed: ' . $ex->getMessage());
             }
         }
         return false;
     }
 
 
-    // upload image
     public static function createImageBase64($base64, $image_path, $image_id, $width = 0, $height = 0)
     {
         $file_name = $image_id . '.png';
-        if (!file_exists(public_path($image_path))) {
-            mkdir(public_path($image_path), 0755, true);
+        $fullDir = public_path($image_path);
+        if (!file_exists($fullDir)) {
+            mkdir($fullDir, 0755, true);
         }
         try {
-            // finally we save the image as a new file
-            $img = Image::make($base64);
+            $binary = base64_decode($base64);
+            if ($binary === false) {
+                return null;
+            }
+            $img = Image::read($binary);
             if ($width != 0 && $height != 0) {
                 $img->resize($width, $height);
             }
-            $img->save($image_path . $file_name);
+            $img->save($fullDir . $file_name);
             return $image_path . $file_name;
-        } catch (ImageException $ex) {
+        } catch (\Throwable $ex) {
+            Log::error('createImageBase64 failed: ' . $ex->getMessage());
         }
         return null;
     }
@@ -227,14 +228,14 @@ class UtilsRepository
             mkdir(public_path($image_path), 0755, true);
         }
         try {
-            // finally we save the image as a new file
-            $img = Image::make($image);
+            $img = Image::read($image);
             if ($width != 0 && $height != 0) {
                 $img->resize($width, $height);
             }
-            $img->save($image_path . $file_name);
+            $img->save(public_path($image_path . $file_name));
             return $image_path . $file_name;
-        } catch (ImageException $ex) {
+        } catch (\Throwable $ex) {
+            Log::error('uploadImage failed: ' . $ex->getMessage());
         }
         return false;
     }
@@ -257,44 +258,58 @@ class UtilsRepository
     }
 
 
+    /**
+     * Send FCM message via legacy HTTP API (using config fcm.http.server_key).
+     *
+     * @param array $registrationIds Device tokens
+     * @param array|null $notification ['title' => ..., 'body' => ..., 'sound' => 'default']
+     * @param array $data Key-value data payload (values must be strings)
+     * @return bool
+     */
+    private static function sendFCMToDevices(array $registrationIds, ?array $notification, array $data): bool
+    {
+        $serverKey = config('fcm.http.server_key');
+        $url = config('fcm.http.server_send_url', 'https://fcm.googleapis.com/fcm/send');
+        if (empty($serverKey) || empty($registrationIds)) {
+            return false;
+        }
+        $payload = [
+            'registration_ids' => array_values($registrationIds),
+            'time_to_live' => 60 * 20,
+            'data' => array_map('strval', $data),
+        ];
+        if (!empty($notification)) {
+            $payload['notification'] = array_merge(['sound' => 'default'], $notification);
+        }
+        $response = Http::withHeaders([
+            'Authorization' => 'key=' . $serverKey,
+            'Content-Type' => 'application/json',
+        ])->post($url, $payload);
+        if ($response->successful()) {
+            $body = $response->json();
+            return isset($body['success']) && $body['success'] > 0;
+        }
+        return false;
+    }
+
     // send android push notification
     public static function sendAndroidFCM($notification_data, $device_tokens)
     {
-        $optionBuiler = new OptionsBuilder();
-        $optionBuiler->setTimeToLive(60 * 20);
-        $option = $optionBuiler->build();
-        $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData($notification_data);
-        $data = $dataBuilder->build();
-        $downstreamResponse = FCM::sendTo($device_tokens, $option, null, $data);
-        if ($downstreamResponse->numberSuccess()) {
-            return true;
-        } else {
-            return false;
-        }
+        $tokens = is_array($device_tokens) ? $device_tokens : [$device_tokens];
+        return self::sendFCMToDevices($tokens, null, $notification_data);
     }
 
     // send ios push notification
     public static function sendIosFCM($notification_data, $notification_data_obj, $device_tokens)
     {
-        $optionBuiler = new OptionsBuilder();
-        $optionBuiler->setTimeToLive(60 * 20);
-        $notificationBuilder = new PayloadNotificationBuilder($notification_data['title']);
-        $notificationBuilder->setBody($notification_data['message'])
-            ->setSound('default');
-        $option = $optionBuiler->build();
-        $notification = $notificationBuilder->build();
-
-        $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData($notification_data_obj);
-
-        $data = $dataBuilder->build();
-        $downstreamResponse = FCM::sendTo($device_tokens, $option, $notification, $data);
-        if ($downstreamResponse->numberSuccess()) {
-            return true;
-        } else {
-            return false;
-        }
+        $tokens = is_array($device_tokens) ? $device_tokens : [$device_tokens];
+        $notification = [
+            'title' => $notification_data['title'] ?? '',
+            'body' => $notification_data['message'] ?? '',
+        ];
+        $data = is_array($notification_data_obj) ? $notification_data_obj : (array) $notification_data_obj;
+        $data = array_map('strval', $data);
+        return self::sendFCMToDevices($tokens, $notification, $data);
     }
 
     public static function sendSMS($phone, $message, $lang)
@@ -360,8 +375,8 @@ class UtilsRepository
     public static function sendNotification(array $tokens, string $title, string $body,
                                             array $notificationData)
     {
-        $url = 'https://fcm.googleapis.com/fcm/send';
-        $FcmKey = 'AAAAjDXwdcM:APA91bHiqxqSXHIamC09-s8AYrEyYtZhrk-vPzHhm9n8F-LQ79HpQg2huAec2V8N-QfwkpVgWUdGLd83xrkImy_rW1h9u1MxXewx7L8cjCW201T-A5DkBQm9N9TCmiu69Y6TFLTWgTpg';
+        $url = config('fcm.http.server_send_url', 'https://fcm.googleapis.com/fcm/send');
+        $serverKey = config('fcm.http.server_key', '');
 
         $data = [
             "registration_ids" => $tokens,
@@ -375,7 +390,7 @@ class UtilsRepository
         ];
         $RESPONSE = json_encode($data);
         $headers = [
-            'Authorization:key=' . $FcmKey,
+            'Authorization:key=' . $serverKey,
             'Content-Type: application/json',
         ];
         // CURL

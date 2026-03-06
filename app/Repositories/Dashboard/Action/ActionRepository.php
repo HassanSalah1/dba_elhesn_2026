@@ -39,7 +39,8 @@ class ActionRepository
             'title_en' => $data['title_en'],
             'description_ar' => $data['description_ar'],
             'description_en' => $data['description_en'],
-            'start_date' => date('Y-m-d', strtotime($data['start_date']))
+            'start_date' => date('Y-m-d', strtotime($data['start_date'])),
+            'end_date' => isset($data['end_date']) ? date('Y-m-d', strtotime($data['end_date'])) : null
         ];
 
         $created = Action::create($actionData);
@@ -126,7 +127,8 @@ class ActionRepository
                 'title_en' => $data['title_en'],
                 'description_ar' => $data['description_ar'],
                 'description_en' => $data['description_en'],
-                'start_date' => date('Y-m-d', strtotime($data['start_date']))
+                'start_date' => date('Y-m-d', strtotime($data['start_date'])),
+                'end_date' => isset($data['end_date']) ? date('Y-m-d', strtotime($data['end_date'])) : null
             ];
             if ($data['request']->hasFile('image')) {
                 $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));

@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
         User::firstOrCreate([
             'name' => 'admin',
             'email' => 'admin@elhesn.com',
-            'password' => Hash::make('12#adm$in@456'),
+            'password' => Hash::make('password'),
             'role' => UserRoles::ADMIN,
             'status' => Status::ACTIVE
         ]);

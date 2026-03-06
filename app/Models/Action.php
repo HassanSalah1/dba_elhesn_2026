@@ -12,8 +12,15 @@ class Action extends Model
     use HasFactory;
 
     protected $table = 'actions';
-    protected $fillable = ['title_ar', 'title_en', 'description_ar', 'description_en',
-        'start_date', 'video_url'];
+    protected $fillable = [
+        'title_ar',
+        'title_en',
+        'description_ar',
+        'description_en',
+        'start_date',
+        'end_date',
+        'video_url'
+    ];
 
     protected $appends = ['title', 'description'];
 

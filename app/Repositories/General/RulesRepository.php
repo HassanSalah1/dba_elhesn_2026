@@ -24,7 +24,7 @@ class RulesRepository
     public static function countArrayEqualField()
     {
         Validator::extend('countArrayEqual', function ($attribute, $value, $parameters, $validator) {
-            $count = array_get($validator->getData(), $parameters[0]);
+            $count = data_get($validator->getData(), $parameters[0]);
             return (count($value) === intval($count));
         });
     }

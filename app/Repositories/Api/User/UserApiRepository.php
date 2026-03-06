@@ -367,7 +367,6 @@ class UserApiRepository
     public static function presenceAbsence(array $data)
     {
         $user = auth()->user();
-
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
             if (is_array($data['players'])) {

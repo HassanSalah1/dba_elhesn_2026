@@ -27,6 +27,10 @@ use App\Http\Controllers\ChartsController;
 |
 */
 
+Route::get('/', function () {
+    return response('OK', 200);
+});
+
 
 
 

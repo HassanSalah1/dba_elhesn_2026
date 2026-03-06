@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="{{ asset(mix('vendors/css/tables/datatable/responsive.bootstrap5.min.css')) }}">
     <link rel="stylesheet" type="text/css" href="{{ asset(mix('vendors/css/extensions/sweetalert2.min.css')) }}">
     <link rel="stylesheet" type="text/css"
-          href="{{ asset(mix('css/base/plugins/extensions/ext-component-sweet-alerts.css')) }}">
+        href="{{ asset(mix('css/base/plugins/extensions/ext-component-sweet-alerts.css')) }}">
 
 @endsection
 
 @section('page-style')
-    <link href="{{url('/css/jquery.loader.css')}}" rel="stylesheet"/>
-    <link href="{{url('/css/custom/fancybox.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{url('/css/jquery.loader.css')}}" rel="stylesheet" />
+    <link href="{{url('/css/custom/fancybox.css')}}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -62,7 +62,7 @@
         $(function () {
 
             loadDataTables('{{ url("/admin/actions/data") }}',
-                ['title', 'image' , 'start_date', 'actions'], '',
+                ['title', 'image', 'start_date', 'end_date', 'actions'], '',
                 {
                     'show': '{{trans('admin.show')}}',
                     'first': '{{trans('admin.first')}}',
