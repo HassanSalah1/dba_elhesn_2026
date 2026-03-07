@@ -24,7 +24,7 @@ use App\Http\Controllers\Dashboard\User\UserController;
 //    echo \Illuminate\Support\Facades\Hash::make('s@*Rv31E4Kn0avi');
 //});
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'web'], function () {
     Route::get('card', [AuthenticationController::class, 'showCard']);
 
     Route::group(['prefix' => 'auth'], function () {
