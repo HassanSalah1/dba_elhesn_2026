@@ -33,10 +33,15 @@
                 <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
                     <h2 class="card-title fw-bold mb-1">{{trans('admin.welcome_text')}}</h2>
                     <p class="card-text mb-2">{{trans('admin.Please sign-in to your account')}}</p>
-                    <form class="auth-login-form mt-2">
+                    @if(session('error'))
+                        <div class="alert alert-danger mb-2" role="alert">{{ session('error') }}</div>
+                    @endif
+                    <form class="auth-login-form mt-2" action="{{ url('/admin/auth/login') }}" method="POST">
+                        @csrf
                         <div class="mb-1">
                             <label class="form-label" for="login-email">{{trans('admin.Email')}}</label>
                             <input class="form-control" id="login-email" type="text" name="email"
+                                   value="{{ old('email') }}"
                                    placeholder="{{trans('admin.Email')}}"
                                    aria-describedby="login-email" autofocus="" tabindex="1"/>
                         </div>

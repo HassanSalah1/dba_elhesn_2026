@@ -38,7 +38,18 @@ class AuthenticationController extends Controller
     {
         $data = $request->all('email', 'password');
         $data['remember'] = $request->has('remember');
-        return AuthService::processLogin($data);
+        $response = AuthService::processLogin($data);
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return $response;
+        }
+
+        $content = $response->getData(true);
+        $success = $response->getStatusCode() === 200;
+        if ($success) {
+            return redirect()->to(url('/admin/home?first_time=1'));
+        }
+        return redirect()->back()->withInput()->with('error', $content['message'] ?? trans('admin.general_error_message'));
     }
 
 
