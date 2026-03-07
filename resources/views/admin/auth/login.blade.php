@@ -100,17 +100,13 @@
                         required: '{{trans('admin.required_error_message')}}',
                         minlength: '{{trans('admin.minlength_error_message')}}',
                     }
-                }
-            });
-
-            //login
-            form.on('submit', function (e) {
-                e.preventDefault();
-                let form = new FormData(this);
-                $.ajax({
+                },
+                submitHandler: function (formElement) {
+                    let formData = new FormData(formElement);
+                    $.ajax({
                     url: '{{url("/admin/auth/login" , [] , env('APP_ENV') === 'local' ?  false : true)}}',
                     method: 'POST',
-                    data: form,
+                    data: formData,
                     processData: false,
                     contentType: false,
                     headers: {'X-CSRF-TOKEN': '{{csrf_token()}}'},
@@ -137,7 +133,8 @@
                         }
                     }
                 });//ajax request
-            });//login function
+                }
+            });
         });
     </script>
 @endsection
