@@ -36,7 +36,7 @@
                     @if(session('error'))
                         <div class="alert alert-danger mb-2" role="alert">{{ session('error') }}</div>
                     @endif
-                    <form class="auth-login-form mt-2" action="{{ url('/admin/auth/login') }}" method="POST">
+                    <form class="auth-login-form mt-2" action="/admin/auth/login" method="POST">
                         @csrf
                         <div class="mb-1">
                             <label class="form-label" for="login-email">{{trans('admin.Email')}}</label>
@@ -109,14 +109,14 @@
                 submitHandler: function (formElement) {
                     let formData = new FormData(formElement);
                     $.ajax({
-                    url: '{{url("/admin/auth/login" , [] , env('APP_ENV') === 'local' ?  false : true)}}',
+                    url: '/admin/auth/login',
                     method: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
                     headers: {'X-CSRF-TOKEN': '{{csrf_token()}}'},
                     success: function (response) {
-                        window.location = '{{url('/admin/home?first_time=1' , [] , env('APP_ENV') === 'local' ?  false : true)}}';
+                        window.location = '/admin/home?first_time=1';
                     },
                     error: function (response) {
                         if (response.status === 403) {
