@@ -57,9 +57,9 @@ class SqlServerApiRepository
             "UID" => $uid,
             "PWD" => $pwd,
             "Database" => $databaseName,
-            "ColumnEncryption" => "Enabled",
             "TrustServerCertificate" => true,
-            "CharacterSet" => "UTF-8"
+            "CharacterSet" => "UTF-8",
+            "LoginTimeout" => 15,
         ];
         /* Connect using SQL Server Authentication. */
         $conn = \sqlsrv_connect($serverName, $connectionInfo);
