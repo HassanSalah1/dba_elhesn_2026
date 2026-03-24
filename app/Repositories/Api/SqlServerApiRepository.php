@@ -44,6 +44,10 @@ class SqlServerApiRepository
 
     public static function startConnection()
     {
+        if (! function_exists('sqlsrv_connect')) {
+            return false;
+        }
+
         $serverName = 'dhsckarem.ddns.net';
         $uid = 'dhclubapp';
         $pwd = 'bNHW^3&q1mH5';
@@ -63,6 +67,44 @@ class SqlServerApiRepository
             return $conn;
         }
         return false;
+    }
+
+    /**
+     * Test connectivity to the SQL Server used by this repository (same credentials as startConnection).
+     *
+     * @return array{ok: bool, message: string}
+     */
+    public static function testConnection(): array
+    {
+        if (! function_exists('sqlsrv_connect')) {
+            return [
+                'ok' => false,
+                'message' => 'PHP extension sqlsrv is not loaded. Install ext-sqlsrv for your PHP version.',
+            ];
+        }
+
+        $conn = self::startConnection();
+        if ($conn) {
+            if (function_exists('sqlsrv_close')) {
+                sqlsrv_close($conn);
+            }
+
+            return [
+                'ok' => true,
+                'message' => 'Connected successfully to SQL Server (database FBall).',
+            ];
+        }
+
+        $errors = function_exists('sqlsrv_errors') ? sqlsrv_errors() : [];
+        $message = 'Connection failed.';
+        if (! empty($errors)) {
+            $message .= ' ' . json_encode($errors, JSON_UNESCAPED_UNICODE);
+        }
+
+        return [
+            'ok' => false,
+            'message' => $message,
+        ];
     }
 
     public static function getSports()

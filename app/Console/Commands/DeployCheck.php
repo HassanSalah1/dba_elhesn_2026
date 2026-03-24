@@ -103,16 +103,13 @@ class DeployCheck extends Command
 
     private function checkSqlServerConnection(): array
     {
-        if (! extension_loaded('sqlsrv') && ! extension_loaded('pdo_sqlsrv')) {
+        if (! function_exists('sqlsrv_connect')) {
             return ['SQL Server', 'SKIP', 'ext-sqlsrv not installed'];
         }
 
-        try {
-            DB::connection('sqlsrv')->getPdo();
-            return ['SQL Server', 'OK', 'Connected'];
-        } catch (\Throwable $e) {
-            return ['SQL Server', 'FAIL', $e->getMessage()];
-        }
+        $result = \App\Repositories\Api\SqlServerApiRepository::testConnection();
+
+        return ['SQL Server', $result['ok'] ? 'OK' : 'FAIL', $result['message']];
     }
 
     private function checkStorageLink(): array
