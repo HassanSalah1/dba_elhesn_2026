@@ -223,6 +223,40 @@ class SqlServerApiRepository
         }
     }
 
+    public static function syncPlayerImages(callable $onProgress = null): array
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $stats = ['processed' => 0, 'updated' => 0, 'skipped' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        TeamPlayer::where('image', '=', null)
+            ->orderBy('id')
+            ->chunk(100, function ($players) use ($conn, &$stats, $onProgress) {
+                foreach ($players as $player) {
+                    $image = self::getPlayerImage($conn, $player->player_id);
+                    $stats['processed']++;
+
+                    if ($image) {
+                        TeamPlayer::where(['player_id' => $player->player_id])->update(['image' => $image]);
+                        $stats['updated']++;
+                    } else {
+                        $stats['skipped']++;
+                    }
+
+                    if ($onProgress) {
+                        $onProgress($stats);
+                    }
+                }
+            });
+
+        sqlsrv_close($conn);
+
+        return $stats;
+    }
+
     public static function getTeamImages()
     {
         $conn = SqlServerApiRepository::startConnection();
