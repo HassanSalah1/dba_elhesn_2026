@@ -193,6 +193,177 @@ class SqlServerApiRepository
         }
     }
 
+    public static function syncPlayersWithSqlServer(): array
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT TeamRowID, PNameAR, PNameEN, PlayerRowID FROM dbo.MobileApp_Players";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        $sqlServerIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            TeamPlayer::updateOrCreate(
+                ['player_id' => $object->PlayerRowID, 'team_id' => $object->TeamRowID],
+                ['name_en' => $object->PNameEN, 'name_ar' => $object->PNameAR]
+            );
+            $sqlServerIds[] = $object->PlayerRowID;
+            $stats['upserted']++;
+        }
+
+        sqlsrv_close($conn);
+
+        if (!empty($sqlServerIds)) {
+            $stats['deleted'] = TeamPlayer::whereNotIn('player_id', $sqlServerIds)->count();
+            TeamPlayer::whereNotIn('player_id', $sqlServerIds)->delete();
+        }
+
+        return $stats;
+    }
+
+    public static function syncTeamsWithSqlServer(): array
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT SportID, TeamAR, TeamEN, TeamRowID, Email FROM dbo.MobileApp_Teams";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        $sqlServerIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            SportTeam::updateOrCreate(
+                ['team_id' => $object->TeamRowID],
+                ['sport_id' => $object->SportID, 'name_en' => $object->TeamEN, 'name_ar' => $object->TeamAR, 'email' => $object->Email]
+            );
+            $sqlServerIds[] = $object->TeamRowID;
+            $stats['upserted']++;
+        }
+
+        sqlsrv_close($conn);
+
+        if (!empty($sqlServerIds)) {
+            $stats['deleted'] = SportTeam::whereNotIn('team_id', $sqlServerIds)->count();
+            SportTeam::whereNotIn('team_id', $sqlServerIds)->delete();
+        }
+
+        return $stats;
+    }
+
+    public static function syncUsersWithSqlServer(): array
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT UserID, UserEN, UserAR, Username, Password, Role FROM dbo.MobileApp_Users ORDER BY UserID DESC";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        $sqlServerIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            User::updateOrCreate(
+                ['user_id' => $object->UserID],
+                [
+                    'name'     => $object->UserEN,
+                    'email'    => $object->Username . '@dhclubapp.xyz',
+                    'password' => Hash::make($object->Password),
+                    'role'     => $object->Role,
+                    'status'   => Status::ACTIVE,
+                    'lang'     => 'en',
+                ]
+            );
+            $sqlServerIds[] = $object->UserID;
+            $stats['upserted']++;
+        }
+
+        sqlsrv_close($conn);
+
+        // Only delete users that originated from SQL Server (user_id IS NOT NULL)
+        // to avoid removing locally created admins/fans
+        if (!empty($sqlServerIds)) {
+            $stats['deleted'] = User::whereNotNull('user_id')
+                ->whereNotIn('user_id', $sqlServerIds)
+                ->count();
+            User::whereNotNull('user_id')
+                ->whereNotIn('user_id', $sqlServerIds)
+                ->delete();
+        }
+
+        return $stats;
+    }
+
+    public static function syncUserTeamsWithSqlServer(): array
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT UserID, TeamsRowID, FullTeamNames, OfficialID FROM dbo.V_Official_Teams";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        $sqlServerOfficialIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            $user      = User::where('user_id', $object->UserID)->first();
+            $sportTeam = SportTeam::where('team_id', $object->TeamsRowID)->first();
+
+            if ($user && $sportTeam) {
+                UserTeam::updateOrCreate(
+                    ['official_id' => $object->OfficialID],
+                    [
+                        'user_id'        => $user->id,
+                        'team_id'        => $sportTeam->id,
+                        'full_team_name' => $object->FullTeamNames,
+                    ]
+                );
+                $stats['upserted']++;
+            }
+
+            $sqlServerOfficialIds[] = $object->OfficialID;
+        }
+
+        sqlsrv_close($conn);
+
+        if (!empty($sqlServerOfficialIds)) {
+            $stats['deleted'] = UserTeam::whereNotIn('official_id', $sqlServerOfficialIds)->count();
+            UserTeam::whereNotIn('official_id', $sqlServerOfficialIds)->delete();
+        }
+
+        return $stats;
+    }
+
     public static function getPlayerImage($conn, $playerId)
     {
         $sql = "SELECT TOP 1 PlayerPhoto,PlayerRowID FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID=$playerId AND PlayerPhoto IS NOT NULL";
