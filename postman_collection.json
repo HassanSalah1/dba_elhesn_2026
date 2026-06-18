@@ -1,0 +1,3288 @@
+{
+    "info": {
+        "_postman_id": "650dbff30eec9b84cbaa9855ca215655",
+        "name": "DBA Elhesn API Collection",
+        "description": "Automatically generated Postman Collection for DBA Elhesn application API routes (V1 and V2).",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "V1",
+            "item": [
+                {
+                    "name": "SqlServer",
+                    "item": [
+                        {
+                            "name": "api/v1/handle/teams",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/handle/teams",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "handle",
+                                        "teams"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Setting",
+                    "item": [
+                        {
+                            "name": "api/v1/handle/site",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/handle/site",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "handle",
+                                        "site"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/intros",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/intros",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "intros"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/terms",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/terms",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "terms"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/contact",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/contact",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "contact"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/contact",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/contact",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "contact"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"contact_type\": \"inquiry\",\n    \"message\": \"Hello, I have an inquiry about the services.\",\n    \"name\": \"John Doe\",\n    \"phone\": \"+971500000000\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/teams",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/teams",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "teams"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/gallery",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/gallery",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "gallery"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/sport/games",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/sport/games",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "sport",
+                                        "games"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/sport/games/{id}/gallery",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/sport/games/{id}/gallery",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "sport",
+                                        "games",
+                                        "{id}",
+                                        "gallery"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/sport/teams/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/sport/teams/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "sport",
+                                        "teams",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/team/players/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/team/players/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "team",
+                                        "players",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/history",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/history",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "history"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/categories",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/categories",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "categories"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/home",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/home",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "home"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/news",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/news",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "news"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/new/details/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/new/details/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "new",
+                                        "details",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/actions",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/actions",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "actions"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/action/details/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/action/details/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "action",
+                                        "details",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/about-dba",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/about-dba",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "about-dba"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/committees",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/committees",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "committees"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/magles",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/magles",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "magles"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/club_structure",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/club_structure",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "club_structure"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/elders",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/elders",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "elders"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/regulations",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/regulations",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "regulations"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Auth",
+                    "item": [
+                        {
+                            "name": "api/v1/signup",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/signup",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "signup"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"test@test.com\",\n    \"password\": \"password\",\n    \"device_type\": \"android\",\n    \"device_token\": \"token123\",\n    \"phone\": \"+971500000000\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/get/verification/code",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/get/verification/code",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "get",
+                                        "verification",
+                                        "code"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/verify/check",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/verify/check",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "verify",
+                                        "check"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\",\n    \"code\": \"1234\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/verify/resend",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/verify/resend",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "verify",
+                                        "resend"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/login",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/login",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "login"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"password\",\n    \"device_type\": \"android\",\n    \"device_token\": \"token123\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/password/forget",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/password/forget",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "password",
+                                        "forget"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/password/forget/change",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/password/forget/change",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "password",
+                                        "forget",
+                                        "change"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/logout",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/logout",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "logout"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"device_type\": \"android\",\n    \"device_token\": \"token123\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/delete-account",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/delete-account",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "delete-account"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"password\": \"password\"\n}"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "User",
+                    "item": [
+                        {
+                            "name": "api/v1/image/upload",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/image/upload",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "image",
+                                        "upload"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "[]"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/sport/subscribe",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/sport/subscribe",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "sport",
+                                        "subscribe"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"player_email\": \"player@example.com\",\n    \"player_full_name_ar\": \"لاعب تجريبي\",\n    \"player_full_name_en\": \"Test Player\",\n    \"birth_date\": \"2010-01-01\",\n    \"nationality\": \"UAE\",\n    \"birth_place\": \"Abu Dhabi\",\n    \"player_category\": \"Junior\",\n    \"player_id_number\": \"784-2010-1234567-1\",\n    \"player_id_expire_date\": \"2030-01-01\",\n    \"player_passport_number\": \"N123456\",\n    \"player_passport_expire_date\": \"2030-01-01\",\n    \"address\": \"Abu Dhabi, UAE\",\n    \"player_phone\": \"+971500000000\",\n    \"player_school_name\": \"School Name\",\n    \"player_class_name\": \"Grade 10\",\n    \"another_club_name\": \"None\",\n    \"sport_id\": 1,\n    \"sport_level\": \"Advanced\",\n    \"weight\": \"60\",\n    \"height\": \"170\",\n    \"clothes_size\": \"M\",\n    \"shoe_size\": \"42\",\n    \"parent_phone\": \"+971500000000\",\n    \"parent_job\": \"Engineer\",\n    \"player_photo\": \"uploads\\/subscribe\\/temp_photo.jpg\",\n    \"player_id_photo\": \"uploads\\/subscribe\\/temp_id.jpg\",\n    \"player_passport_photo\": \"uploads\\/subscribe\\/temp_passport.jpg\",\n    \"player_medical_examination_photo\": \"uploads\\/subscribe\\/temp_medical.jpg\",\n    \"parent_id_photo\": \"uploads\\/subscribe\\/temp_parent_id.jpg\",\n    \"parent_passport_photo\": \"uploads\\/subscribe\\/temp_parent_passport.jpg\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/competitions/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/competitions/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "competitions",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/profile/get",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/profile/get",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "profile",
+                                        "get"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/profile/edit",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/profile/edit",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "profile",
+                                        "edit"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"John Doe Updated\",\n    \"email\": \"updated@test.com\",\n    \"phone\": \"+971500000000\",\n    \"password\": \"newpassword\",\n    \"old_password\": \"password\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/profile/download/card",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/profile/download/card",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "profile",
+                                        "download",
+                                        "card"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/my/notifications",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/my/notifications",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "my",
+                                        "notifications"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/notifications/count",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/notifications/count",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "notifications",
+                                        "count"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/my/teams",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/my/teams",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "my",
+                                        "teams"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/administrative_report",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/administrative_report",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "administrative_report"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"date\": \"2026-06-18 12:00:00\",\n    \"subject\": \"Report Subject\",\n    \"location\": \"Dubai\",\n    \"events\": \"Events info\",\n    \"cons\": \"Cons\",\n    \"pros\": \"Pros\",\n    \"recommendations\": \"Recommendations\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/advance_requests",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/advance_requests",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "advance_requests"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"players_count\": 15,\n    \"escorts_count\": 3,\n    \"cost\": 500,\n    \"breakfast\": 1,\n    \"snacks\": 1,\n    \"lunch\": 0,\n    \"dinner\": 0,\n    \"tournament\": \"League Match\",\n    \"date\": \"2026-06-18\",\n    \"location\": \"Dubai Stadium\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/my/team/players/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/my/team/players/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "my",
+                                        "team",
+                                        "players",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/reasons",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/reasons",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "reasons"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/presence_absence",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/presence_absence",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "presence_absence"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"date\": \"2026-06-18\",\n    \"period\": 1,\n    \"players\": [\n        {\n            \"player_id\": 1,\n            \"attendance_status\": 1,\n            \"notes\": \"Present\"\n        }\n    ]\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/general_evaluation",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/general_evaluation",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "general_evaluation"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"player_id\": 1,\n    \"position\": \"Defender\",\n    \"behavior\": 5,\n    \"commitment\": 5,\n    \"technical\": 4,\n    \"physical\": 4,\n    \"participations\": \"All\",\n    \"recommendation\": \"Keep training hard\",\n    \"comments\": \"Excellent performance\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/coach_evaluation/sports",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/coach_evaluation/sports",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "coach_evaluation",
+                                        "sports"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"sport_id\": 1,\n    \"season\": \"2025\\/2026\",\n    \"category\": \"A\",\n    \"comp\": \"League\",\n    \"date\": \"2026-06-18\",\n    \"participants\": \"18\",\n    \"difficulty\": \"Medium\",\n    \"results\": \"Win\",\n    \"team_performance\": \"Excellent\",\n    \"weakness\": \"Defense lines\",\n    \"strength\": \"Counter attacks\",\n    \"abbsents\": \"None\",\n    \"injuries\": \"None\",\n    \"comments\": \"Great physical performance\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/coach_evaluation",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/coach_evaluation",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "coach_evaluation"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"sport_id\": 1,\n    \"season\": \"2025\\/2026\",\n    \"category\": \"A\",\n    \"comp\": \"League\",\n    \"date\": \"2026-06-18\",\n    \"participants\": \"18\",\n    \"difficulty\": \"Medium\",\n    \"results\": \"Win\",\n    \"team_performance\": \"Excellent\",\n    \"weakness\": \"Defense lines\",\n    \"strength\": \"Counter attacks\",\n    \"abbsents\": \"None\",\n    \"injuries\": \"None\",\n    \"comments\": \"Great physical performance\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/coach_evaluation/seasons",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/coach_evaluation/seasons",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "coach_evaluation",
+                                        "seasons"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"sport_id\": 1,\n    \"season\": \"2025\\/2026\",\n    \"category\": \"A\",\n    \"comp\": \"League\",\n    \"date\": \"2026-06-18\",\n    \"participants\": \"18\",\n    \"difficulty\": \"Medium\",\n    \"results\": \"Win\",\n    \"team_performance\": \"Excellent\",\n    \"weakness\": \"Defense lines\",\n    \"strength\": \"Counter attacks\",\n    \"abbsents\": \"None\",\n    \"injuries\": \"None\",\n    \"comments\": \"Great physical performance\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/matches",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/matches",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "matches"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/match/update",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/match/update",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "match",
+                                        "update"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"matches\": [\n        {\n            \"id\": 1,\n            \"result1\": 2,\n            \"result2\": 1\n        }\n    ]\n}"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "V2",
+            "item": [
+                {
+                    "name": "SqlServer",
+                    "item": [
+                        {
+                            "name": "api/v2/handle/teams",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/handle/teams",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "handle",
+                                        "teams"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Setting",
+                    "item": [
+                        {
+                            "name": "api/v2/handle/site",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/handle/site",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "handle",
+                                        "site"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/intros",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/intros",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "intros"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/terms",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/terms",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "terms"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/contact",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/contact",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "contact"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/contact",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/contact",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "contact"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"contact_type\": \"inquiry\",\n    \"message\": \"Hello, I have an inquiry about the services.\",\n    \"name\": \"John Doe\",\n    \"phone\": \"+971500000000\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/teams",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/teams",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "teams"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/gallery",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/gallery",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "gallery"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/sport/games",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/sport/games",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "sport",
+                                        "games"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/sport/games/{id}/gallery",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/sport/games/{id}/gallery",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "sport",
+                                        "games",
+                                        "{id}",
+                                        "gallery"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/sport/teams/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/sport/teams/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "sport",
+                                        "teams",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/team/players/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/team/players/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "team",
+                                        "players",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/history",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/history",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "history"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/categories",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/categories",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "categories"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/home",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/home",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "home"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/news",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/news",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "news"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/new/details/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/new/details/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "new",
+                                        "details",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/actions",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/actions",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "actions"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/action/details/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/action/details/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "action",
+                                        "details",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/about-dba",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/about-dba",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "about-dba"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/committees",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/committees",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "committees"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/magles",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/magles",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "magles"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/club_structure",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/club_structure",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "club_structure"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/elders",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/elders",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "elders"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/regulations",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/regulations",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "regulations"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Auth",
+                    "item": [
+                        {
+                            "name": "api/v2/signup",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/signup",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "signup"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"test@test.com\",\n    \"password\": \"password\",\n    \"device_type\": \"android\",\n    \"device_token\": \"token123\",\n    \"phone\": \"+971500000000\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/get/verification/code",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/get/verification/code",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "get",
+                                        "verification",
+                                        "code"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/verify/check",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/verify/check",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "verify",
+                                        "check"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\",\n    \"code\": \"1234\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/verify/resend",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/verify/resend",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "verify",
+                                        "resend"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/login",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/login",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "login"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"password\",\n    \"device_type\": \"android\",\n    \"device_token\": \"token123\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/password/forget",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/password/forget",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "password",
+                                        "forget"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/password/forget/change",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/password/forget/change",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "password",
+                                        "forget",
+                                        "change"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@test.com\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/logout",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/logout",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "logout"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"device_type\": \"android\",\n    \"device_token\": \"token123\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/delete-account",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/delete-account",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "delete-account"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"password\": \"password\"\n}"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "User",
+                    "item": [
+                        {
+                            "name": "api/v2/image/upload",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/image/upload",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "image",
+                                        "upload"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "[]"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/sport/subscribe",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/sport/subscribe",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "sport",
+                                        "subscribe"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"player_email\": \"player@example.com\",\n    \"player_full_name_ar\": \"لاعب تجريبي\",\n    \"player_full_name_en\": \"Test Player\",\n    \"birth_date\": \"2010-01-01\",\n    \"nationality\": \"UAE\",\n    \"birth_place\": \"Abu Dhabi\",\n    \"player_category\": \"Junior\",\n    \"player_id_number\": \"784-2010-1234567-1\",\n    \"player_id_expire_date\": \"2030-01-01\",\n    \"player_passport_number\": \"N123456\",\n    \"player_passport_expire_date\": \"2030-01-01\",\n    \"address\": \"Abu Dhabi, UAE\",\n    \"player_phone\": \"+971500000000\",\n    \"player_school_name\": \"School Name\",\n    \"player_class_name\": \"Grade 10\",\n    \"another_club_name\": \"None\",\n    \"sport_id\": 1,\n    \"sport_level\": \"Advanced\",\n    \"weight\": \"60\",\n    \"height\": \"170\",\n    \"clothes_size\": \"M\",\n    \"shoe_size\": \"42\",\n    \"parent_phone\": \"+971500000000\",\n    \"parent_job\": \"Engineer\",\n    \"player_photo\": \"uploads\\/subscribe\\/temp_photo.jpg\",\n    \"player_id_photo\": \"uploads\\/subscribe\\/temp_id.jpg\",\n    \"player_passport_photo\": \"uploads\\/subscribe\\/temp_passport.jpg\",\n    \"player_medical_examination_photo\": \"uploads\\/subscribe\\/temp_medical.jpg\",\n    \"parent_id_photo\": \"uploads\\/subscribe\\/temp_parent_id.jpg\",\n    \"parent_passport_photo\": \"uploads\\/subscribe\\/temp_parent_passport.jpg\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/competitions/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/competitions/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "competitions",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/profile/get",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/profile/get",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "profile",
+                                        "get"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/profile/edit",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/profile/edit",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "profile",
+                                        "edit"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"John Doe Updated\",\n    \"email\": \"updated@test.com\",\n    \"phone\": \"+971500000000\",\n    \"password\": \"newpassword\",\n    \"old_password\": \"password\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/profile/download/card",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/profile/download/card",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "profile",
+                                        "download",
+                                        "card"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/my/notifications",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/my/notifications",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "my",
+                                        "notifications"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/notifications/count",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/notifications/count",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "notifications",
+                                        "count"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/my/teams",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/my/teams",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "my",
+                                        "teams"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/administrative_report",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/administrative_report",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "administrative_report"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"date\": \"2026-06-18 12:00:00\",\n    \"subject\": \"Report Subject\",\n    \"location\": \"Dubai\",\n    \"events\": \"Events info\",\n    \"cons\": \"Cons\",\n    \"pros\": \"Pros\",\n    \"recommendations\": \"Recommendations\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/advance_requests",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/advance_requests",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "advance_requests"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"players_count\": 15,\n    \"escorts_count\": 3,\n    \"cost\": 500,\n    \"breakfast\": 1,\n    \"snacks\": 1,\n    \"lunch\": 0,\n    \"dinner\": 0,\n    \"tournament\": \"League Match\",\n    \"date\": \"2026-06-18\",\n    \"location\": \"Dubai Stadium\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/my/team/players/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/my/team/players/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "my",
+                                        "team",
+                                        "players",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/reasons",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/reasons",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "reasons"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/presence_absence",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/presence_absence",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "presence_absence"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"date\": \"2026-06-18\",\n    \"period\": 1,\n    \"players\": [\n        {\n            \"player_id\": 1,\n            \"attendance_status\": 1,\n            \"notes\": \"Present\"\n        }\n    ]\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/general_evaluation",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/general_evaluation",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "general_evaluation"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"player_id\": 1,\n    \"position\": \"Defender\",\n    \"behavior\": 5,\n    \"commitment\": 5,\n    \"technical\": 4,\n    \"physical\": 4,\n    \"participations\": \"All\",\n    \"recommendation\": \"Keep training hard\",\n    \"comments\": \"Excellent performance\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/coach_evaluation/sports",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/coach_evaluation/sports",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "coach_evaluation",
+                                        "sports"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"sport_id\": 1,\n    \"season\": \"2025\\/2026\",\n    \"category\": \"A\",\n    \"comp\": \"League\",\n    \"date\": \"2026-06-18\",\n    \"participants\": \"18\",\n    \"difficulty\": \"Medium\",\n    \"results\": \"Win\",\n    \"team_performance\": \"Excellent\",\n    \"weakness\": \"Defense lines\",\n    \"strength\": \"Counter attacks\",\n    \"abbsents\": \"None\",\n    \"injuries\": \"None\",\n    \"comments\": \"Great physical performance\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/coach_evaluation",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/coach_evaluation",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "coach_evaluation"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"sport_id\": 1,\n    \"season\": \"2025\\/2026\",\n    \"category\": \"A\",\n    \"comp\": \"League\",\n    \"date\": \"2026-06-18\",\n    \"participants\": \"18\",\n    \"difficulty\": \"Medium\",\n    \"results\": \"Win\",\n    \"team_performance\": \"Excellent\",\n    \"weakness\": \"Defense lines\",\n    \"strength\": \"Counter attacks\",\n    \"abbsents\": \"None\",\n    \"injuries\": \"None\",\n    \"comments\": \"Great physical performance\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/coach_evaluation/seasons",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/coach_evaluation/seasons",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "coach_evaluation",
+                                        "seasons"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"sport_id\": 1,\n    \"season\": \"2025\\/2026\",\n    \"category\": \"A\",\n    \"comp\": \"League\",\n    \"date\": \"2026-06-18\",\n    \"participants\": \"18\",\n    \"difficulty\": \"Medium\",\n    \"results\": \"Win\",\n    \"team_performance\": \"Excellent\",\n    \"weakness\": \"Defense lines\",\n    \"strength\": \"Counter attacks\",\n    \"abbsents\": \"None\",\n    \"injuries\": \"None\",\n    \"comments\": \"Great physical performance\"\n}"
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/matches",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/matches",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "matches"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/match/update",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/match/update",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "match",
+                                        "update"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"matches\": [\n        {\n            \"id\": 1,\n            \"result1\": 2,\n            \"result2\": 1\n        }\n    ]\n}"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://127.0.0.1:8000",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "YOUR_BEARER_TOKEN",
+            "type": "string"
+        }
+    ]
+}

@@ -6,6 +6,11 @@ use App\Http\Controllers\Api\User\UserController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\SqlServerController;
 
+use App\Http\Controllers\Api\V2\Auth\AuthController as AuthV2Controller;
+use App\Http\Controllers\Api\V2\Setting\SettingController as SettingV2Controller;
+use App\Http\Controllers\Api\V2\User\UserController as UserV2Controller;
+use App\Http\Controllers\Api\V2\SqlServerController as SqlServerV2Controller;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -114,4 +119,100 @@ Route::group(['middleware' => 'lang'], function () {
 
         });
     });
+
+    Route::group(['prefix' => 'v2'], function () {
+
+        Route::get('/handle/teams', [SqlServerV2Controller::class, 'getTeams']); // get intros
+        ////////////////////////////////////////
+        ///
+        Route::get('/handle/site', [SettingV2Controller::class, 'getSiteNews']); // get intros
+
+        Route::get('/intros', [SettingV2Controller::class, 'getIntros']); // get intros
+
+        Route::get('/terms', [SettingV2Controller::class, 'getTerms']); // get terms
+        Route::get('/contact', [SettingV2Controller::class, 'getContactDetails']); // get contact details
+
+        Route::post('/contact', [SettingV2Controller::class, 'addContact']); // contact us
+
+        Route::get('/teams', [SettingV2Controller::class, 'getTeams']); // get teams
+
+        Route::get('/gallery', [SettingV2Controller::class, 'getGallery']); // get gallery
+        Route::get('/sport/games', [SettingV2Controller::class, 'getSportGames']); // get SportGames
+        Route::get('/sport/games/{id}/gallery', [SettingV2Controller::class, 'getSportGamesGallery']); // get SportGames
+
+        Route::get('/sport/teams/{id}', [SettingV2Controller::class, 'getSportTeams']); // get Sport teams
+        Route::get('/team/players/{id}', [SettingV2Controller::class, 'getTeamPlayers']); // get Sport teams
+
+        Route::get('/history', [SettingV2Controller::class, 'getHistory']); // history
+
+        Route::get('/categories', [SettingV2Controller::class, 'getCategories']); // get categories
+
+        Route::get('/home', [SettingV2Controller::class, 'getHome']); // get news
+
+        Route::get('/news', [SettingV2Controller::class, 'getNews']); // get news
+        Route::get('/new/details/{id}', [SettingV2Controller::class, 'getNewDetails']); // get new details
+
+        Route::get('/actions', [SettingV2Controller::class, 'getActions']); // get actions
+        Route::get('/action/details/{id}', [SettingV2Controller::class, 'getActionDetails']); // get action details
+
+        Route::get('/about-dba', [SettingV2Controller::class, 'getAbout']); // get about
+        Route::get('/committees', [SettingV2Controller::class, 'getCommittees']); // get committees
+
+        Route::get('/magles', [SettingV2Controller::class, 'getMagles']); // get about
+        Route::get('/club_structure', [SettingV2Controller::class, 'getClubStructure']); // get about
+
+        Route::get('/elders', [SettingV2Controller::class, 'getElders']);
+
+        Route::post('/signup', [AuthV2Controller::class, 'register']); // register new user
+        Route::get('/get/verification/code', [AuthV2Controller::class, 'getVerificationCode']); // get verification code
+        Route::post('/verify/check', [AuthV2Controller::class, 'checkVerificationCode']); // check verification code
+        Route::post('/verify/resend', [AuthV2Controller::class, 'resendVerificationCode']); // resend verification code
+        Route::post('/login', [AuthV2Controller::class, 'login']); // login user
+        Route::post('/password/forget', [AuthV2Controller::class, 'forgetPassword']); // forget password
+        Route::post('/password/forget/change', [AuthV2Controller::class, 'changeForgetPassword']); // change forget password
+
+
+        Route::get('/regulations', [SettingV2Controller::class, 'getRegulations']); // get regulations
+
+        Route::post('/image/upload', [UserV2Controller::class, 'uploadImage']);
+        Route::post('/sport/subscribe', [UserV2Controller::class, 'subscribeSport']);
+
+        Route::get('/competitions/{id}', [UserV2Controller::class, 'getCompetitions']);
+
+        Route::group(['middleware' => ['auth:api', 'authApi']], function () {
+
+            Route::post('/logout', [AuthV2Controller::class, 'logout']); // logout
+
+            Route::get('/profile/get', [UserV2Controller::class, 'getProfile']); // get profile
+            Route::post('/profile/edit', [UserV2Controller::class, 'editProfile']); // edit profile
+            Route::post('/delete-account', [AuthV2Controller::class, 'deleteAccount']); // delete Account (only deactivate)
+
+            Route::get('/profile/download/card', [UserV2Controller::class, 'downloadProfileCard']); // download Profile Card
+
+            // get my notifications
+            Route::get('/my/notifications', [UserV2Controller::class, 'getMyNotifications']); // get my notifications
+            Route::get('/notifications/count', [UserV2Controller::class, 'getNotificationsCount']); // get my notifications
+
+
+
+            Route::get('/my/teams', [UserV2Controller::class, 'getMyTeams']);
+            Route::post('/administrative_report', [UserV2Controller::class, 'administrativeReport']);
+            Route::post('/advance_requests', [UserV2Controller::class, 'advanceRequests']);
+            Route::get('/my/team/players/{id}', [UserV2Controller::class, 'getTeamPlayers']);
+
+            Route::get('/reasons', [UserV2Controller::class, 'getReasons']);
+            Route::post('/presence_absence', [UserV2Controller::class, 'presenceAbsence']);
+            Route::post('/general_evaluation', [UserV2Controller::class, 'generalEvaluation']);
+            Route::post('/coach_evaluation/sports', [UserV2Controller::class, 'getSports']);
+            Route::post('/coach_evaluation', [UserV2Controller::class, 'coachEvaluation']);
+            Route::post('/coach_evaluation/seasons', [UserV2Controller::class, 'getSeasons']);
+
+
+
+            Route::get('/matches', [UserV2Controller::class, 'getMatches']);
+            Route::post('/match/update', [UserV2Controller::class, 'updateMatcheResult']);
+
+        });
+    });
 });
+
