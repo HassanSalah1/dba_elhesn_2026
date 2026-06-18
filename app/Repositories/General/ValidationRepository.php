@@ -62,7 +62,7 @@ class ValidationRepository
             return Response()->json([
 //                'errors' => $errors,
                 'message' => $validation_errors
-            ], HttpCode::ERROR);
+            ], HttpCode::ERROR, [], JSON_UNESCAPED_UNICODE);
         }
         return true;
     }

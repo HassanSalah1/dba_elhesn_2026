@@ -102,7 +102,7 @@ class UtilsRepository
         if (isset($response['data'])) {
             $responseArray['data'] = $response['data'];
         }
-        return response()->json($responseArray, $response['code']);
+        return response()->json($responseArray, $response['code'], [], JSON_UNESCAPED_UNICODE);
     }
 
     public static function handleResponseFromApi($response)

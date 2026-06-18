@@ -100,21 +100,21 @@ class AuthApiRepository
         } else {
             return Response()->json([
                 'message' => trans('api.credentials_error_message')
-            ], HttpCode::ERROR);
+            ], HttpCode::ERROR, [], JSON_UNESCAPED_UNICODE);
         }
-
-
+ 
+ 
         if ($user && in_array( $user->role , [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL,UserRoles::Foot])) {
             if ($user && $user->isBlocked()) {
                 return Response()->json([
                     'message' => trans('api.block_status_error_message')
-                ], HttpCode::ERROR);
+                ], HttpCode::ERROR, [], JSON_UNESCAPED_UNICODE);
             } else if ($user && $user->isActiveUser()) {
                 $user = UserAuthResource::make($user);
                 return Response()->json([
                     'data' => $user,
                     'message' => trans('api.login_success_message'),
-                ], HttpCode::SUCCESS);
+                ], HttpCode::SUCCESS, [], JSON_UNESCAPED_UNICODE);
             } else if ($user && $user->isNotPhoneVerified()) {
                 // send verification sms
                 self::sendVerificationCode($user);
@@ -123,12 +123,12 @@ class AuthApiRepository
                         'verify' => 1
                     ],
                     'message' => trans('api.not_verified_error_message'),
-                ], HttpCode::NOT_VERIFIED);
+                ], HttpCode::NOT_VERIFIED, [], JSON_UNESCAPED_UNICODE);
             }
         }
         return Response()->json([
             'message' => trans('api.credentials_error_message')
-        ], HttpCode::ERROR);
+        ], HttpCode::ERROR, [], JSON_UNESCAPED_UNICODE);
     }
 
     // forget password
