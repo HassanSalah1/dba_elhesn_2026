@@ -325,6 +325,33 @@
                             }
                         },
                         {
+                            "name": "api/v1/team/player/details/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/team/player/details/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "team",
+                                        "player",
+                                        "details",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
                             "name": "api/v1/history",
                             "request": {
                                 "method": "GET",
@@ -612,6 +639,30 @@
                                         "api",
                                         "v1",
                                         "elders"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v1/emergencies",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/emergencies",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "emergencies"
                                     ]
                                 }
                             }
@@ -1958,6 +2009,33 @@
                             }
                         },
                         {
+                            "name": "api/v2/team/player/details/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/team/player/details/{id}",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "team",
+                                        "player",
+                                        "details",
+                                        "{id}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
                             "name": "api/v2/history",
                             "request": {
                                 "method": "GET",
@@ -2245,6 +2323,30 @@
                                         "api",
                                         "v2",
                                         "elders"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/emergencies",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/emergencies",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "emergencies"
                                     ]
                                 }
                             }

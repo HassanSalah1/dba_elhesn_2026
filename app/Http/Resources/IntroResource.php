@@ -17,7 +17,12 @@ class IntroResource extends JsonResource
         return [
             'title' => $this->title,
             'description' => $this->description,
-            'image' => $this->image ? url($this->image) : null,
+            'title_ar' => $this->title_ar,
+            'title_en' => $this->title_en,
+            'description_ar' => $this->description_ar,
+            'description_en' => $this->description_en,
+            'image' => $this->image ? url($this->image) : url('images/default.png'),
+            'order' => $this->order,
         ];
     }
 }

@@ -21,10 +21,12 @@ class ActionDetailsResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'video_url' => $this->video_url,
-            'image' => $image ? url($image->image) : null,
+            'image' => $image ? url($image->image) : url('images/default.png'),
             'images' => ImageResource::collection($this->images()),
             'created_date' => UtilsRepository::translateDate(date('d F Y', strtotime($this->created_at))),
-            'start_date' => UtilsRepository::translateDate(date('d F Y', strtotime($this->start_date)))
+            'start_date' => $this->start_date ? date('c', strtotime($this->start_date)) : null,
+            'end_date' => $this->end_date ? date('c', strtotime($this->end_date)) : null,
+            'location' => $this->location,
         ];
     }
 }

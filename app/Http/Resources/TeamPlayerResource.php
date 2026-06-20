@@ -27,6 +27,7 @@ class TeamPlayerResource extends JsonResource
         return [
             'id' => $this->player_id,
             'name' => $this->name,
+            'number' => $this->number,
             'image' => $this->image_url,
             'description' => $description
         ];

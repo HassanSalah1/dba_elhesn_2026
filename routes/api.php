@@ -45,6 +45,7 @@ Route::group(['middleware' => 'lang'], function () {
 
         Route::get('/sport/teams/{id}', [SettingController::class, 'getSportTeams']); // get Sport teams
         Route::get('/team/players/{id}', [SettingController::class, 'getTeamPlayers']); // get Sport teams
+        Route::get('/team/player/details/{id}', [SettingController::class, 'getTeamPlayerDetails']);
 
         Route::get('/history', [SettingController::class, 'getHistory']); // history
 
@@ -65,6 +66,7 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('/club_structure', [SettingController::class, 'getClubStructure']); // get about
 
         Route::get('/elders', [SettingController::class, 'getElders']);
+        Route::get('/emergencies', [SettingController::class, 'getEmergencies']);
 
         Route::post('/signup', [AuthController::class, 'register']); // register new user
         Route::get('/get/verification/code', [AuthController::class, 'getVerificationCode']); // get verification code'Auth\@getVerificationCode'); // get verification code
@@ -142,6 +144,7 @@ Route::group(['middleware' => 'lang'], function () {
 
         Route::get('/sport/teams/{id}', [SettingV2Controller::class, 'getSportTeams']); // get Sport teams
         Route::get('/team/players/{id}', [SettingV2Controller::class, 'getTeamPlayers']); // get Sport teams
+        Route::get('/team/player/details/{id}', [SettingV2Controller::class, 'getTeamPlayerDetails']);
 
         Route::get('/history', [SettingV2Controller::class, 'getHistory']); // history
 
@@ -162,6 +165,7 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('/club_structure', [SettingV2Controller::class, 'getClubStructure']); // get about
 
         Route::get('/elders', [SettingV2Controller::class, 'getElders']);
+        Route::get('/emergencies', [SettingV2Controller::class, 'getEmergencies']);
 
         Route::post('/signup', [AuthV2Controller::class, 'register']); // register new user
         Route::get('/get/verification/code', [AuthV2Controller::class, 'getVerificationCode']); // get verification code

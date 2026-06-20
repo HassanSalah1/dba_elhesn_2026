@@ -159,4 +159,17 @@ class SettingController extends Controller
         return SettingApiService::getTeamPlayers($data);
     }
  
+    public function getEmergencies(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getEmergencies($data);
+    }
+ 
+    public function getTeamPlayerDetails(Request $request, $id)
+    {
+        $data = $request->all();
+        $data['id'] = $id;
+        return SettingApiService::getTeamPlayerDetails($data);
+    }
+ 
 }

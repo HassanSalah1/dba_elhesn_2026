@@ -162,55 +162,71 @@
     <script src="{{ asset(mix('vendors/js/forms/select/select2.full.min.js'))}}"></script>
 @endsection
 @section('page-script')
-    initTinyMCE('.textarea-editor', '{{url('/admin/upload/image')}}', csrf_token);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js"></script>
+    <script src="{{url('/js/scripts/custom/dropify.min.js')}}"></script>
+    <script src="{{url('/js/scripts/custom/jquery.loader.js')}}"></script>
+    <script>
+        const csrf_token = '{{csrf_token()}}';
+    </script>
+    <script src="{{url('/js/scripts/custom/utils.js')}}"></script>
+    <script src="{{url('/js/scripts/custom/tinymce-config.js')}}"></script>
+    <script>
+        $(function () {
+            @if(isset($new) && $new && $new->image())
+                initDropify('{{url($new->image()->image)}}');
+            @else
+                initDropify();
+            @endif
 
-    $('#general-form').submit(function (e) {
-    e.preventDefault();
-    sendAjaxRequest(this, '{{url(isset($new) && $new ? '/admin/new/edit/' . $new->id : '/admin/new/add')}}', {
-    error_message: '{{trans('admin.general_error_message')}}',
-    error_title: '',
-    loader: true,
-    load_page: '{{url('/admin/news')}}'
-    });
-    });
-    });
+            initTinyMCE('.textarea-editor', '{{url('/admin/upload/image')}}', csrf_token);
 
-    function initDropify(image = null) {
-    let html = '<label class="control-label" for="image">' +
-        '{{trans('admin.image')}}</label>' +
-    '<input name="image" type="file" class="dropify" data-default-file="' + (image ? image : '') + '" ' +
-                    ' data-max-file-size="20M" data-allowed-file-extensions="png jpg jpeg" />';
-    $('#dropify_image').html(html);
-    $('.dropify').dropify({
-    messages: {
-    'default': '{{trans('admin.dropify_default')}}',
-    'replace': '{{trans('admin.dropify_replace')}}',
-    'remove': '{{trans('admin.dropify_remove')}}',
-    'error': '{{trans('admin.dropify_error')}}'
-    },
-    error: {
-    'fileSize': '{{trans('admin.dropify_error')}}',
-    }
-    });
-    }
+            $('#general-form').submit(function (e) {
+                e.preventDefault();
+                sendAjaxRequest(this, '{{url(isset($new) && $new ? '/admin/new/edit/' . $new->id : '/admin/new/add')}}', {
+                    error_message: '{{trans('admin.general_error_message')}}',
+                    error_title: '',
+                    loader: true,
+                    load_page: '{{url('/admin/news')}}'
+                });
+            });
+        });
 
-    function removeImage(id) {
-    var form = new FormData();
-    form.append('id', id);
-    $.ajax({
-    url: '{{url('/admin/new/remove_image', [], env('APP_ENV') === 'local' ? false : true)}}',
-    method: 'POST',
-    data: form,
-    processData: false,
-    contentType: false,
-    headers: {'X-CSRF-TOKEN': csrf_token},
-    success: function (response) {
-    $('#image_' + id).remove();
-    },
-    error: function () {
-    toastr['error']('{{trans('admin.general_error_message')}}', '{{trans('admin.error_title')}}');
-    }
-    });
-    }
+        function initDropify(image = null) {
+            let html = '<label class="control-label" for="image">' +
+                '{{trans('admin.image')}}</label>' +
+                '<input name="image" type="file" class="dropify" data-default-file="' + (image ? image : '') + '" ' +
+                'data-max-file-size="20M" data-allowed-file-extensions="png jpg jpeg"/>';
+            $('#dropify_image').html(html);
+            $('.dropify').dropify({
+                messages: {
+                    'default': '{{trans('admin.dropify_default')}}',
+                    'replace': '{{trans('admin.dropify_replace')}}',
+                    'remove': '{{trans('admin.dropify_remove')}}',
+                    'error': '{{trans('admin.dropify_error')}}'
+                },
+                error: {
+                    'fileSize': '{{trans('admin.dropify_error')}}',
+                }
+            });
+        }
+
+        function removeImage(id) {
+            var form = new FormData();
+            form.append('id', id);
+            $.ajax({
+                url: '{{url('/admin/new/remove_image', [], env('APP_ENV') === 'local' ? false : true)}}',
+                method: 'POST',
+                data: form,
+                processData: false,
+                contentType: false,
+                headers: {'X-CSRF-TOKEN': csrf_token},
+                success: function (response) {
+                    $('#image_' + id).remove();
+                },
+                error: function () {
+                    toastr['error']('{{trans('admin.general_error_message')}}', '{{trans('admin.error_title')}}');
+                }
+            });
+        }
     </script>
 @endsection

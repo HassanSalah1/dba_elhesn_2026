@@ -49,9 +49,27 @@
 
                                 <div class="col-xl-6 col-md-6 col-12">
                                     <div class="mb-1">
+                                        <label class="form-label" for="location_ar">{{trans('admin.location_ar')}}</label>
+                                        <input type="text" class="form-control" id="location_ar" name="location_ar"
+                                            @if(isset($action) && $action) value="{{$action->location_ar}}" @endif
+                                            placeholder="{{trans('admin.location_ar')}}" />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-md-6 col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="location_en">{{trans('admin.location_en')}}</label>
+                                        <input type="text" class="form-control" id="location_en" name="location_en"
+                                            @if(isset($action) && $action) value="{{$action->location_en}}" @endif
+                                            placeholder="{{trans('admin.location_en')}}" />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-md-6 col-12">
+                                    <div class="mb-1">
                                         <label class="form-label" for="start_date">{{trans('admin.start_date')}}</label>
-                                        <input type="date" class="form-control" min="{{date('Y-m-d')}}" value="{{date('Y-m-d')}}" id="start_date" name="start_date"
-                                            @if(isset($action) && $action) value="{{$action->start_date}}" @endif
+                                        <input type="datetime-local" class="form-control" id="start_date" name="start_date"
+                                            value="{{ isset($action) && $action ? date('Y-m-d\TH:i', strtotime($action->start_date)) : date('Y-m-d\TH:i') }}"
                                             placeholder="{{trans('admin.start_date')}}" />
                                     </div>
                                 </div>
@@ -59,8 +77,8 @@
                                 <div class="col-xl-6 col-md-6 col-12">
                                     <div class="mb-1">
                                         <label class="form-label" for="end_date">{{trans('admin.end_date')}}</label>
-                                        <input type="date" class="form-control" min="{{date('Y-m-d')}}" value="{{date('Y-m-d')}}" id="end_date" name="end_date"
-                                            @if(isset($action) && $action) value="{{$action->end_date}}" @endif
+                                        <input type="datetime-local" class="form-control" id="end_date" name="end_date"
+                                            value="{{ isset($action) && $action && $action->end_date ? date('Y-m-d\TH:i', strtotime($action->end_date)) : '' }}"
                                             placeholder="{{trans('admin.end_date')}}" />
                                     </div>
                                 </div>

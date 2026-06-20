@@ -22,6 +22,12 @@
                     "url": "admin/setting",
                     "icon": "circle",
                     "slug": "dashboard-setting"
+                },
+                {
+                    "name": "emergencies_title",
+                    "url": "admin/emergencies",
+                    "icon": "circle",
+                    "slug": "dashboard-emergencies"
                 }
             ],
             "permission": "settings"

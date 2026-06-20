@@ -3,15 +3,16 @@
 namespace App\Console\Commands;
 
 use App\Repositories\Api\SqlServerApiRepository;
+use App\Repositories\Api\V2\SqlServerApiRepository as V2SqlServerApiRepository;
 use Illuminate\Console\Command;
 
 class SyncMysqlData extends Command
 {
-    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, users, user_teams, all)}';
+    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, all)}';
 
     protected $description = 'Sync MySQL data with SQL Server: upsert existing records, delete orphaned ones';
 
-    private array $validTables = ['teams', 'players', 'users', 'user_teams', 'all'];
+    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'all'];
 
     public function __construct()
     {
@@ -28,7 +29,7 @@ class SyncMysqlData extends Command
         }
 
         $this->warn('⚠  This will DELETE any MySQL records not found in SQL Server.');
-        $this->warn('   Order of sync: teams → players → users → user_teams');
+        $this->warn('   Order of sync: teams → players → player_details → users → user_teams');
         $this->newLine();
 
         if (!$this->confirm('Are you sure you want to continue?')) {
@@ -49,6 +50,12 @@ class SyncMysqlData extends Command
             $this->line('Syncing <info>team_players</info>...');
             $stats  = SqlServerApiRepository::syncPlayersWithSqlServer();
             $rows[] = ['team_players', $stats['upserted'], $stats['deleted']];
+        }
+
+        if (in_array($table, ['player_details', 'all'])) {
+            $this->line('Syncing <info>player_details</info> from MobileApp DB...');
+            $stats  = V2SqlServerApiRepository::syncPlayerDetailsFromMobileApp();
+            $rows[] = ['player_details', $stats['updated'], $stats['skipped']];
         }
 
         if (in_array($table, ['users', 'all'])) {

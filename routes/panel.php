@@ -16,6 +16,7 @@ use App\Http\Controllers\Dashboard\Setting\IntroController;
 use App\Http\Controllers\Dashboard\Setting\RegulationController;
 use App\Http\Controllers\Dashboard\Setting\SportGameController;
 use App\Http\Controllers\Dashboard\Setting\TeamController;
+use App\Http\Controllers\Dashboard\Setting\EmergencyController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\User\UserController;
 
@@ -75,6 +76,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'web'], function () {
         //////////////////////////////////
         Route::get('/setting', [HomeController::class, 'showSetting'])->name('dashboard-setting'); // about page
         Route::post('/setting/save', [HomeController::class, 'saveSetting']);
+
+        Route::get('/emergencies', [EmergencyController::class, 'showEmergencies'])->name('dashboard-emergencies');
+        Route::get('/emergencies/data', [EmergencyController::class, 'getEmergenciesData']);
+        Route::post('/emergency/add', [EmergencyController::class, 'addEmergency']);
+        Route::post('/emergency/data', [EmergencyController::class, 'getEmergencyData']);
+        Route::post('/emergency/edit', [EmergencyController::class, 'editEmergency']);
+        Route::post('/emergency/delete', [EmergencyController::class, 'deleteEmergency']);
 
         //////////////////////////////////
         Route::get('/elders', [HomeController::class, 'showElders'])->name('dashboard-elders'); // about page

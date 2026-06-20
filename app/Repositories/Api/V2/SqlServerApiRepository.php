@@ -70,6 +70,35 @@ class SqlServerApiRepository
     }
  
     /**
+     * Connect to the unified MobileApp database on the same SQL Server.
+     */
+    public static function startMobileAppConnection()
+    {
+        if (! function_exists('sqlsrv_connect')) {
+            return false;
+        }
+ 
+        $serverName = 'dhsckarem.ddns.net';
+        $uid = 'dhclubapp';
+        $pwd = 'bNHW^3&q1mH5';
+        $databaseName = 'MobileApp';
+ 
+        $connectionInfo = [
+            "UID" => $uid,
+            "PWD" => $pwd,
+            "Database" => $databaseName,
+            "TrustServerCertificate" => true,
+            "CharacterSet" => "UTF-8",
+            "LoginTimeout" => 15,
+        ];
+        $conn = \sqlsrv_connect($serverName, $connectionInfo);
+        if ($conn) {
+            return $conn;
+        }
+        return false;
+    }
+ 
+    /**
      * Test connectivity to the SQL Server used by this repository (same credentials as startConnection).
      *
      * @return array{ok: bool, message: string}
@@ -523,5 +552,60 @@ class SqlServerApiRepository
             }
         }
         return 0;
+    }
+ 
+    /**
+     * Sync player details (birth date, nationality, height, weight, shirt number, position)
+     * from the MobileApp database View: dbo.MobileApp_Players
+     */
+    public static function syncPlayerDetailsFromMobileApp(): array
+    {
+        $conn = self::startMobileAppConnection();
+        $stats = ['updated' => 0, 'skipped' => 0];
+ 
+        if (!$conn) {
+            Log::warning('syncPlayerDetailsFromMobileApp: Could not connect to MobileApp DB');
+            return $stats;
+        }
+ 
+        $sql = "SELECT PlayerRowID, DOB, Nationality, Length, Weight, Position, JerseyNo FROM dbo.MobileApp_Players";
+        $result = \sqlsrv_query($conn, $sql);
+ 
+        if ($result === false) {
+            Log::warning('syncPlayerDetailsFromMobileApp: Query failed');
+            sqlsrv_close($conn);
+            return $stats;
+        }
+ 
+        while ($object = \sqlsrv_fetch_object($result)) {
+            $player = TeamPlayer::where('player_id', $object->PlayerRowID)->first();
+            if (!$player) {
+                $stats['skipped']++;
+                continue;
+            }
+ 
+            $birthDate = null;
+            if ($object->DOB instanceof \DateTime) {
+                $birthDate = $object->DOB->format('Y-m-d');
+            } elseif (is_string($object->DOB) && !empty($object->DOB)) {
+                $birthDate = $object->DOB;
+            }
+ 
+            $player->update([
+                'birth_date'     => $birthDate,
+                'nationality_ar' => $object->Nationality ?? null,
+                'nationality_en' => $object->Nationality ?? null,
+                'height'         => $object->Length ? (int)$object->Length : null,
+                'weight'         => $object->Weight ? (int)$object->Weight : null,
+                'number'         => $object->JerseyNo ?? $player->number,
+                'position_ar'    => $object->Position ?? null,
+                'position_en'    => $object->Position ?? null,
+            ]);
+            $stats['updated']++;
+        }
+ 
+        sqlsrv_close($conn);
+ 
+        return $stats;
     }
 }

@@ -165,4 +165,16 @@ class SettingApiService
         return UtilsRepository::handleResponseApi($response);
     }
  
+    public static function getEmergencies(array $data)
+    {
+        $response = SettingApiRepository::getEmergencies($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+ 
+    public static function getTeamPlayerDetails(array $data)
+    {
+        $response = SettingApiRepository::getTeamPlayerDetails($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+ 
 }

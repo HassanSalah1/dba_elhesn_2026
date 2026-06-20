@@ -468,7 +468,7 @@ class SettingApiRepository
 
             $sport = SportGame::where(['game_id' => $team->sport_id])->first();
             TeamPlayerResource::using([
-                'description' => $sport->description
+                'description' => $sport ? $sport->description : ''
             ]);
             return [
                 'data' => TeamPlayerResource::collection($players),
@@ -527,5 +527,30 @@ class SettingApiRepository
         ];
     }
 
+    public static function getEmergencies(array $data)
+    {
+        $emergencies = \App\Models\Emergency::orderBy('order', 'ASC')->get();
+        return [
+            'data' => \App\Http\Resources\EmergencyResource::collection($emergencies),
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getTeamPlayerDetails(array $data)
+    {
+        $player = TeamPlayer::where('player_id', $data['id'])->first();
+        if (!$player) {
+            return [
+                'message' => 'not found',
+                'code' => HttpCode::ERROR
+            ];
+        }
+        return [
+            'data' => \App\Http\Resources\TeamPlayerDetailsResource::make($player),
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
 
 }

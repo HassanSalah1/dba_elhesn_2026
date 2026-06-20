@@ -20,7 +20,7 @@ class NewResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'short_description' => $this->short_description,
-            'image' => $image ? url($image->image) : null,
+            'image' => $image ? url($image->image) : url('images/default.png'),
             'category' => $this->category ? $this->category->name : '',
             'created_date' => UtilsRepository::translateDate(date('d F Y', strtotime($this->created_at))),
         ];

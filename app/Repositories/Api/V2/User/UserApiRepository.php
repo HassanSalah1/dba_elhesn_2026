@@ -7,7 +7,7 @@ use App\Entities\HttpCode;
 use App\Entities\Period;
 use App\Entities\UserRoles;
 use App\Http\Resources\NotificationResource;
-use App\Http\Resources\SportGameResource;
+use App\Http\Resources\V2\SportGameResource;
 use App\Http\Resources\TeamPlayerResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserTeamResource;
@@ -505,7 +505,7 @@ class UserApiRepository
     {
         $games = SportGame::orderBy('order', 'ASC')
             ->select('game_id AS id', 'title_ar', 'title_en', 'description_ar', 'description_en',
-                'image', 'order')
+                'history_ar', 'history_en', 'image', 'order')
             ->get();
         $games = SportGameResource::collection($games);
         // return success response

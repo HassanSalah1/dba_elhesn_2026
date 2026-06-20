@@ -19,10 +19,12 @@ class Action extends Model
         'description_en',
         'start_date',
         'end_date',
-        'video_url'
+        'video_url',
+        'location_ar',
+        'location_en'
     ];
 
-    protected $appends = ['title', 'description'];
+    protected $appends = ['title', 'description', 'location'];
 
     public function getTitleAttribute()
     {
@@ -34,6 +36,12 @@ class Action extends Model
     {
         $lang = App::getLocale();
         return $lang === 'en' ? $this->description_en : $this->description_ar;
+    }
+
+    public function getLocationAttribute()
+    {
+        $lang = App::getLocale();
+        return $lang === 'en' ? $this->location_en : $this->location_ar;
     }
 
     public function images()

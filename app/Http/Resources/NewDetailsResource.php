@@ -21,7 +21,7 @@ class NewDetailsResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'video_url' => $this->video_url,
-            'image' => null ,//$image ? url($image->image) : null,
+            'image' => $image ? url($image->image) : url('images/default.png'),
             'images' => ImageResource::collection($this->images()),
             'category' => $this->category ? $this->category->name : '',
             'created_date' => UtilsRepository::translateDate(date('d F Y', strtotime($this->created_at))),
