@@ -1635,7 +1635,7 @@
                                     }
                                 ],
                                 "url": {
-                                    "raw": "{{baseUrl}}/api/v1/matches",
+                                    "raw": "{{baseUrl}}/api/v1/matches?type=week",
                                     "host": [
                                         "{{baseUrl}}"
                                     ],
@@ -1643,6 +1643,13 @@
                                         "api",
                                         "v1",
                                         "matches"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "type",
+                                            "value": "week",
+                                            "description": "Filter options: previous, week, upcoming, today"
+                                        }
                                     ]
                                 }
                             }
@@ -3319,7 +3326,7 @@
                                     }
                                 ],
                                 "url": {
-                                    "raw": "{{baseUrl}}/api/v2/matches",
+                                    "raw": "{{baseUrl}}/api/v2/matches?type=week",
                                     "host": [
                                         "{{baseUrl}}"
                                     ],
@@ -3327,6 +3334,13 @@
                                         "api",
                                         "v2",
                                         "matches"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "type",
+                                            "value": "week",
+                                            "description": "Filter options: previous, week, upcoming, today"
+                                        }
                                     ]
                                 }
                             }

@@ -622,8 +622,7 @@ class UserApiRepository
         }
     }
  
-    public
-    static function getMatches(array $data)
+    public static function getMatches(array $data)
     {
         $user = auth()->user();
         if (!in_array($user->role, [UserRoles::Foot])) {
@@ -635,7 +634,22 @@ class UserApiRepository
         $conn = SqlServerApiRepository::startConnection();
         $resultData = [];
         if ($conn) {
-            $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate='" . date('Y-m-d') . "'";
+            $type = isset($data['type']) ? $data['type'] : (isset($data['filter']) ? $data['filter'] : 'today');
+            $todayStr = date('Y-m-d');
+ 
+            if ($type === 'previous') {
+                $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate < '" . $todayStr . "' ORDER BY Matchdate DESC";
+            } elseif ($type === 'week') {
+                $today = \Carbon\Carbon::today();
+                $startOfWeek = $today->copy()->startOfWeek(\Carbon\Carbon::SUNDAY)->format('Y-m-d');
+                $endOfWeek = $today->copy()->endOfWeek(\Carbon\Carbon::SATURDAY)->format('Y-m-d');
+                $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate BETWEEN '" . $startOfWeek . "' AND '" . $endOfWeek . "' ORDER BY Matchdate ASC";
+            } elseif ($type === 'upcoming' || $type === 'next') {
+                $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate > '" . $todayStr . "' ORDER BY Matchdate ASC";
+            } else {
+                $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate = '" . $todayStr . "' ORDER BY Matchdate ASC";
+            }
+ 
             $result = \sqlsrv_query($conn, $sql);
             if ($result !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
