@@ -14,7 +14,9 @@ class AddEndDateToActionsTable extends Migration
     public function up()
     {
         Schema::table('actions', function (Blueprint $table) {
-            $table->date('end_date')->nullable()->after('start_date');
+            if (!Schema::hasColumn('actions', 'end_date')) {
+                $table->date('end_date')->nullable()->after('start_date');
+            }
         });
     }
 

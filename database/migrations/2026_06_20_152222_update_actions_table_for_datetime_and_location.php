@@ -16,8 +16,12 @@ return new class extends Migration
         Schema::table('actions', function (Blueprint $table) {
             $table->dateTime('start_date')->change();
             $table->dateTime('end_date')->nullable()->change();
-            $table->string('location_ar')->nullable()->after('end_date');
-            $table->string('location_en')->nullable()->after('location_ar');
+            if (!Schema::hasColumn('actions', 'location_ar')) {
+                $table->string('location_ar')->nullable()->after('end_date');
+            }
+            if (!Schema::hasColumn('actions', 'location_en')) {
+                $table->string('location_en')->nullable()->after('location_ar');
+            }
         });
     }
 
