@@ -21,6 +21,7 @@ class ActionResource extends JsonResource
             'title' => $this->title,
             'image' => $image ? url($image->image) : url('images/default.png'),
             'start_date' => $this->start_date ? date('c', strtotime($this->start_date)) : null,
+            'end_date' => $this->end_date ? date('c', strtotime($this->end_date)) : null,
             'location' => $this->location,
             'created_date' => UtilsRepository::translateDate(date('d F Y', strtotime($this->created_at))),
         ];
