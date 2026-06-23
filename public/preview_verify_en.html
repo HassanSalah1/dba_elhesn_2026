@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ $data['lang'] ?? 'ar' }}" @if(isset($data['lang']) && $data['lang'] == 'ar') dir="rtl" @else dir="ltr" @endif>
+<html lang="en"  dir="ltr" >
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('subject')</title>
+    <title>    تفعيل الحساب
+</title>
     <style>
         /* Mobile-specific styles */
         @media only screen and (max-width: 600px) {
@@ -25,13 +26,6 @@
         }
     </style>
 </head>
-@php
-    $facebook = \App\Models\Setting::where('key', \App\Entities\Key::FACEBOOK)->first()?->value ?? '#';
-    $twitter = \App\Models\Setting::where('key', \App\Entities\Key::TWITTER)->first()?->value ?? '#';
-    $instagram = \App\Models\Setting::where('key', \App\Entities\Key::INSTAGRAM)->first()?->value ?? '#';
-    $youtube = \App\Models\Setting::where('key', \App\Entities\Key::YOUTUBE)->first()?->value ?? '#';
-    $contactEmail = \App\Models\Setting::where('key', \App\Entities\Key::EMAIL)->first()?->value ?? 'info@dhclub.ae';
-@endphp
 <body style="margin: 0; padding: 0; background-color: #040807; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
 
     <!-- Wrapper table with radial gradient simulation -->
@@ -40,30 +34,16 @@
             <td align="center" valign="top">
                 
                 <!-- Main Container Card -->
-                <table class="container-card" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 24px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4); padding: 40px; box-sizing: border-box; text-align: {{ isset($data['lang']) && $data['lang'] == 'ar' ? 'right' : 'left' }};" @if(isset($data['lang']) && $data['lang'] == 'ar') dir="rtl" @else dir="ltr" @endif>
+                <table class="container-card" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 24px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4); padding: 40px; box-sizing: border-box; text-align: left;"  dir="ltr" >
                     
                     <!-- Header with Logo and Text -->
                     <tr>
                         <td valign="top" style="padding-bottom: 30px; border-bottom: 1px solid #f0f0f0;">
-                            @if(isset($data['lang']) && $data['lang'] == 'ar')
-                            <!-- Arabic RTL Header -->
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%" dir="rtl">
-                                <tr>
-                                    <td class="header-text-td" align="right" valign="middle" style="padding-right: 15px;">
-                                        <h2 class="club-title-ar" style="font-size: 20px; font-weight: bold; color: #093f21; margin: 0; line-height: 1.3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">نادي دبا الحصن الرياضي الثقافي</h2>
-                                        <p class="club-title-en" style="font-size: 13px; color: #666666; margin: 4px 0 0 0; line-height: 1.2; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: normal;">Dibba Al-Hisn Sports & Cultural Club</p>
-                                    </td>
-                                    <td width="70" align="left" valign="middle">
-                                        <img src="{{ asset('images/logo/logo.png') }}" style="width: 70px; height: 70px; display: block;" alt="Logo">
-                                    </td>
-                                </tr>
-                            </table>
-                            @else
-                            <!-- English LTR Header -->
+                                                        <!-- English LTR Header -->
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" dir="ltr">
                                 <tr>
                                     <td width="70" align="left" valign="middle">
-                                        <img src="{{ asset('images/logo/logo.png') }}" style="width: 70px; height: 70px; display: block;" alt="Logo">
+                                        <img src="http://localhost/images/logo/logo.png" style="width: 70px; height: 70px; display: block;" alt="Logo">
                                     </td>
                                     <td class="header-text-td" align="left" valign="middle" style="padding-left: 15px;">
                                         <h2 class="club-title-ar" style="font-size: 20px; font-weight: bold; color: #093f21; margin: 0; line-height: 1.3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">نادي دبا الحصن الرياضي الثقافي</h2>
@@ -71,22 +51,40 @@
                                     </td>
                                 </tr>
                             </table>
-                            @endif
-                        </td>
+                                                    </td>
                     </tr>
                     
                     <!-- Content Title -->
                     <tr>
                         <td valign="top" style="padding-top: 25px;">
-                            @yield('title')
-                        </td>
+                                        <h1 style="font-size: 24px; font-weight: 700; color: #0b8a45; margin: 0 0 15px 0; line-height: 1.3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: left;">Welcome to Dibba El-Hisn Club 🎉</h1>
+        <p style="font-size: 15px; color: #666666; line-height: 1.6; margin: 0 0 25px 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: left;">
+            Account activated successfully. Welcome to the future of Dibba Al-Hisn Sports Club. Explore upcoming matches, book medical clinic sessions, and fully sports journey.
+        </p>
+                            </td>
                     </tr>
                     
                     <!-- Content Message/Body -->
                     <tr>
                         <td valign="top" style="padding-top: 10px; font-size: 15px; color: #555555; line-height: 1.6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                            @yield('message')
-                        </td>
+                                        <!-- English Status Card and Verification Code -->
+        <div style="background-color: #f2f8f5; border: 1px solid #d1ebd9; border-radius: 16px; padding: 20px; margin-bottom: 25px; text-align: left; direction: ltr;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" dir="ltr">
+                <tr>
+                    <td width="36" valign="middle" align="left">
+                        <div style="width: 36px; height: 36px; background-color: #0b8a45; border-radius: 50%; text-align: center; line-height: 36px; color: #ffffff; font-size: 18px; font-weight: bold; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">✓</div>
+                    </td>
+                    <td valign="middle" style="padding-left: 15px; font-size: 16px; font-weight: bold; color: #0f5b30; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                        Account created successfully
+                    </td>
+                </tr>
+            </table>
+            <div style="margin-top: 20px; border-top: 1px dashed #d1ebd9; padding-top: 15px; text-align: center;">
+                <p style="font-size: 14px; color: #555555; margin: 0 0 10px 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Your verification code is:</p>
+                <div style="font-size: 32px; font-weight: bold; color: #0b8a45; letter-spacing: 6px; padding: 10px 20px; background-color: #ffffff; border: 1px dashed #0b8a45; border-radius: 8px; display: inline-block; font-family: monospace;">4829</div>
+            </div>
+        </div>
+                            </td>
                     </tr>
                     
                     <!-- Footer Section -->
@@ -97,12 +95,8 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
                                     <td align="center" style="font-size: 14px; color: #666666; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                                        @if(isset($data['lang']) && $data['lang'] == 'ar')
-                                            هل تحتاج إلى مساعدة؟ <a href="mailto:{{ $contactEmail }}" style="color: #0b8a45; text-decoration: none; font-weight: bold;">تواصل مع الدعم</a>
-                                        @else
-                                            Need help? <a href="mailto:{{ $contactEmail }}" style="color: #0b8a45; text-decoration: none; font-weight: bold;">Contact support</a>
-                                        @endif
-                                    </td>
+                                                                                    Need help? <a href="mailto:info@dhclub.ae" style="color: #0b8a45; text-decoration: none; font-weight: bold;">Contact support</a>
+                                                                            </td>
                                 </tr>
                             </table>
                             
@@ -110,12 +104,8 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 20px;">
                                 <tr>
                                     <td align="center" style="font-size: 12px; color: #999999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                                        @if(isset($data['lang']) && $data['lang'] == 'ar')
-                                            &copy; {{ date('Y') }} نادي دبا الحصن | جميع الحقوق محفوظة
-                                        @else
-                                            &copy; {{ date('Y') }} Dibba Al-Hisn Club | All rights reserved
-                                        @endif
-                                    </td>
+                                                                                    &copy; 2026 Dibba Al-Hisn Club | All rights reserved
+                                                                            </td>
                                 </tr>
                             </table>
                             
@@ -123,19 +113,19 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 20px;">
                                 <tr>
                                     <td align="center">
-                                        <a href="{{ $instagram }}" style="text-decoration: none; margin: 0 8px; display: inline-block;">
+                                        <a href="#" style="text-decoration: none; margin: 0 8px; display: inline-block;">
                                             <img src="https://img.icons8.com/ios-filled/40/093f21/instagram-new.png" style="width: 20px; height: 20px; display: block;" alt="Instagram">
                                         </a>
-                                        <a href="{{ $twitter }}" style="text-decoration: none; margin: 0 8px; display: inline-block;">
+                                        <a href="#" style="text-decoration: none; margin: 0 8px; display: inline-block;">
                                             <img src="https://img.icons8.com/ios-filled/40/093f21/twitterx.png" style="width: 20px; height: 20px; display: block;" alt="X">
                                         </a>
                                         <a href="#" style="text-decoration: none; margin: 0 8px; display: inline-block;">
                                             <img src="https://img.icons8.com/ios-filled/40/093f21/linkedin.png" style="width: 20px; height: 20px; display: block;" alt="LinkedIn">
                                         </a>
-                                        <a href="{{ $facebook }}" style="text-decoration: none; margin: 0 8px; display: inline-block;">
+                                        <a href="#" style="text-decoration: none; margin: 0 8px; display: inline-block;">
                                             <img src="https://img.icons8.com/ios-filled/40/093f21/facebook-new.png" style="width: 20px; height: 20px; display: block;" alt="Facebook">
                                         </a>
-                                        <a href="{{ $youtube }}" style="text-decoration: none; margin: 0 8px; display: inline-block;">
+                                        <a href="#" style="text-decoration: none; margin: 0 8px; display: inline-block;">
                                             <img src="https://img.icons8.com/ios-filled/40/093f21/youtube-play.png" style="width: 20px; height: 20px; display: block;" alt="YouTube">
                                         </a>
                                     </td>
