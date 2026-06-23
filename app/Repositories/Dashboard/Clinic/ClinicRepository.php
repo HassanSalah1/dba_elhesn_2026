@@ -43,6 +43,24 @@ class ClinicRepository
         $timeSlots = ClinicTimeSlot::orderBy('day_of_week', 'asc')->orderBy('start_time', 'asc');
         
         return DataTables::of($timeSlots)
+            ->editColumn('day_of_week', function ($slot) {
+                $days = [
+                    'Saturday' => 'السبت',
+                    'Sunday' => 'الأحد',
+                    'Monday' => 'الإثنين',
+                    'Tuesday' => 'الثلاثاء',
+                    'Wednesday' => 'الأربعاء',
+                    'Thursday' => 'الخميس',
+                    'Friday' => 'الجمعة',
+                ];
+                return isset($days[$slot->day_of_week]) ? $days[$slot->day_of_week] : $slot->day_of_week;
+            })
+            ->editColumn('start_time', function ($slot) {
+                return date('H:i', strtotime($slot->start_time));
+            })
+            ->editColumn('end_time', function ($slot) {
+                return date('H:i', strtotime($slot->end_time));
+            })
             ->editColumn('status', function ($slot) {
                 $badgeClass = $slot->status ? 'badge-light-success' : 'badge-light-danger';
                 $text = $slot->status ? trans('admin.active_status') : trans('admin.blocked_status');

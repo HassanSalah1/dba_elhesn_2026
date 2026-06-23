@@ -375,6 +375,10 @@ return [
     'complete_booking' => 'إكمال الحجز',
     'cancel_booking' => 'إلغاء الحجز',
     'clinic_permission' => 'العيادة',
+    'day_of_week' => 'يوم الأسبوع',
+    'start_time' => 'وقت البدء',
+    'end_time' => 'وقت الانتهاء',
+    'max_bookings' => 'الحد الأقصى للحجوزات',
 ];
 
 ?>
