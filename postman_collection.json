@@ -3385,6 +3385,328 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "Clinic",
+                    "item": [
+                        {
+                            "name": "api/v2/clinic/status",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/clinic/status",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "clinic",
+                                        "status"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/clinic/time-slots",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/clinic/time-slots?date=2026-06-24",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "clinic",
+                                        "time-slots"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "date",
+                                            "value": "2026-06-24",
+                                            "description": "Target date format Y-m-d (optional)"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/clinic/booking",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/clinic/booking",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "clinic",
+                                        "booking"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "booking_date",
+                                            "value": "2026-06-24",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "time_slot_id",
+                                            "value": "1",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "is_for_other",
+                                            "value": "0",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "other_name",
+                                            "value": "",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "other_phone",
+                                            "value": "",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "other_country_code",
+                                            "value": "",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "injury_type",
+                                            "value": "Muscle tear",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "description",
+                                            "value": "Injury during training match",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "attachments",
+                                            "type": "file",
+                                            "description": "JPEG, PNG, PDF files (optional)"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/clinic/bookings",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/clinic/bookings?status=active",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "clinic",
+                                        "bookings"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "status",
+                                            "value": "active",
+                                            "description": "Filter by status: active, cancelled, pending, confirmed, completed"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/clinic/booking/{id}",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/clinic/booking/1",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "clinic",
+                                        "booking",
+                                        "1"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/clinic/booking/{id}/cancel",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/clinic/booking/1/cancel",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "clinic",
+                                        "booking",
+                                        "1",
+                                        "cancel"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/clinic/booking/{id}/attachment",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/clinic/booking/1/attachment",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "clinic",
+                                        "booking",
+                                        "1",
+                                        "attachment"
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "file",
+                                            "type": "file",
+                                            "description": "JPEG, PNG, PDF file to add"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "api/v2/clinic/booking/{id}/attachment/{attachmentId}",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/clinic/booking/1/attachment/1",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "clinic",
+                                        "booking",
+                                        "1",
+                                        "attachment",
+                                        "1"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
                 }
             ]
         }
