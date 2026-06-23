@@ -114,6 +114,7 @@ class HomeController extends Controller
         $data['longitude'] = Setting::where(['key' => Key::LONGITUDE])->first();
 
         $data['CLUB_STRUCTURE'] = Setting::where(['key' => Key::CLUB_STRUCTURE])->first();
+        $data['show_clinic'] = Setting::where(['key' => Key::SHOW_CLINIC])->first();
         $data['title'] = trans('admin.settings_title');
         return view('admin.settings.setting')->with($data);
     }

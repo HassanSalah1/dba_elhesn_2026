@@ -35,6 +35,7 @@ class Key
     const Image_4 = 'Image_4';
     const name_4 = 'name_4';
     const position_4 = 'position_4';
+    const SHOW_CLINIC = 'show_clinic';
 }
 
 ?>

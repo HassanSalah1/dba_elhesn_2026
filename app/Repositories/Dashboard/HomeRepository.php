@@ -246,6 +246,20 @@ class HomeRepository
             }
         }
 
+        // show clinic
+        $showClinic = Setting::where(['key' => Key::SHOW_CLINIC])->first();
+        $clinicValue = isset($data[Key::SHOW_CLINIC]) ? '1' : '0';
+        if ($showClinic) {
+            $showClinic->update([
+                'value' => $clinicValue
+            ]);
+        } else {
+            Setting::create([
+                'key' => Key::SHOW_CLINIC,
+                'value' => $clinicValue
+            ]);
+        }
+
         return UtilsRepository::response(true, trans('admin.process_success_message')
             , '');
     }

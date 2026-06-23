@@ -179,6 +179,7 @@ Route::group(['middleware' => 'lang'], function () {
 
 
         Route::get('/regulations', [SettingV2Controller::class, 'getRegulations']); // get regulations
+        Route::get('/clinic/status', [SettingV2Controller::class, 'getClinicStatus']);
 
         Route::post('/image/upload', [UserV2Controller::class, 'uploadImage']);
         Route::post('/sport/subscribe', [UserV2Controller::class, 'subscribeSport']);

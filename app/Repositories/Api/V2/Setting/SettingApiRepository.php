@@ -553,4 +553,17 @@ class SettingApiRepository
         ];
     }
  
+    public static function getClinicStatus(array $data)
+    {
+        $setting = Setting::where(['key' => Key::SHOW_CLINIC])->first();
+        $showClinic = $setting ? (int)$setting->value : 0;
+ 
+        return [
+            'data' => [
+                'show_clinic' => $showClinic
+            ],
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
 }

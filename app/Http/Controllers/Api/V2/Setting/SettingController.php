@@ -172,4 +172,9 @@ class SettingController extends Controller
         return SettingApiService::getTeamPlayerDetails($data);
     }
  
+    public function getClinicStatus(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getClinicStatus($data);
+    }
 }

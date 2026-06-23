@@ -177,4 +177,9 @@ class SettingApiService
         return UtilsRepository::handleResponseApi($response);
     }
  
+    public static function getClinicStatus(array $data)
+    {
+        $response = SettingApiRepository::getClinicStatus($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
 }

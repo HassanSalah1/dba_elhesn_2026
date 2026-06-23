@@ -101,6 +101,20 @@
                                     </div>
                                 </div>
 
+                                <div class="col-xl-6 col-md-6 col-12">
+                                    <div class="mb-1">
+                                        <label class="form-label"
+                                               for="{{\App\Entities\Key::SHOW_CLINIC}}">إظهار العيادة في التطبيق</label>
+                                        <div class="form-check form-switch mt-50">
+                                            <input type="checkbox" class="form-check-input" 
+                                                   id="{{\App\Entities\Key::SHOW_CLINIC}}"
+                                                   name="{{\App\Entities\Key::SHOW_CLINIC}}"
+                                                   value="1"
+                                                   @if(isset($show_clinic) && $show_clinic && $show_clinic->value == '1') checked @endif />
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <input type="hidden" name="latitude"
                                        @if(isset($latitude) && $latitude) value="{{$latitude->value}}" @endif>
                                 <input type="hidden" name="longitude"
