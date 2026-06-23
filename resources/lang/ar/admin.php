@@ -357,13 +357,24 @@ return [
     'one_period_day' => 'يوم فترة واحدة',
     'my_first_morning' => 'صباحى فترة أولى',
     'evening_another_period' => 'مسائى فترة تانيه',
-    'magles_title' => 'مجلس الشارقة الرياضي',
     'elders_title' => 'صور الشيوخ ومناصبهم',
     'end_date' => 'تاريخ الانتهاء',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
+
+    // Clinic Bookings
+    'clinic_title' => 'العيادة',
+    'clinic_bookings_title' => 'حجوزات العيادة',
+    'clinic_time_slots_title' => 'المواعيد المتاحة',
+    'booking_number' => 'رقم الحجز',
+    'booking_date' => 'تاريخ الحجز',
+    'booking_time' => 'الموعد',
+    'booking_status' => 'الحالة',
+    'player_name' => 'اسم اللاعب',
+    'injury_type' => 'نوع الإصابة',
+    'change_status' => 'تغيير الحالة',
+    'confirm_booking' => 'تأكيد الحجز',
+    'complete_booking' => 'إكمال الحجز',
+    'cancel_booking' => 'إلغاء الحجز',
+    'clinic_permission' => 'العيادة',
 ];
+
 ?>

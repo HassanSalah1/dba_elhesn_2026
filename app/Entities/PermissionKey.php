@@ -23,6 +23,8 @@ class PermissionKey extends Enum
     const REGULATIONS = 'regulations';
     const NOTIFICATION = 'notification';
     const GALLERIES = 'galleries';
+    const CLINIC = 'clinic';
 }
+
 
 ?>

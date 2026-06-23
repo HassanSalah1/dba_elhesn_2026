@@ -19,6 +19,9 @@ use App\Http\Controllers\Dashboard\Setting\TeamController;
 use App\Http\Controllers\Dashboard\Setting\EmergencyController;
 use App\Http\Controllers\Dashboard\SubscriptionController;
 use App\Http\Controllers\Dashboard\User\UserController;
+use App\Http\Controllers\Dashboard\Clinic\ClinicBookingController;
+use App\Http\Controllers\Dashboard\Clinic\ClinicTimeSlotsController;
+
 
 
 //Route::get('/', function () {
@@ -150,6 +153,21 @@ Route::group(['prefix' => 'admin', 'middleware' => 'web'], function () {
         Route::get('/sport/subscription', [SubscriptionController::class, 'showSubscriptions'])->name('dashboard-subscription'); // show Index page that control all SportGamess
         Route::get('/sport/subscription/data', [SubscriptionController::class, 'getSubscriptionsData']); // get all SportGamess data for DataTable
         Route::get('/sport/subscription/show/{id}', [SubscriptionController::class, 'showSubscription']); // get all SportGamess data for DataTable
+
+        // Clinic Bookings
+        Route::get('/clinic/bookings', [ClinicBookingController::class, 'showBookings'])->name('dashboard-clinic_bookings');
+        Route::get('/clinic/bookings/data', [ClinicBookingController::class, 'getBookingsData']);
+        Route::get('/clinic/booking/{id}', [ClinicBookingController::class, 'showBooking']);
+        Route::post('/clinic/booking/status', [ClinicBookingController::class, 'changeStatus']);
+
+        // Clinic Time Slots
+        Route::get('/clinic/time-slots', [ClinicTimeSlotsController::class, 'showTimeSlots'])->name('dashboard-clinic_time_slots');
+        Route::get('/clinic/time-slots/data', [ClinicTimeSlotsController::class, 'getTimeSlotsData']);
+        Route::post('/clinic/time-slot/add', [ClinicTimeSlotsController::class, 'addTimeSlot']);
+        Route::post('/clinic/time-slot/data', [ClinicTimeSlotsController::class, 'getTimeSlotData']);
+        Route::post('/clinic/time-slot/edit', [ClinicTimeSlotsController::class, 'editTimeSlot']);
+        Route::post('/clinic/time-slot/delete', [ClinicTimeSlotsController::class, 'deleteTimeSlot']);
+
 
 
         //////////////////////////////////

@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\V2\Auth\AuthController as AuthV2Controller;
 use App\Http\Controllers\Api\V2\Setting\SettingController as SettingV2Controller;
 use App\Http\Controllers\Api\V2\User\UserController as UserV2Controller;
 use App\Http\Controllers\Api\V2\SqlServerController as SqlServerV2Controller;
+use App\Http\Controllers\Api\V2\User\ClinicController as ClinicV2Controller;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -216,7 +218,16 @@ Route::group(['middleware' => 'lang'], function () {
             Route::get('/matches', [UserV2Controller::class, 'getMatches']);
             Route::post('/match/update', [UserV2Controller::class, 'updateMatcheResult']);
 
+            // Clinic Bookings
+            Route::get('/clinic/time-slots', [ClinicV2Controller::class, 'getTimeSlots']);
+            Route::post('/clinic/booking', [ClinicV2Controller::class, 'createBooking']);
+            Route::get('/clinic/bookings', [ClinicV2Controller::class, 'getBookings']);
+            Route::get('/clinic/booking/{id}', [ClinicV2Controller::class, 'getBookingDetails']);
+            Route::post('/clinic/booking/{id}/cancel', [ClinicV2Controller::class, 'cancelBooking']);
+            Route::post('/clinic/booking/{id}/attachment', [ClinicV2Controller::class, 'addAttachment']);
+            Route::delete('/clinic/booking/{id}/attachment/{attachmentId}', [ClinicV2Controller::class, 'deleteAttachment']);
         });
     });
 });
+
 

@@ -105,8 +105,25 @@ return [
 
     'account_verification_subject' => 'تفعيل الحساب',
     'hello_user' => 'مرحبا',
-    'account_verification_message' => 'أدخل رمز التحقق التالى لتفعيل حسابك : {code}',
     'max_size_error_message' => 'يجب ألا يزيد حجم الملف عن 6 ميجا',
-    'success_message' => 'تم بنجاح'
+    'success_message' => 'تم بنجاح',
+
+    // Clinic Bookings
+    'clinic_bookings' => 'حجوزات العيادة',
+    'booking_created' => 'تم إنشاء الحجز بنجاح',
+    'booking_cancelled' => 'تم إلغاء الحجز بنجاح',
+    'booking_not_found' => 'الحجز غير موجود',
+    'time_slot_not_available' => 'الموعد غير متاح',
+    'booking_status_pending' => 'في الانتظار',
+    'booking_status_confirmed' => 'مؤكد',
+    'booking_status_completed' => 'مكتمل',
+    'booking_status_cancelled' => 'ملغي',
+    'attachment_uploaded' => 'تم رفع المرفق بنجاح',
+    'attachment_deleted' => 'تم حذف المرفق',
+    'invalid_file_type' => 'نوع الملف غير مسموح (JPEG, PNG, PDF فقط)',
+    'file_too_large' => 'حجم الملف يتجاوز 5 ميجابايت',
+    'booking_for_self' => 'الحجز لنفسك',
+    'booking_for_other' => 'الحجز لشخص آخر'
 ];
+
 ?>

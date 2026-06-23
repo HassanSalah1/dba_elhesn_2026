@@ -170,6 +170,27 @@
             "url": "admin/notification",
             "slug": "dashboard-show_send_notification",
             "permission": "notification"
+        },
+        {
+            "name": "clinic_title",
+            "icon": "activity",
+            "slug": "",
+            "submenu": [
+                {
+                    "name": "clinic_bookings_title",
+                    "url": "admin/clinic/bookings",
+                    "icon": "circle",
+                    "slug": "dashboard-clinic_bookings"
+                },
+                {
+                    "name": "clinic_time_slots_title",
+                    "url": "admin/clinic/time-slots",
+                    "icon": "circle",
+                    "slug": "dashboard-clinic_time_slots"
+                }
+            ],
+            "permission": "clinic"
         }
     ]
 }
+
