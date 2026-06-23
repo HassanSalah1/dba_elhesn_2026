@@ -183,7 +183,6 @@ class SqlServerApiRepository
                 $sql = "SELECT TeamRowID, PNameAR, PNameEN, PlayerRowID FROM dbo.MobileApp_Players WHERE PlayerRowID=$playerId";
                 if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                     $object = sqlsrv_fetch_object($result);
-                    Log::alert(json_encode($object));
                     if (!$object) {
                         $player->forceDelete();
                     }
@@ -489,7 +488,6 @@ class SqlServerApiRepository
             $sql = "SELECT UserID , TeamsRowID , FullTeamNames, OfficialID FROM dbo.V_Official_Teams";//MobileApp_Officials_Teams
             if (($result = \sqlsrv_query($conn, $sql)) !== false) {
                 while ($object = sqlsrv_fetch_object($result)) {
-                    Log::alert(json_encode($object));
                     $user = User::where(['user_id' => $object->UserID,])->first();
                     $sportTeam = SportTeam::where(['team_id' => $object->TeamsRowID,])->first();
                     if ($user && $sportTeam) {
@@ -518,7 +516,6 @@ class SqlServerApiRepository
         if (($result = \sqlsrv_query($conn, $sql)) !== false) {
             $object = sqlsrv_fetch_object($result);
             if ($object) {
-                Log::alert($object->SeasonTeamPlayerRowID);
                 return $object->SeasonTeamPlayerRowID;
             }
         }

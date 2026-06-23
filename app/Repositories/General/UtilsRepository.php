@@ -131,7 +131,7 @@ class UtilsRepository
             $data['lang'] = App::getLocale();
             Mail::send($data['template'], ['data' => $data,], function ($message) use ($data, $email) {
                 $message->to($data['email']);
-                $message->setPriority(1);
+                $message->priority(1);
                 $message->from($email);
                 $message->subject($data['subject']);
             });
