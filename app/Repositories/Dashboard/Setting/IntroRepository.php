@@ -37,7 +37,7 @@ class IntroRepository
             $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
             $image_name = 'image';
             $image_path = 'uploads/intros/';
-            $introData['image'] = UtilsRepository::createImage($data['request'], $image_name, $image_path, $file_id, 375, 812);
+            $introData['image'] = UtilsRepository::createImage($data['request'], $image_name, $image_path, $file_id);
             if ($introData['image'] !== false) {
                 $created = Intro::create($introData);
                 if ($created) {
@@ -86,7 +86,7 @@ class IntroRepository
             $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
             $image_name = 'image';
             $image_path = 'uploads/intros/';
-            $introData['image'] = UtilsRepository::createImage($data['request'], $image_name, $image_path, $file_id ,375, 812);
+            $introData['image'] = UtilsRepository::createImage($data['request'], $image_name, $image_path, $file_id);
             if ($introData['image'] == false) {
                 unset($introData['image']);
             } else {

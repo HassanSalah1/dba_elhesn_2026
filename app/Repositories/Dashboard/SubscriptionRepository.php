@@ -13,7 +13,7 @@ class SubscriptionRepository
         $subscriptions = Subscribe::orderBy('id', 'DESC');
         return DataTables::of($subscriptions)
             ->addColumn('sport_name', function ($subscription) {
-                return $subscription->sport->title;
+                return $subscription->sport ? $subscription->sport->title : '';
             })
             ->addColumn('actions', function ($subscription) {
                 $ul = '';

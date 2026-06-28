@@ -51,36 +51,6 @@ class SqlServerApiRepository
         $serverName = 'dhsckarem.ddns.net';
         $uid = 'dhclubapp';
         $pwd = 'bNHW^3&q1mH5';
-        $databaseName = 'FBall';
- 
-        $connectionInfo = [
-            "UID" => $uid,
-            "PWD" => $pwd,
-            "Database" => $databaseName,
-            "TrustServerCertificate" => true,
-            "CharacterSet" => "UTF-8",
-            "LoginTimeout" => 15,
-        ];
-        /* Connect using SQL Server Authentication. */
-        $conn = \sqlsrv_connect($serverName, $connectionInfo);
-        if ($conn) {
-            return $conn;
-        }
-        return false;
-    }
- 
-    /**
-     * Connect to the unified MobileApp database on the same SQL Server.
-     */
-    public static function startMobileAppConnection()
-    {
-        if (! function_exists('sqlsrv_connect')) {
-            return false;
-        }
- 
-        $serverName = 'dhsckarem.ddns.net';
-        $uid = 'dhclubapp';
-        $pwd = 'bNHW^3&q1mH5';
         $databaseName = 'MobileApp';
  
         $connectionInfo = [
@@ -91,6 +61,7 @@ class SqlServerApiRepository
             "CharacterSet" => "UTF-8",
             "LoginTimeout" => 15,
         ];
+        /* Connect using SQL Server Authentication. */
         $conn = \sqlsrv_connect($serverName, $connectionInfo);
         if ($conn) {
             return $conn;
@@ -120,7 +91,7 @@ class SqlServerApiRepository
  
             return [
                 'ok' => true,
-                'message' => 'Connected successfully to SQL Server (database FBall).',
+                'message' => 'Connected successfully to SQL Server (database MobileApp).',
             ];
         }
  
@@ -557,11 +528,11 @@ class SqlServerApiRepository
      */
     public static function syncPlayerDetailsFromMobileApp(): array
     {
-        $conn = self::startMobileAppConnection();
+        $conn = self::startConnection();
         $stats = ['updated' => 0, 'skipped' => 0];
  
         if (!$conn) {
-            Log::warning('syncPlayerDetailsFromMobileApp: Could not connect to MobileApp DB');
+            Log::warning('syncPlayerDetailsFromMobileApp: Could not connect to SQL Server');
             return $stats;
         }
  
@@ -602,6 +573,167 @@ class SqlServerApiRepository
         }
  
         sqlsrv_close($conn);
+ 
+        return $stats;
+    }
+ 
+    public static function syncMatchesWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+ 
+        if (!$conn) {
+            return $stats;
+        }
+ 
+        $sql = "SELECT RowID, SeasonRowID, CompetitionRowID, Team1, Team2, MatchDate, MatchTime, StageRound, MatchNumber, Week, Pitch, Remarks, Team1Result, Team2Result, MatchInHouse, FANETMatchID, LiveLink FROM FBall.dbo.tblMatches";
+        $result = \sqlsrv_query($conn, $sql);
+ 
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+ 
+        $sqlServerIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            $matchDate = null;
+            if ($object->MatchDate instanceof \DateTime) {
+                $matchDate = $object->MatchDate->format('Y-m-d');
+            }
+            
+            $matchTime = null;
+            if ($object->MatchTime instanceof \DateTime) {
+                $matchTime = $object->MatchTime->format('H:i:s');
+            } elseif (is_string($object->MatchTime)) {
+                $matchTime = $object->MatchTime;
+            }
+ 
+            \App\Models\SportMatch::updateOrCreate(
+                ['row_id' => $object->RowID],
+                [
+                    'season_row_id'      => $object->SeasonRowID,
+                    'competition_row_id' => $object->CompetitionRowID,
+                    'team1'              => $object->Team1,
+                    'team2'              => $object->Team2,
+                    'match_date'         => $matchDate,
+                    'match_time'         => $matchTime,
+                    'stage_round'        => $object->StageRound,
+                    'match_number'       => $object->MatchNumber,
+                    'week'               => $object->Week,
+                    'pitch'              => $object->Pitch,
+                    'remarks'            => $object->Remarks,
+                    'team1_result'       => $object->Team1Result,
+                    'team2_result'       => $object->Team2Result,
+                    'match_in_house'     => $object->MatchInHouse,
+                    'fanet_match_id'     => $object->FANETMatchID,
+                    'live_link'          => $object->LiveLink,
+                ]
+            );
+            $sqlServerIds[] = $object->RowID;
+            $stats['upserted']++;
+        }
+ 
+        sqlsrv_close($conn);
+ 
+        if (!empty($sqlServerIds)) {
+            $stats['deleted'] = \App\Models\SportMatch::whereNotIn('row_id', $sqlServerIds)->count();
+            \App\Models\SportMatch::whereNotIn('row_id', $sqlServerIds)->delete();
+        }
+ 
+        return $stats;
+    }
+ 
+    public static function syncSeasonsWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+ 
+        if (!$conn) {
+            return $stats;
+        }
+ 
+        $sql = "SELECT RowID, SName, Sstart, Send, SNotes, Active FROM FBall.dbo.tblSeasons";
+        $result = \sqlsrv_query($conn, $sql);
+ 
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+ 
+        $sqlServerIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            $startDate = null;
+            if ($object->Sstart instanceof \DateTime) {
+                $startDate = $object->Sstart->format('Y-m-d');
+            }
+            
+            $endDate = null;
+            if ($object->Send instanceof \DateTime) {
+                $endDate = $object->Send->format('Y-m-d');
+            }
+ 
+            \App\Models\Season::updateOrCreate(
+                ['row_id' => $object->RowID],
+                [
+                    'name'       => $object->SName,
+                    'start_date' => $startDate,
+                    'end_date'   => $endDate,
+                    'notes'      => $object->SNotes,
+                    'active'     => $object->Active,
+                ]
+            );
+            $sqlServerIds[] = $object->RowID;
+            $stats['upserted']++;
+        }
+ 
+        sqlsrv_close($conn);
+ 
+        if (!empty($sqlServerIds)) {
+            $stats['deleted'] = \App\Models\Season::whereNotIn('row_id', $sqlServerIds)->count();
+            \App\Models\Season::whereNotIn('row_id', $sqlServerIds)->delete();
+        }
+ 
+        return $stats;
+    }
+ 
+    public static function syncAttendReasonsWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+ 
+        if (!$conn) {
+            return $stats;
+        }
+ 
+        $sql = "SELECT RowID, TheReason, ReasonKey, TheOrder, GlobalReason FROM FBall.dbo.tbl_Attend_Reasons";
+        $result = \sqlsrv_query($conn, $sql);
+ 
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+ 
+        $sqlServerIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            \App\Models\AttendReason::updateOrCreate(
+                ['row_id' => $object->RowID],
+                [
+                    'reason'        => $object->TheReason,
+                    'reason_key'    => $object->ReasonKey,
+                    'the_order'     => $object->TheOrder,
+                    'global_reason' => $object->GlobalReason,
+                ]
+            );
+            $sqlServerIds[] = $object->RowID;
+            $stats['upserted']++;
+        }
+ 
+        sqlsrv_close($conn);
+ 
+        if (!empty($sqlServerIds)) {
+            $stats['deleted'] = \App\Models\AttendReason::whereNotIn('row_id', $sqlServerIds)->count();
+            \App\Models\AttendReason::whereNotIn('row_id', $sqlServerIds)->delete();
+        }
  
         return $stats;
     }

@@ -8,11 +8,11 @@ use Illuminate\Console\Command;
 
 class SyncMysqlData extends Command
 {
-    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, all)}';
+    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, all)}';
 
     protected $description = 'Sync MySQL data with SQL Server: upsert existing records, delete orphaned ones';
 
-    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'all'];
+    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'matches', 'seasons', 'attend_reasons', 'all'];
 
     public function __construct()
     {
@@ -29,7 +29,7 @@ class SyncMysqlData extends Command
         }
 
         $this->warn('⚠  This will DELETE any MySQL records not found in SQL Server.');
-        $this->warn('   Order of sync: teams → players → player_details → users → user_teams');
+        $this->warn('   Order of sync: teams → players → player_details → users → user_teams → matches → seasons → attend_reasons');
         $this->newLine();
 
         if (!$this->confirm('Are you sure you want to continue?')) {
@@ -68,6 +68,24 @@ class SyncMysqlData extends Command
             $this->line('Syncing <info>user_teams</info>...');
             $stats  = SqlServerApiRepository::syncUserTeamsWithSqlServer();
             $rows[] = ['user_teams', $stats['upserted'], $stats['deleted']];
+        }
+
+        if (in_array($table, ['matches', 'all'])) {
+            $this->line('Syncing <info>sport_matches</info>...');
+            $stats  = V2SqlServerApiRepository::syncMatchesWithSqlServer();
+            $rows[] = ['sport_matches', $stats['upserted'], $stats['deleted']];
+        }
+
+        if (in_array($table, ['seasons', 'all'])) {
+            $this->line('Syncing <info>seasons</info>...');
+            $stats  = V2SqlServerApiRepository::syncSeasonsWithSqlServer();
+            $rows[] = ['seasons', $stats['upserted'], $stats['deleted']];
+        }
+
+        if (in_array($table, ['attend_reasons', 'all'])) {
+            $this->line('Syncing <info>attend_reasons</info>...');
+            $stats  = V2SqlServerApiRepository::syncAttendReasonsWithSqlServer();
+            $rows[] = ['attend_reasons', $stats['upserted'], $stats['deleted']];
         }
 
         $this->newLine();

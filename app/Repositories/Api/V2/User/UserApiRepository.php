@@ -224,7 +224,7 @@ class UserApiRepository
         $userTeam = UserTeam::find($data['team_id']);
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $sql = "INSERT INTO dbo.tblOfficial_Actions (OfficialID,UserID,InsertedDateTime,Topic,ActionDate,ActionPlace,TheEvents,Negativity,Positivity,Recommendations) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO FBall.dbo.tblOfficial_Actions (OfficialID,UserID,InsertedDateTime,Topic,ActionDate,ActionPlace,TheEvents,Negativity,Positivity,Recommendations) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $params = [
                 $userTeam->official_id,
                 $user->user_id,
@@ -264,7 +264,7 @@ class UserApiRepository
  
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $sql = "INSERT INTO dbo.tbl_RequestRelease (TeamRowID,Players,Officials,TheCost,Details,WhoInsert,WhenInsert,Match,TheDate,Place,MatchTime,LeaveTime,ReturnTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO FBall.dbo.tbl_RequestRelease (TeamRowID,Players,Officials,TheCost,Details,WhoInsert,WhenInsert,Match,TheDate,Place,MatchTime,LeaveTime,ReturnTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
  
             $details = '';
             if (isset($data['breakfast']) && intval($data['breakfast']) > 0) {
@@ -342,23 +342,12 @@ class UserApiRepository
  
     public static function getReasons(array $data)
     {
-        $conn = SqlServerApiRepository::startConnection();
-        $resultData = [];
-        if ($conn) {
-            $sql = "SELECT ReasonKey AS id, TheReason AS reason FROM dbo.tbl_Attend_Reasons ORDER BY TheOrder ASC";
-            if (($result = \sqlsrv_query($conn, $sql)) !== false) {
-                while ($object = sqlsrv_fetch_object($result)) {
-                    $resultData[] = [
-                        'id' => $object->id,
-                        'reason' => $object->reason,
-                    ];
-                }
-            }
-            sqlsrv_close($conn);
-        }
- 
+        $reasons = \App\Models\AttendReason::orderBy('the_order', 'asc')
+            ->select('reason_key AS id', 'reason')
+            ->get();
+
         return [
-            'data' => $resultData,
+            'data' => $reasons,
             'message' => 'success',
             'code' => HttpCode::SUCCESS
         ];
@@ -372,7 +361,7 @@ class UserApiRepository
             if (is_array($data['players'])) {
                 $execute = false;
                 foreach ($data['players'] as $key => $player) {
-                    $sql = "INSERT INTO dbo.tbl_Players_Attendance (SeasonTeamPlayerRowID,ReasonKey,TheDate,PlayerRowID,UserID,WhenInserted,Comments,Relief,Visit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $sql = "INSERT INTO FBall.dbo.tbl_Players_Attendance (SeasonTeamPlayerRowID,ReasonKey,TheDate,PlayerRowID,UserID,WhenInserted,Comments,Relief,Visit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $visit = '';
                     if ($data['period'] === Period::one_period_day) {
                         $visit = 'يوم فترة واحدة';
@@ -423,7 +412,7 @@ class UserApiRepository
  
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $sql = "INSERT INTO dbo.tbl_Evaluations_Global (TeamRowID,PlayerRowID,SeasonTeamPlayerRowID,UserID,Eval_DateTime,Position,Behavior,Commitment,Technical,Physical,Participations,Recommendation,Comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO FBall.dbo.tbl_Evaluations_Global (TeamRowID,PlayerRowID,SeasonTeamPlayerRowID,UserID,Eval_DateTime,Position,Behavior,Commitment,Technical,Physical,Participations,Recommendation,Comments) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
  
             $params = [
                 $userTeam->team->team_id,
@@ -465,7 +454,7 @@ class UserApiRepository
         $user = auth()->user();
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
-            $sql = "INSERT INTO dbo.tbl_Coach_Match_Evaluation_OG (Season,SportID,Category,Comp,TheDate,Participants,Difficulty,Results,Team_Performance,Weakness,Strength,Abbsents,Injuries,Comments,UserID,InsertedDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
+            $sql = "INSERT INTO FBall.dbo.tbl_Coach_Match_Evaluation_OG (Season,SportID,Category,Comp,TheDate,Participants,Difficulty,Results,Team_Performance,Weakness,Strength,Abbsents,Injuries,Comments,UserID,InsertedDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
  
             $params = [
                 $data['season'],
@@ -518,22 +507,10 @@ class UserApiRepository
  
     public static function getSeasons(array $data)
     {
-        $conn = SqlServerApiRepository::startConnection();
-        $resultData = [];
-        if ($conn) {
-            $sql = "SELECT SName AS season FROM dbo.tblSeasons";
-            if (($result = \sqlsrv_query($conn, $sql)) !== false) {
-                while ($object = sqlsrv_fetch_object($result)) {
-                    $resultData[] = [
-                        'season' => $object->season,
-                    ];
-                }
-            }
-            sqlsrv_close($conn);
-        }
- 
+        $seasons = \App\Models\Season::select('name AS season')->get();
+
         return [
-            'data' => $resultData,
+            'data' => $seasons,
             'message' => 'success',
             'code' => HttpCode::SUCCESS
         ];
@@ -631,34 +608,50 @@ class UserApiRepository
                 'code' => HttpCode::AUTH_ERROR
             ];
         }
-        $conn = SqlServerApiRepository::startConnection();
-        $resultData = [];
-        if ($conn) {
-            $type = isset($data['type']) ? $data['type'] : (isset($data['filter']) ? $data['filter'] : 'today');
-            $todayStr = date('Y-m-d');
- 
-            if ($type === 'previous') {
-                $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate < '" . $todayStr . "' ORDER BY Matchdate DESC";
-            } elseif ($type === 'week') {
-                $today = \Carbon\Carbon::today();
-                $startOfWeek = $today->copy()->startOfWeek(\Carbon\Carbon::SUNDAY)->format('Y-m-d');
-                $endOfWeek = $today->copy()->endOfWeek(\Carbon\Carbon::SATURDAY)->format('Y-m-d');
-                $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate BETWEEN '" . $startOfWeek . "' AND '" . $endOfWeek . "' ORDER BY Matchdate ASC";
-            } elseif ($type === 'upcoming' || $type === 'next') {
-                $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate > '" . $todayStr . "' ORDER BY Matchdate ASC";
-            } else {
-                $sql = "SELECT * FROM dbo.tblMatches WHERE Matchdate = '" . $todayStr . "' ORDER BY Matchdate ASC";
-            }
- 
-            $result = \sqlsrv_query($conn, $sql);
-            if ($result !== false) {
-                while ($object = sqlsrv_fetch_object($result)) {
-                    $resultData[] = $object;
-                }
-            }
-            sqlsrv_close($conn);
+
+        $type = isset($data['type']) ? $data['type'] : (isset($data['filter']) ? $data['filter'] : 'today');
+        $todayStr = date('Y-m-d');
+
+        $query = \App\Models\SportMatch::query();
+
+        if ($type === 'previous') {
+            $query->where('match_date', '<', $todayStr)->orderBy('match_date', 'desc');
+        } elseif ($type === 'week') {
+            $today = \Carbon\Carbon::today();
+            $startOfWeek = $today->copy()->startOfWeek(\Carbon\Carbon::SUNDAY)->format('Y-m-d');
+            $endOfWeek = $today->copy()->endOfWeek(\Carbon\Carbon::SATURDAY)->format('Y-m-d');
+            $query->whereBetween('match_date', [$startOfWeek, $endOfWeek])->orderBy('match_date', 'asc');
+        } elseif ($type === 'upcoming' || $type === 'next') {
+            $query->where('match_date', '>', $todayStr)->orderBy('match_date', 'asc');
+        } else {
+            $query->where('match_date', '=', $todayStr)->orderBy('match_date', 'asc');
         }
- 
+
+        $matches = $query->get();
+
+        $resultData = [];
+        foreach ($matches as $match) {
+            $resultData[] = (object)[
+                'RowID' => $match->row_id,
+                'SeasonRowID' => $match->season_row_id,
+                'CompetitionRowID' => $match->competition_row_id,
+                'Team1' => $match->team1,
+                'Team2' => $match->team2,
+                'MatchDate' => $match->match_date,
+                'MatchTime' => $match->match_time,
+                'StageRound' => $match->stage_round,
+                'MatchNumber' => $match->match_number,
+                'Week' => $match->week,
+                'Pitch' => $match->pitch,
+                'Remarks' => $match->remarks,
+                'Team1Result' => $match->team1_result,
+                'Team2Result' => $match->team2_result,
+                'MatchInHouse' => $match->match_in_house,
+                'FANETMatchID' => $match->fanet_match_id,
+                'LiveLink' => $match->live_link
+            ];
+        }
+
         return [
             'data' => $resultData,
             'message' => 'success',
@@ -666,20 +659,26 @@ class UserApiRepository
         ];
     }
  
-    public
-    static function updateMatcheResult(array $data)
+    public static function updateMatcheResult(array $data)
     {
         $conn = SqlServerApiRepository::startConnection();
         if ($conn) {
             foreach ($data['matches'] as $match) {
+                // Update local MySQL first
+                \App\Models\SportMatch::where('row_id', $match['id'])->update([
+                    'team1_result' => $match['result1'],
+                    'team2_result' => $match['result2']
+                ]);
+
+                // Update SQL Server
                 $params = [
                     $match['result1'],
                     $match['result2'],
                     $match['id']
                 ];
-                $sql = "UPDATE dbo.tblMatches SET Team1Result=? , Team2Result=? WHERE RowID=?";
+                $sql = "UPDATE FBall.dbo.tblMatches SET Team1Result=? , Team2Result=? WHERE RowID=?";
                 $stmt = sqlsrv_prepare($conn, $sql, $params);
-                $execute = sqlsrv_execute($stmt);
+                sqlsrv_execute($stmt);
             }
             sqlsrv_close($conn);
             return [
