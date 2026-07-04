@@ -182,4 +182,16 @@ class SettingApiService
         $response = SettingApiRepository::getClinicStatus($data);
         return UtilsRepository::handleResponseApi($response);
     }
+
+    public static function getSeasons(array $data)
+    {
+        $response = SettingApiRepository::getSeasons($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function getClubs(array $data)
+    {
+        $response = SettingApiRepository::getClubs($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
 }

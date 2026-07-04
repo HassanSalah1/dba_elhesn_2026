@@ -177,4 +177,16 @@ class SettingController extends Controller
         $data = $request->all();
         return SettingApiService::getClinicStatus($data);
     }
+
+    public function getSeasons(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getSeasons($data);
+    }
+
+    public function getClubs(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getClubs($data);
+    }
 }

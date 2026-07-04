@@ -737,4 +737,62 @@ class SqlServerApiRepository
  
         return $stats;
     }
+ 
+    public static function syncClubsWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+ 
+        if (!$conn) {
+            return $stats;
+        }
+ 
+        $sql = "SELECT RowID, NameAR, NameEN, Logo FROM dbo.MobileApp_Clubs";
+        $result = \sqlsrv_query($conn, $sql);
+ 
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+ 
+        $sqlServerIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            $logoPath = null;
+            if (!empty($object->Logo)) {
+                $base64 = base64_encode($object->Logo);
+                $logoPath = \App\Repositories\General\UtilsRepository::createImageBase64(
+                    $base64,
+                    'uploads/clubs/',
+                    'club_' . $object->RowID
+                );
+            }
+ 
+            \App\Models\Club::updateOrCreate(
+                ['row_id' => $object->RowID],
+                [
+                    'name_ar' => $object->NameAR,
+                    'name_en' => $object->NameEN,
+                    'logo'    => $logoPath,
+                ]
+            );
+            $sqlServerIds[] = $object->RowID;
+            $stats['upserted']++;
+        }
+ 
+        sqlsrv_close($conn);
+ 
+        if (!empty($sqlServerIds)) {
+            $stats['deleted'] = \App\Models\Club::whereNotIn('row_id', $sqlServerIds)->count();
+            
+            $deletedClubs = \App\Models\Club::whereNotIn('row_id', $sqlServerIds)->get();
+            foreach ($deletedClubs as $club) {
+                if ($club->logo && file_exists(public_path($club->logo))) {
+                    @unlink(public_path($club->logo));
+                }
+                $club->delete();
+            }
+        }
+ 
+        return $stats;
+    }
 }

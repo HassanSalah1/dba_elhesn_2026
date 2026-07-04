@@ -545,7 +545,9 @@ class UserApiRepository
                         $objectArr = [
                             'competition_name' => $lang == 'ar' ? $object->CompetitionAR : $object->CompetitionEN,
                             'team1' => $lang == 'ar' ? $object->HomeAR : $object->HomeEN,
+                            'team1_logo' => self::getClubLogoUrl($lang == 'ar' ? $object->HomeAR : $object->HomeEN),
                             'team2' => $lang == 'ar' ? $object->AgainstAR : $object->AgainstEN,
+                            'team2_logo' => self::getClubLogoUrl($lang == 'ar' ? $object->AgainstAR : $object->AgainstEN),
                             'date' => $object->Date_and_Time,
                             'to_date' => null,
                             'result' => $object->Result,
@@ -614,6 +616,14 @@ class UserApiRepository
 
         $query = \App\Models\SportMatch::query();
 
+        if (isset($data['competition_id']) && !empty($data['competition_id'])) {
+            $query->where('competition_row_id', $data['competition_id']);
+        }
+
+        if (isset($data['season_id']) && !empty($data['season_id'])) {
+            $query->where('season_row_id', $data['season_id']);
+        }
+
         if ($type === 'previous') {
             $query->where('match_date', '<', $todayStr)->orderBy('match_date', 'desc');
         } elseif ($type === 'week') {
@@ -637,6 +647,8 @@ class UserApiRepository
                 'CompetitionRowID' => $match->competition_row_id,
                 'Team1' => $match->team1,
                 'Team2' => $match->team2,
+                'Team1Logo' => self::getClubLogoUrl($match->team1),
+                'Team2Logo' => self::getClubLogoUrl($match->team2),
                 'MatchDate' => $match->match_date,
                 'MatchTime' => $match->match_time,
                 'StageRound' => $match->stage_round,
@@ -690,5 +702,31 @@ class UserApiRepository
             'message' => trans('api.general_error_message'),
             'code' => HttpCode::ERROR
         ];
+    }
+
+    private static function getClubLogoUrl($clubName)
+    {
+        if (empty($clubName)) {
+            return url('images/default-logo.png');
+        }
+
+        $club = \App\Models\Club::where('name_ar', $clubName)
+            ->orWhere('name_en', $clubName)
+            ->first();
+
+        if ($club && $club->logo && file_exists(public_path($club->logo))) {
+            return url($club->logo);
+        }
+
+        // Fallback to sport team image (for our own club's teams, e.g. "دبا الحصن")
+        $team = \App\Models\SportTeam::where('name_ar', $clubName)
+            ->orWhere('name_en', $clubName)
+            ->first();
+
+        if ($team && $team->image && file_exists(public_path($team->image))) {
+            return url($team->image);
+        }
+
+        return url('images/default-logo.png');
     }
 }

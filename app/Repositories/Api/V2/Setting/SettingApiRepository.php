@@ -566,4 +566,35 @@ class SettingApiRepository
             'code' => HttpCode::SUCCESS
         ];
     }
+
+    public static function getSeasons(array $data)
+    {
+        $seasons = \App\Models\Season::orderBy('name', 'desc')->get();
+        return [
+            'data' => $seasons,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getClubs(array $data)
+    {
+        $clubs = \App\Models\Club::orderBy('name_ar', 'asc')->get();
+        
+        $result = [];
+        foreach ($clubs as $club) {
+            $result[] = [
+                'id' => $club->row_id,
+                'name_ar' => $club->name_ar,
+                'name_en' => $club->name_en,
+                'logo' => $club->logo ? url($club->logo) : url('images/default-logo.png'),
+            ];
+        }
+        
+        return [
+            'data' => $result,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
 }
