@@ -189,4 +189,10 @@ class SettingController extends Controller
         $data = $request->all();
         return SettingApiService::getClubs($data);
     }
+
+    public function getMatchesGrouped(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getMatchesGrouped($data);
+    }
 }

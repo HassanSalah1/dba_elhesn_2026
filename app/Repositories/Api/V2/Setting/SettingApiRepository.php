@@ -597,4 +597,123 @@ class SettingApiRepository
             'code' => HttpCode::SUCCESS
         ];
     }
+
+    public static function getMatchesGrouped(array $data)
+    {
+        $lang = \Illuminate\Support\Facades\App::getLocale();
+        $type = isset($data['type']) ? $data['type'] : 'today';
+        $todayStr = date('Y-m-d');
+        
+        $query = \App\Models\Competition::with(['matches' => function ($q) use ($type, $todayStr) {
+            if ($type === 'previous') {
+                $q->where('match_date', '<', $todayStr)->orderBy('match_date', 'desc');
+            } elseif ($type === 'week') {
+                $today = \Carbon\Carbon::today();
+                $startOfWeek = $today->copy()->startOfWeek(\Carbon\Carbon::SUNDAY)->format('Y-m-d');
+                $endOfWeek = $today->copy()->endOfWeek(\Carbon\Carbon::SATURDAY)->format('Y-m-d');
+                $q->whereBetween('match_date', [$startOfWeek, $endOfWeek])->orderBy('match_date', 'asc');
+            } elseif ($type === 'upcoming' || $type === 'next') {
+                $q->where('match_date', '>', $todayStr)->orderBy('match_date', 'asc');
+            } else {
+                $q->where('match_date', '=', $todayStr)->orderBy('match_date', 'asc');
+            }
+            $q->with(['team1Club', 'team2Club']);
+        }, 'season']);
+
+        if (isset($data['competition_id']) && !empty($data['competition_id'])) {
+            $query->where('row_id', $data['competition_id']);
+        }
+        
+        if (isset($data['season_id']) && !empty($data['season_id'])) {
+            $query->where('season_row_id', $data['season_id']);
+        }
+
+        // Only return competitions that have matches matching the filter
+        $query->whereHas('matches', function ($q) use ($type, $todayStr) {
+            if ($type === 'previous') {
+                $q->where('match_date', '<', $todayStr);
+            } elseif ($type === 'week') {
+                $today = \Carbon\Carbon::today();
+                $startOfWeek = $today->copy()->startOfWeek(\Carbon\Carbon::SUNDAY)->format('Y-m-d');
+                $endOfWeek = $today->copy()->endOfWeek(\Carbon\Carbon::SATURDAY)->format('Y-m-d');
+                $q->whereBetween('match_date', [$startOfWeek, $endOfWeek]);
+            } elseif ($type === 'upcoming' || $type === 'next') {
+                $q->where('match_date', '>', $todayStr);
+            } else {
+                $q->where('match_date', '=', $todayStr);
+            }
+        });
+
+        $page = isset($data['page']) ? max(1, (int)$data['page']) : 1;
+        $pageSize = isset($data['page_size']) ? max(1, (int)$data['page_size']) : 10;
+        
+        $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
+        
+        $competitionsData = [];
+        foreach ($paginator->items() as $comp) {
+            $matchesData = [];
+            foreach ($comp->matches as $match) {
+                // Determine logo URLs
+                $team1Logo = $match->team1Club && $match->team1Club->logo ? url($match->team1Club->logo) : null;
+                $team2Logo = $match->team2Club && $match->team2Club->logo ? url($match->team2Club->logo) : null;
+                
+                // Fallbacks if null
+                if (!$team1Logo) {
+                    $club1 = \App\Models\Club::where('name_ar', $match->team1)->orWhere('name_en', $match->team1)->first();
+                    if ($club1 && $club1->logo) $team1Logo = url($club1->logo);
+                    else {
+                        $team1 = \App\Models\SportTeam::where('name_ar', $match->team1)->orWhere('name_en', $match->team1)->first();
+                        $team1Logo = $team1 && $team1->image ? url($team1->image) : url('images/default-logo.png');
+                    }
+                }
+                
+                if (!$team2Logo) {
+                    $club2 = \App\Models\Club::where('name_ar', $match->team2)->orWhere('name_en', $match->team2)->first();
+                    if ($club2 && $club2->logo) $team2Logo = url($club2->logo);
+                    else {
+                        $team2 = \App\Models\SportTeam::where('name_ar', $match->team2)->orWhere('name_en', $match->team2)->first();
+                        $team2Logo = $team2 && $team2->image ? url($team2->image) : url('images/default-logo.png');
+                    }
+                }
+
+                $matchesData[] = [
+                    'id' => $match->row_id,
+                    'team1' => $match->team1,
+                    'team1_logo' => $team1Logo,
+                    'team2' => $match->team2,
+                    'team2_logo' => $team2Logo,
+                    'team1_result' => $match->team1_result,
+                    'team2_result' => $match->team2_result,
+                    'match_date' => $match->match_date,
+                    'match_time' => $match->match_time,
+                    'stage_round' => $match->stage_round,
+                    'pitch' => $match->pitch,
+                    'week' => $match->week,
+                    'live_link' => $match->live_link,
+                    'fanet_match_id' => $match->fanet_match_id,
+                ];
+            }
+            
+            $competitionsData[] = [
+                'id' => $comp->row_id,
+                'name' => $lang == 'ar' ? $comp->name_ar : $comp->name_en,
+                'logo' => $comp->logo ? url($comp->logo) : null,
+                'season' => $comp->season ? $comp->season->name : null,
+                'matches' => $matchesData,
+                'matches_count' => count($matchesData),
+            ];
+        }
+
+        return [
+            'data' => [
+                'competitions' => $competitionsData,
+                'total_competitions' => $paginator->total(),
+                'page' => $paginator->currentPage(),
+                'page_size' => $paginator->perPage(),
+                'has_more_pages' => $paginator->hasMorePages()
+            ],
+            'message' => 'success',
+            'code' => \App\Entities\HttpCode::SUCCESS
+        ];
+    }
 }

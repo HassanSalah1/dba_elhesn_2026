@@ -16,7 +16,9 @@ class SportMatch extends Model
         'season_row_id',
         'competition_row_id',
         'team1',
+        'team1_row_id',
         'team2',
+        'team2_row_id',
         'match_date',
         'match_time',
         'stage_round',
@@ -30,4 +32,19 @@ class SportMatch extends Model
         'fanet_match_id',
         'live_link',
     ];
+
+    public function team1Club()
+    {
+        return $this->belongsTo(Club::class, 'team1_row_id', 'row_id');
+    }
+
+    public function team2Club()
+    {
+        return $this->belongsTo(Club::class, 'team2_row_id', 'row_id');
+    }
+
+    public function competition()
+    {
+        return $this->belongsTo(Competition::class, 'competition_row_id', 'row_id');
+    }
 }

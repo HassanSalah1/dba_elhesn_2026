@@ -136,5 +136,17 @@ class UserController extends Controller
         $data = $request->all();
         return UserApiService::updateMatcheResult($data);
     }
- 
+
+    public function getAllCompetitions(Request $request)
+    {
+        $data = $request->all();
+        return UserApiService::getAllCompetitions($data);
+    }
+
+    public function getLeagueStandings(Request $request, $id)
+    {
+        $data = $request->all();
+        $data['competition_id'] = $id;
+        return UserApiService::getLeagueStandings($data);
+    }
 }

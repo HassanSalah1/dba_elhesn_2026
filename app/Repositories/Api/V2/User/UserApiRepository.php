@@ -637,6 +637,7 @@ class UserApiRepository
             $query->where('match_date', '=', $todayStr)->orderBy('match_date', 'asc');
         }
 
+        $query->with(['team1Club', 'team2Club']);
         $matches = $query->get();
 
         $resultData = [];
@@ -647,8 +648,8 @@ class UserApiRepository
                 'CompetitionRowID' => $match->competition_row_id,
                 'Team1' => $match->team1,
                 'Team2' => $match->team2,
-                'Team1Logo' => self::getClubLogoUrl($match->team1),
-                'Team2Logo' => self::getClubLogoUrl($match->team2),
+                'Team1Logo' => $match->team1Club && $match->team1Club->logo ? url($match->team1Club->logo) : self::getClubLogoUrl($match->team1),
+                'Team2Logo' => $match->team2Club && $match->team2Club->logo ? url($match->team2Club->logo) : self::getClubLogoUrl($match->team2),
                 'MatchDate' => $match->match_date,
                 'MatchTime' => $match->match_time,
                 'StageRound' => $match->stage_round,
@@ -728,5 +729,69 @@ class UserApiRepository
         }
 
         return url('images/default-logo.png');
+    }
+
+    public static function getAllCompetitions(array $data)
+    {
+        $lang = App::getLocale();
+        $query = \App\Models\Competition::query();
+        
+        if (isset($data['sport_id'])) {
+            $query->where('sport_id', $data['sport_id']);
+        }
+        
+        if (isset($data['season_row_id'])) {
+            $query->where('season_row_id', $data['season_row_id']);
+        }
+
+        $competitions = $query->get()->map(function ($comp) use ($lang) {
+            return [
+                'id' => $comp->row_id,
+                'name' => $lang == 'ar' ? $comp->name_ar : $comp->name_en,
+                'logo' => $comp->logo ? url($comp->logo) : null,
+                'weeks_no' => $comp->weeks_no,
+            ];
+        });
+
+        return [
+            'data' => $competitions,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getLeagueStandings(array $data)
+    {
+        if (!isset($data['competition_id'])) {
+            return [
+                'message' => trans('api.general_error_message'),
+                'code' => HttpCode::ERROR
+            ];
+        }
+
+        $standings = \App\Models\LeagueStanding::with('club')
+            ->where('competition_row_id', $data['competition_id'])
+            ->orderBy('rank', 'asc')
+            ->get()->map(function ($std) {
+                return [
+                    'rank' => $std->rank,
+                    'team_name' => $std->team_name,
+                    'team_logo' => $std->club && $std->club->logo ? url($std->club->logo) : null,
+                    'play' => $std->play,
+                    'win' => $std->win,
+                    'draw' => $std->draw,
+                    'lose' => $std->lose,
+                    'goals_for' => $std->goals_for,
+                    'goals_against' => $std->goals_against,
+                    'goals_diff' => $std->goals_diff,
+                    'points' => $std->points,
+                ];
+            });
+
+        return [
+            'data' => $standings,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
     }
 }

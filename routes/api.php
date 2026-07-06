@@ -182,6 +182,9 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('/clinic/status', [SettingV2Controller::class, 'getClinicStatus']);
         Route::get('/seasons', [SettingV2Controller::class, 'getSeasons']);
         Route::get('/clubs', [SettingV2Controller::class, 'getClubs']);
+        Route::get('/matches/grouped', [SettingV2Controller::class, 'getMatchesGrouped']);
+        Route::get('/competitions', [UserV2Controller::class, 'getAllCompetitions']);
+        Route::get('/competitions/{id}/standings', [UserV2Controller::class, 'getLeagueStandings']);
 
         Route::post('/image/upload', [UserV2Controller::class, 'uploadImage']);
         Route::post('/sport/subscribe', [UserV2Controller::class, 'subscribeSport']);

@@ -194,4 +194,10 @@ class SettingApiService
         $response = SettingApiRepository::getClubs($data);
         return UtilsRepository::handleResponseApi($response);
     }
+
+    public static function getMatchesGrouped(array $data)
+    {
+        $response = SettingApiRepository::getMatchesGrouped($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
 }

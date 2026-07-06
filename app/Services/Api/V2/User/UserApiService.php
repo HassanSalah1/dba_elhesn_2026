@@ -288,5 +288,16 @@ class UserApiService
         $response = UserApiRepository::updateMatcheResult($data);
         return UtilsRepository::handleResponseApi($response);
     }
- 
+
+    public static function getAllCompetitions(array $data)
+    {
+        $response = UserApiRepository::getAllCompetitions($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function getLeagueStandings(array $data)
+    {
+        $response = UserApiRepository::getLeagueStandings($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
 }

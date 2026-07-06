@@ -586,7 +586,7 @@ class SqlServerApiRepository
             return $stats;
         }
  
-        $sql = "SELECT RowID, SeasonRowID, CompetitionRowID, Team1, Team2, MatchDate, MatchTime, StageRound, MatchNumber, Week, Pitch, Remarks, Team1Result, Team2Result, MatchInHouse, FANETMatchID, LiveLink FROM FBall.dbo.tblMatches";
+        $sql = "SELECT RowID, SeasonRowID, CompetitionRowID, Team1, Team2, MatchDate, MatchTime, StageRound, MatchNumber, Week, Pitch, Remarks, Team1Result, Team2Result, MatchInHouse, FANETMatchID, LiveLink, Team1RowID, Team2RowID FROM FBall.dbo.tblMatches";
         $result = \sqlsrv_query($conn, $sql);
  
         if ($result === false) {
@@ -614,7 +614,9 @@ class SqlServerApiRepository
                     'season_row_id'      => $object->SeasonRowID,
                     'competition_row_id' => $object->CompetitionRowID,
                     'team1'              => $object->Team1,
+                    'team1_row_id'       => $object->Team1RowID,
                     'team2'              => $object->Team2,
+                    'team2_row_id'       => $object->Team2RowID,
                     'match_date'         => $matchDate,
                     'match_time'         => $matchTime,
                     'stage_round'        => $object->StageRound,
@@ -792,6 +794,112 @@ class SqlServerApiRepository
                 $club->delete();
             }
         }
+ 
+        return $stats;
+    }
+
+    public static function syncCompetitionsWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+ 
+        if (!$conn) {
+            return $stats;
+        }
+ 
+        $sql = "SELECT c.RowID, c.SeasonRowID, c.CName, c.CNameEN, c.WeeksNo, c.SportID, l.CompetitionLogo 
+                FROM dbo.MobileApp_Competitions c
+                LEFT JOIN dbo.MobileApp_Competitions_Logos l ON c.RowID = l.CompetitionRowID";
+        $result = \sqlsrv_query($conn, $sql);
+ 
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+ 
+        $sqlServerIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            $logoPath = null;
+            if (!empty($object->CompetitionLogo)) {
+                $base64 = base64_encode($object->CompetitionLogo);
+                $logoPath = \App\Repositories\General\UtilsRepository::createImageBase64(
+                    $base64,
+                    'uploads/competitions/',
+                    'comp_' . $object->RowID
+                );
+            }
+ 
+            \App\Models\Competition::updateOrCreate(
+                ['row_id' => $object->RowID],
+                [
+                    'season_row_id' => $object->SeasonRowID,
+                    'name_ar'       => $object->CName,
+                    'name_en'       => $object->CNameEN,
+                    'sport_id'      => $object->SportID,
+                    'weeks_no'      => $object->WeeksNo,
+                    'logo'          => $logoPath,
+                ]
+            );
+            $sqlServerIds[] = $object->RowID;
+            $stats['upserted']++;
+        }
+ 
+        sqlsrv_close($conn);
+ 
+        if (!empty($sqlServerIds)) {
+            $stats['deleted'] = \App\Models\Competition::whereNotIn('row_id', $sqlServerIds)->count();
+            
+            $deleted = \App\Models\Competition::whereNotIn('row_id', $sqlServerIds)->get();
+            foreach ($deleted as $comp) {
+                if ($comp->logo && file_exists(public_path($comp->logo))) {
+                    @unlink(public_path($comp->logo));
+                }
+                $comp->delete();
+            }
+        }
+ 
+        return $stats;
+    }
+
+    public static function syncLeagueStandingsWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+ 
+        if (!$conn) {
+            return $stats;
+        }
+ 
+        $sql = "SELECT CompetitionRowID, ClubID, TheTeam, Play, Win, Draw, Lose, Has, Against, [Diff.], Points, [Order] FROM dbo.MobileApp_CompetitionsStandings";
+        $result = \sqlsrv_query($conn, $sql);
+ 
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+ 
+        // We will just clear and re-insert since standings change often
+        \App\Models\LeagueStanding::truncate();
+
+        while ($object = \sqlsrv_fetch_object($result)) {
+            \App\Models\LeagueStanding::create([
+                'competition_row_id' => $object->CompetitionRowID,
+                'club_id'            => $object->ClubID,
+                'team_name'          => $object->TheTeam,
+                'play'               => $object->Play,
+                'win'                => $object->Win,
+                'draw'               => $object->Draw,
+                'lose'               => $object->Lose,
+                'goals_for'          => $object->Has,
+                'goals_against'      => $object->Against,
+                'goals_diff'         => $object->{'Diff.'},
+                'points'             => $object->Points,
+                'rank'               => $object->Order,
+            ]);
+            $stats['upserted']++;
+        }
+ 
+        sqlsrv_close($conn);
  
         return $stats;
     }
