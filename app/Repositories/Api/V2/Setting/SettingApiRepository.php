@@ -716,4 +716,69 @@ class SettingApiRepository
             'code' => \App\Entities\HttpCode::SUCCESS
         ];
     }
+
+    public static function getNextHeroMatch(array $data)
+    {
+        $todayStr = date('Y-m-d');
+        
+        $match = \App\Models\SportMatch::with(['team1Club', 'team2Club', 'competition.season'])
+            ->where('match_date', '>=', $todayStr)
+            ->orderBy('match_date', 'asc')
+            ->orderBy('match_time', 'asc')
+            ->first();
+
+        if (!$match) {
+            return [
+                'data' => null,
+                'message' => 'success',
+                'code' => \App\Entities\HttpCode::SUCCESS
+            ];
+        }
+
+        $team1Logo = $match->team1Club && $match->team1Club->logo ? url($match->team1Club->logo) : null;
+        $team2Logo = $match->team2Club && $match->team2Club->logo ? url($match->team2Club->logo) : null;
+        
+        if (!$team1Logo) {
+            $club1 = \App\Models\Club::where('name_ar', $match->team1)->orWhere('name_en', $match->team1)->first();
+            if ($club1 && $club1->logo) $team1Logo = url($club1->logo);
+            else {
+                $team1 = \App\Models\SportTeam::where('name_ar', $match->team1)->orWhere('name_en', $match->team1)->first();
+                $team1Logo = $team1 && $team1->image ? url($team1->image) : url('images/default-logo.png');
+            }
+        }
+        
+        if (!$team2Logo) {
+            $club2 = \App\Models\Club::where('name_ar', $match->team2)->orWhere('name_en', $match->team2)->first();
+            if ($club2 && $club2->logo) $team2Logo = url($club2->logo);
+            else {
+                $team2 = \App\Models\SportTeam::where('name_ar', $match->team2)->orWhere('name_en', $match->team2)->first();
+                $team2Logo = $team2 && $team2->image ? url($team2->image) : url('images/default-logo.png');
+            }
+        }
+
+        $lang = \Illuminate\Support\Facades\App::getLocale();
+        
+        $matchData = [
+            'id' => $match->row_id,
+            'team1' => $match->team1,
+            'team1_logo' => $team1Logo,
+            'team2' => $match->team2,
+            'team2_logo' => $team2Logo,
+            'match_date' => $match->match_date,
+            'match_time' => $match->match_time,
+            'stage_round' => $match->stage_round,
+            'pitch' => $match->pitch,
+            'week' => $match->week,
+            'live_link' => $match->live_link,
+            'fanet_match_id' => $match->fanet_match_id,
+            'competition_name' => $match->competition ? ($lang == 'ar' ? $match->competition->name_ar : $match->competition->name_en) : null,
+            'season_name' => ($match->competition && $match->competition->season) ? $match->competition->season->name : null,
+        ];
+
+        return [
+            'data' => $matchData,
+            'message' => 'success',
+            'code' => \App\Entities\HttpCode::SUCCESS
+        ];
+    }
 }

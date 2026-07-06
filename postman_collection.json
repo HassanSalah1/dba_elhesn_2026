@@ -3910,6 +3910,31 @@
                                     ]
                                 }
                             }
+                        },
+                        {
+                            "name": "Get Next Hero Match",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept-Language",
+                                        "value": "ar",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v2/matches/next-hero",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "matches",
+                                        "next-hero"
+                                    ]
+                                }
+                            }
                         }
                     ]
                 }

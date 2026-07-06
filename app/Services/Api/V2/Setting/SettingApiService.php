@@ -200,4 +200,10 @@ class SettingApiService
         $response = SettingApiRepository::getMatchesGrouped($data);
         return UtilsRepository::handleResponseApi($response);
     }
+
+    public static function getNextHeroMatch(array $data)
+    {
+        $response = SettingApiRepository::getNextHeroMatch($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
 }

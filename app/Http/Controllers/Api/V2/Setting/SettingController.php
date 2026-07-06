@@ -195,4 +195,10 @@ class SettingController extends Controller
         $data = $request->all();
         return SettingApiService::getMatchesGrouped($data);
     }
+
+    public function getNextHeroMatch(Request $request)
+    {
+        $data = $request->all();
+        return SettingApiService::getNextHeroMatch($data);
+    }
 }
