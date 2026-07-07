@@ -3935,6 +3935,67 @@
                                     ]
                                 }
                             }
+                        },
+                        {
+                            "name": "Get Competition Matches (Paginated)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept-Language",
+                                        "value": "ar",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v2/competitions/77/matches?type=previous&page=1",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "competitions",
+                                        "77",
+                                        "matches"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "type",
+                                            "value": "previous"
+                                        },
+                                        {
+                                            "key": "page",
+                                            "value": "1"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Match Details",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept-Language",
+                                        "value": "ar",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v2/matches/116",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "matches",
+                                        "116"
+                                    ]
+                                }
+                            }
                         }
                     ]
                 }

@@ -201,4 +201,18 @@ class SettingController extends Controller
         $data = $request->all();
         return SettingApiService::getNextHeroMatch($data);
     }
+
+    public function getCompetitionMatches(Request $request, $id)
+    {
+        $data = $request->all();
+        $data['competition_id'] = $id;
+        return SettingApiService::getCompetitionMatches($data);
+    }
+
+    public function getMatchDetails(Request $request, $id)
+    {
+        $data = $request->all();
+        $data['match_id'] = $id;
+        return SettingApiService::getMatchDetails($data);
+    }
 }

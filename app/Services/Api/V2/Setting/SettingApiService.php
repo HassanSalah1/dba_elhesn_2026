@@ -206,4 +206,16 @@ class SettingApiService
         $response = SettingApiRepository::getNextHeroMatch($data);
         return UtilsRepository::handleResponseApi($response);
     }
+
+    public static function getCompetitionMatches(array $data)
+    {
+        $response = SettingApiRepository::getCompetitionMatches($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function getMatchDetails(array $data)
+    {
+        $response = SettingApiRepository::getMatchDetails($data);
+        return UtilsRepository::handleResponseApi($response);
+    }
 }

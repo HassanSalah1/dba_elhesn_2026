@@ -652,7 +652,11 @@ class SettingApiRepository
         $competitionsData = [];
         foreach ($paginator->items() as $comp) {
             $matchesData = [];
+            $count = 0;
             foreach ($comp->matches as $match) {
+                if ($count >= 10) break; // Limit to 10 matches per competition in the grouped view
+                $count++;
+                
                 // Determine logo URLs
                 $team1Logo = $match->team1Club && $match->team1Club->logo ? url($match->team1Club->logo) : null;
                 $team2Logo = $match->team2Club && $match->team2Club->logo ? url($match->team2Club->logo) : null;
@@ -700,7 +704,7 @@ class SettingApiRepository
                 'logo' => $comp->logo ? url($comp->logo) : null,
                 'season' => $comp->season ? $comp->season->name : null,
                 'matches' => $matchesData,
-                'matches_count' => count($matchesData),
+                'matches_count' => $comp->matches->count(),
             ];
         }
 
@@ -712,6 +716,163 @@ class SettingApiRepository
                 'page_size' => $paginator->perPage(),
                 'has_more_pages' => $paginator->hasMorePages()
             ],
+            'message' => 'success',
+            'code' => \App\Entities\HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getCompetitionMatches(array $data)
+    {
+        $lang = \Illuminate\Support\Facades\App::getLocale();
+        $type = isset($data['type']) ? $data['type'] : 'today';
+        $todayStr = date('Y-m-d');
+        
+        if (!isset($data['competition_id'])) {
+            return [
+                'message' => trans('api.general_error_message'),
+                'code' => \App\Entities\HttpCode::ERROR
+            ];
+        }
+
+        $query = \App\Models\SportMatch::with(['team1Club', 'team2Club'])
+            ->where('competition_row_id', $data['competition_id']);
+
+        if ($type === 'previous') {
+            $query->where('match_date', '<', $todayStr)->orderBy('match_date', 'desc');
+        } elseif ($type === 'week') {
+            $today = \Carbon\Carbon::today();
+            $startOfWeek = $today->copy()->startOfWeek(\Carbon\Carbon::SUNDAY)->format('Y-m-d');
+            $endOfWeek = $today->copy()->endOfWeek(\Carbon\Carbon::SATURDAY)->format('Y-m-d');
+            $query->whereBetween('match_date', [$startOfWeek, $endOfWeek])->orderBy('match_date', 'asc');
+        } elseif ($type === 'upcoming' || $type === 'next') {
+            $query->where('match_date', '>', $todayStr)->orderBy('match_date', 'asc');
+        } else {
+            $query->where('match_date', '=', $todayStr)->orderBy('match_date', 'asc');
+        }
+
+        $page = isset($data['page']) ? max(1, (int)$data['page']) : 1;
+        $pageSize = isset($data['page_size']) ? max(1, (int)$data['page_size']) : 10;
+        
+        $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
+        
+        $matchesData = [];
+        foreach ($paginator->items() as $match) {
+            $team1Logo = $match->team1Club && $match->team1Club->logo ? url($match->team1Club->logo) : null;
+            $team2Logo = $match->team2Club && $match->team2Club->logo ? url($match->team2Club->logo) : null;
+            
+            if (!$team1Logo) {
+                $club1 = \App\Models\Club::where('name_ar', $match->team1)->orWhere('name_en', $match->team1)->first();
+                if ($club1 && $club1->logo) $team1Logo = url($club1->logo);
+                else {
+                    $team1 = \App\Models\SportTeam::where('name_ar', $match->team1)->orWhere('name_en', $match->team1)->first();
+                    $team1Logo = $team1 && $team1->image ? url($team1->image) : url('images/default-logo.png');
+                }
+            }
+            if (!$team2Logo) {
+                $club2 = \App\Models\Club::where('name_ar', $match->team2)->orWhere('name_en', $match->team2)->first();
+                if ($club2 && $club2->logo) $team2Logo = url($club2->logo);
+                else {
+                    $team2 = \App\Models\SportTeam::where('name_ar', $match->team2)->orWhere('name_en', $match->team2)->first();
+                    $team2Logo = $team2 && $team2->image ? url($team2->image) : url('images/default-logo.png');
+                }
+            }
+
+            $matchesData[] = [
+                'id' => $match->row_id,
+                'team1' => $match->team1,
+                'team1_logo' => $team1Logo,
+                'team2' => $match->team2,
+                'team2_logo' => $team2Logo,
+                'team1_result' => $match->team1_result,
+                'team2_result' => $match->team2_result,
+                'match_date' => $match->match_date,
+                'match_time' => $match->match_time,
+                'stage_round' => $match->stage_round,
+                'pitch' => $match->pitch,
+                'week' => $match->week,
+                'live_link' => $match->live_link,
+                'fanet_match_id' => $match->fanet_match_id,
+            ];
+        }
+
+        return [
+            'data' => [
+                'matches' => $matchesData,
+                'total_matches' => $paginator->total(),
+                'page' => $paginator->currentPage(),
+                'page_size' => $paginator->perPage(),
+                'has_more_pages' => $paginator->hasMorePages()
+            ],
+            'message' => 'success',
+            'code' => \App\Entities\HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getMatchDetails(array $data)
+    {
+        $lang = \Illuminate\Support\Facades\App::getLocale();
+        
+        if (!isset($data['match_id'])) {
+            return [
+                'message' => trans('api.general_error_message'),
+                'code' => \App\Entities\HttpCode::ERROR
+            ];
+        }
+
+        $match = \App\Models\SportMatch::with(['team1Club', 'team2Club', 'competition.season'])
+            ->where('row_id', $data['match_id'])
+            ->first();
+
+        if (!$match) {
+            return [
+                'data' => null,
+                'message' => 'success',
+                'code' => \App\Entities\HttpCode::SUCCESS
+            ];
+        }
+
+        $team1Logo = $match->team1Club && $match->team1Club->logo ? url($match->team1Club->logo) : null;
+        $team2Logo = $match->team2Club && $match->team2Club->logo ? url($match->team2Club->logo) : null;
+        
+        if (!$team1Logo) {
+            $club1 = \App\Models\Club::where('name_ar', $match->team1)->orWhere('name_en', $match->team1)->first();
+            if ($club1 && $club1->logo) $team1Logo = url($club1->logo);
+            else {
+                $team1 = \App\Models\SportTeam::where('name_ar', $match->team1)->orWhere('name_en', $match->team1)->first();
+                $team1Logo = $team1 && $team1->image ? url($team1->image) : url('images/default-logo.png');
+            }
+        }
+        
+        if (!$team2Logo) {
+            $club2 = \App\Models\Club::where('name_ar', $match->team2)->orWhere('name_en', $match->team2)->first();
+            if ($club2 && $club2->logo) $team2Logo = url($club2->logo);
+            else {
+                $team2 = \App\Models\SportTeam::where('name_ar', $match->team2)->orWhere('name_en', $match->team2)->first();
+                $team2Logo = $team2 && $team2->image ? url($team2->image) : url('images/default-logo.png');
+            }
+        }
+        
+        $matchData = [
+            'id' => $match->row_id,
+            'team1' => $match->team1,
+            'team1_logo' => $team1Logo,
+            'team2' => $match->team2,
+            'team2_logo' => $team2Logo,
+            'team1_result' => $match->team1_result,
+            'team2_result' => $match->team2_result,
+            'match_date' => $match->match_date,
+            'match_time' => $match->match_time,
+            'stage_round' => $match->stage_round,
+            'pitch' => $match->pitch,
+            'week' => $match->week,
+            'live_link' => $match->live_link,
+            'fanet_match_id' => $match->fanet_match_id,
+            'competition_name' => $match->competition ? ($lang == 'ar' ? $match->competition->name_ar : $match->competition->name_en) : null,
+            'season_name' => ($match->competition && $match->competition->season) ? $match->competition->season->name : null,
+        ];
+
+        return [
+            'data' => $matchData,
             'message' => 'success',
             'code' => \App\Entities\HttpCode::SUCCESS
         ];

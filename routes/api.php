@@ -184,6 +184,8 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('/clubs', [SettingV2Controller::class, 'getClubs']);
         Route::get('/matches/grouped', [SettingV2Controller::class, 'getMatchesGrouped']);
         Route::get('/matches/next-hero', [SettingV2Controller::class, 'getNextHeroMatch']);
+        Route::get('/matches/{id}', [SettingV2Controller::class, 'getMatchDetails']);
+        Route::get('/competitions/{id}/matches', [SettingV2Controller::class, 'getCompetitionMatches']);
         Route::get('/competitions', [UserV2Controller::class, 'getAllCompetitions']);
         Route::get('/competitions/{id}/standings', [UserV2Controller::class, 'getLeagueStandings']);
 
