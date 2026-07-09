@@ -16,6 +16,8 @@ class Competition extends Model
         'name_en',
         'sport_id',
         'weeks_no',
+        'logo',
+        'mobile_app_header_comp',
     ];
 
     public function matches()

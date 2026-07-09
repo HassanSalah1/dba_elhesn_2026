@@ -611,7 +611,7 @@ class UserApiRepository
             ];
         }
 
-        $type = isset($data['type']) ? $data['type'] : (isset($data['filter']) ? $data['filter'] : 'today');
+        $type = isset($data['type']) ? $data['type'] : (isset($data['filter']) ? $data['filter'] : null);
         $todayStr = date('Y-m-d');
 
         $query = \App\Models\SportMatch::query();
@@ -624,8 +624,12 @@ class UserApiRepository
             $query->where('season_row_id', $data['season_id']);
         }
 
+        $query->where(function($q) {
+            $q->where('team1_row_id', 21)->orWhere('team2_row_id', 21);
+        });
+
         if ($type === 'previous') {
-            $query->where('match_date', '<', $todayStr)->orderBy('match_date', 'desc');
+            $query->where('match_date', '<', $todayStr)->orderBy('match_date', 'desc')->orderBy('match_time', 'desc');
         } elseif ($type === 'week') {
             $today = \Carbon\Carbon::today();
             $startOfWeek = $today->copy()->startOfWeek(\Carbon\Carbon::SUNDAY)->format('Y-m-d');
@@ -633,35 +637,40 @@ class UserApiRepository
             $query->whereBetween('match_date', [$startOfWeek, $endOfWeek])->orderBy('match_date', 'asc');
         } elseif ($type === 'upcoming' || $type === 'next') {
             $query->where('match_date', '>', $todayStr)->orderBy('match_date', 'asc');
-        } else {
+        } elseif ($type === 'today') {
             $query->where('match_date', '=', $todayStr)->orderBy('match_date', 'asc');
+        } else {
+            $query->orderBy('match_date', 'desc')->orderBy('match_time', 'desc');
         }
 
         $query->with(['team1Club', 'team2Club']);
         $matches = $query->get();
 
+        $lang = \Illuminate\Support\Facades\App::getLocale();
         $resultData = [];
         foreach ($matches as $match) {
+            $mapped = \App\Repositories\Api\V2\Setting\SettingApiRepository::mapMatchData($match, $lang);
+
             $resultData[] = (object)[
-                'RowID' => $match->row_id,
+                'RowID' => $mapped['id'],
                 'SeasonRowID' => $match->season_row_id,
                 'CompetitionRowID' => $match->competition_row_id,
-                'Team1' => $match->team1,
-                'Team2' => $match->team2,
-                'Team1Logo' => $match->team1Club && $match->team1Club->logo ? url($match->team1Club->logo) : self::getClubLogoUrl($match->team1),
-                'Team2Logo' => $match->team2Club && $match->team2Club->logo ? url($match->team2Club->logo) : self::getClubLogoUrl($match->team2),
-                'MatchDate' => $match->match_date,
-                'MatchTime' => $match->match_time,
-                'StageRound' => $match->stage_round,
+                'Team1' => $mapped['team1'],
+                'Team2' => $mapped['team2'],
+                'Team1Logo' => $mapped['team1_logo'],
+                'Team2Logo' => $mapped['team2_logo'],
+                'MatchDate' => $mapped['match_date'],
+                'MatchTime' => $mapped['match_time'],
+                'StageRound' => $mapped['stage_round'],
                 'MatchNumber' => $match->match_number,
-                'Week' => $match->week,
-                'Pitch' => $match->pitch,
+                'Week' => $mapped['week'],
+                'Pitch' => $mapped['pitch'],
                 'Remarks' => $match->remarks,
-                'Team1Result' => $match->team1_result,
-                'Team2Result' => $match->team2_result,
+                'Team1Result' => $mapped['team1_result'],
+                'Team2Result' => $mapped['team2_result'],
                 'MatchInHouse' => $match->match_in_house,
-                'FANETMatchID' => $match->fanet_match_id,
-                'LiveLink' => $match->live_link
+                'FANETMatchID' => $mapped['fanet_match_id'],
+                'LiveLink' => $mapped['live_link']
             ];
         }
 
