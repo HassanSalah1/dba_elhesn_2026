@@ -9,3 +9,80 @@ NOTE:
 ------
 PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+/* ==========================================================
+   Dba Elhesn Logo Identity — Green Theme from dh_logo.png
+   ========================================================== */
+$dh-green: #1B7340;
+$dh-green-light: #22905a;
+$dh-brown: #6B3427;
+$dh-navy: #3B5998;
+
+.text-primary { color: $dh-green !important; }
+.bg-primary { background-color: $dh-green !important; }
+.bg-light-primary { background-color: rgba($dh-green, 0.12) !important; color: $dh-green !important; }
+.border-primary { border-color: $dh-green !important; }
+
+.btn-primary {
+    border-color: $dh-green !important;
+    background-color: $dh-green !important;
+    color: #ffffff !important;
+    &:hover, &:focus, &:active, &.active {
+        border-color: $dh-green-light !important;
+        background-color: $dh-green-light !important;
+    }
+}
+
+.btn-outline-primary {
+    border-color: $dh-green !important;
+    color: $dh-green !important;
+    &:hover, &:active, &:focus {
+        background-color: $dh-green !important;
+        color: #ffffff !important;
+    }
+}
+
+.main-menu.menu-light .navigation > li.active > a {
+    background: linear-gradient(118deg, $dh-green, $dh-green-light) !important;
+    box-shadow: 0 0 10px 1px rgba($dh-green, 0.5) !important;
+    color: #fff !important;
+    i, svg, span { color: #ffffff !important; stroke: #ffffff !important; }
+}
+.main-menu.menu-light .navigation > li .active > a {
+    color: $dh-green !important;
+}
+
+.form-control:focus {
+    border-color: $dh-green !important;
+    box-shadow: 0 3px 8px 0 rgba($dh-green, 0.15) !important;
+}
+.form-check-input:checked {
+    background-color: $dh-green !important;
+    border-color: $dh-green !important;
+}
+
+.nav-pills .nav-link.active {
+    background-color: $dh-green !important;
+}
+.nav-tabs .nav-link.active {
+    border-color: $dh-green !important;
+    color: $dh-green !important;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    color: $dh-green !important;
+    background-color: rgba($dh-green, 0.08) !important;
+}
+.dropdown-item.active, .dropdown-item:active {
+    background-color: $dh-green !important;
+}
+
+.page-item.active .page-link {
+    background-color: $dh-green !important;
+    border-color: $dh-green !important;
+}
+
+.badge-light-primary {
+    background-color: rgba($dh-green, 0.12) !important;
+    color: $dh-green !important;
+}

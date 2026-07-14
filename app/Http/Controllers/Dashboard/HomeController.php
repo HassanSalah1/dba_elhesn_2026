@@ -28,13 +28,30 @@ class HomeController extends Controller
             'direction' => 'rtl'
         ];
         $title = trans('admin.home_title');
-        $usersCount = User::where(['role' => UserRoles::FAN])->count();
-
+        
+        // Fetching statistics for the dashboard
+        $usersCount = User::count(); // Removed the 'fan' role filter to show all real users
+        $newsCount = \App\Models\News::count();
+        $actionsCount = \App\Models\Action::count();
+        $sportGamesCount = \App\Models\SportGame::count();
+        $subscribesCount = \App\Models\Subscribe::count();
+        $contactsCount = \App\Models\Contact::count();
+        $clinicBookingsCount = \App\Models\ClinicBooking::count();
+        $galleriesCount = \App\Models\Gallery::count();
+        $committeesCount = \App\Models\Committee::count();
 
         return view('admin.home', [
             'pageConfigs' => $pageConfigs,
             'title' => $title,
             'usersCount' => $usersCount,
+            'newsCount' => $newsCount,
+            'actionsCount' => $actionsCount,
+            'sportGamesCount' => $sportGamesCount,
+            'subscribesCount' => $subscribesCount,
+            'contactsCount' => $contactsCount,
+            'clinicBookingsCount' => $clinicBookingsCount,
+            'galleriesCount' => $galleriesCount,
+            'committeesCount' => $committeesCount,
         ]);
     }
 

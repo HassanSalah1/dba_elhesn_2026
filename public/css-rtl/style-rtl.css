@@ -19,3 +19,103 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 body, h1, h2, h3, h4, h5, h6, .logo , .navigation , .header-navbar {
     font-family: "Tajawal", sans-serif !important;
 }
+
+/* ==========================================================
+   Dba Elhesn Logo Identity — Green Theme from dh_logo.png
+   Primary:   #1B7340  (Green - shield & palms)
+   Secondary: #6B3427  (Brown - tower)
+   Accent:    #3B5998  (Navy - waves)
+   ========================================================== */
+
+/* Primary color utilities */
+.text-primary {
+    color: #1B7340 !important;
+}
+.bg-primary {
+    background-color: #1B7340 !important;
+}
+.bg-light-primary {
+    background-color: rgba(27, 115, 64, 0.12) !important;
+    color: #1B7340 !important;
+}
+.border-primary {
+    border-color: #1B7340 !important;
+}
+
+/* Primary button */
+.btn-primary {
+    border-color: #1B7340 !important;
+    background-color: #1B7340 !important;
+    color: #ffffff !important;
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
+    border-color: #22905a !important;
+    background-color: #22905a !important;
+    color: #ffffff !important;
+}
+.btn-outline-primary {
+    border-color: #1B7340 !important;
+    color: #1B7340 !important;
+}
+.btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:focus {
+    background-color: #1B7340 !important;
+    color: #ffffff !important;
+}
+
+/* Sidebar active */
+.main-menu.menu-light .navigation > li.active > a {
+    background: linear-gradient(118deg, #1B7340, #22905a) !important;
+    box-shadow: 0 0 10px 1px rgba(27, 115, 64, 0.5) !important;
+    color: #fff !important;
+}
+.main-menu.menu-light .navigation > li.active > a i,
+.main-menu.menu-light .navigation > li.active > a svg,
+.main-menu.menu-light .navigation > li.active > a span {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+.main-menu.menu-light .navigation > li .active > a {
+    color: #1B7340 !important;
+}
+
+/* Form Controls */
+.form-control:focus {
+    border-color: #1B7340 !important;
+    box-shadow: 0 3px 8px 0 rgba(27, 115, 64, 0.15) !important;
+}
+.form-check-input:checked {
+    background-color: #1B7340 !important;
+    border-color: #1B7340 !important;
+}
+
+/* Nav pills / tabs */
+.nav-pills .nav-link.active {
+    background-color: #1B7340 !important;
+    box-shadow: 0 4px 10px rgba(27, 115, 64, 0.25) !important;
+}
+.nav-tabs .nav-link.active {
+    border-color: #1B7340 !important;
+    color: #1B7340 !important;
+}
+
+/* Dropdowns & pagination */
+.dropdown-item:hover, .dropdown-item:focus {
+    color: #1B7340 !important;
+    background-color: rgba(27, 115, 64, 0.08) !important;
+}
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #1B7340 !important;
+}
+.page-item.active .page-link {
+    background-color: #1B7340 !important;
+    border-color: #1B7340 !important;
+}
+.page-link:hover {
+    color: #1B7340 !important;
+}
+
+/* Badges */
+.badge-light-primary {
+    background-color: rgba(27, 115, 64, 0.12) !important;
+    color: #1B7340 !important;
+}
