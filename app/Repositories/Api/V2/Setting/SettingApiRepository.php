@@ -569,11 +569,16 @@ class SettingApiRepository
 
     public static function getSeasons(array $data)
     {
-        $seasons = \App\Models\Season::orderBy('name', 'desc')->get();
+        $seasons = \App\Models\Season::orderBy('row_id', 'desc')
+            ->get(['row_id', 'name'])
+            ->map(fn($s) => [
+                'id'   => $s->row_id,
+                'name' => $s->name,
+            ]);
         return [
-            'data' => $seasons,
+            'data'    => $seasons,
             'message' => 'success',
-            'code' => HttpCode::SUCCESS
+            'code'    => HttpCode::SUCCESS
         ];
     }
 
@@ -707,11 +712,18 @@ class SettingApiRepository
             ];
         }
 
-        $query = \App\Models\SportMatch::with(['team1Club', 'team2Club'])
+        $query = \App\Models\SportMatch::with(['team1Club', 'team2Club', 'competition.season'])
             ->where('competition_row_id', $data['competition_id'])
             ->where(function($q) {
                 $q->where('team1_row_id', 21)->orWhere('team2_row_id', 21);
             });
+
+        // Filter by season if provided
+        if (!empty($data['season_id'])) {
+            $query->whereHas('competition', function($q) use ($data) {
+                $q->where('season_row_id', $data['season_id']);
+            });
+        }
 
         if ($type === 'previous') {
             $query->where('match_date', '<', $todayStr)->orderBy('match_date', 'desc')->orderBy('match_time', 'desc');
@@ -735,19 +747,27 @@ class SettingApiRepository
         
         $matchesData = [];
         foreach ($paginator->items() as $match) {
-            $matchesData[] = self::mapMatchData($match, $lang);
+            $mapped = self::mapMatchData($match, $lang);
+            $matchesData[] = $mapped;
         }
+
+        // Competition info
+        $comp = \App\Models\Competition::with('season')
+            ->where('row_id', $data['competition_id'])->first();
 
         return [
             'data' => [
-                'matches' => $matchesData,
-                'total_matches' => $paginator->total(),
-                'page' => $paginator->currentPage(),
-                'page_size' => $paginator->perPage(),
-                'has_more_pages' => $paginator->hasMorePages()
+                'competition_name' => $comp ? ($lang == 'ar' ? $comp->name_ar : $comp->name_en) : null,
+                'season_name'      => ($comp && $comp->season) ? $comp->season->name : null,
+                'order'            => $comp ? $comp->the_order : null,
+                'matches'          => $matchesData,
+                'total_matches'    => $paginator->total(),
+                'page'             => $paginator->currentPage(),
+                'page_size'        => $paginator->perPage(),
+                'has_more_pages'   => $paginator->hasMorePages()
             ],
             'message' => 'success',
-            'code' => \App\Entities\HttpCode::SUCCESS
+            'code'    => \App\Entities\HttpCode::SUCCESS
         ];
     }
 

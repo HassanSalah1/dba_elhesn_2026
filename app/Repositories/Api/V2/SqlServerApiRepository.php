@@ -807,7 +807,7 @@ class SqlServerApiRepository
             return $stats;
         }
  
-        $sql = "SELECT c.RowID, c.SeasonRowID, c.CName, c.CNameEN, c.WeeksNo, c.SportID, c.MobileAppHeaderComp, l.CompetitionLogo 
+        $sql = "SELECT c.RowID, c.SeasonRowID, c.CName, c.CNameEN, c.WeeksNo, c.SportID, c.TheOrder, c.MobileAppHeaderComp, l.CompetitionLogo 
                 FROM dbo.MobileApp_Competitions c
                 LEFT JOIN dbo.MobileApp_Competitions_Logos l ON c.RowID = l.CompetitionRowID";
         $result = \sqlsrv_query($conn, $sql);
@@ -837,6 +837,7 @@ class SqlServerApiRepository
                     'name_en'       => $object->CNameEN,
                     'sport_id'      => $object->SportID,
                     'weeks_no'      => $object->WeeksNo,
+                    'the_order'     => $object->TheOrder,
                     'logo'          => $logoPath,
                     'mobile_app_header_comp' => $object->MobileAppHeaderComp ? 1 : 0,
                 ]

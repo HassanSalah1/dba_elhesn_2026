@@ -16,6 +16,7 @@ class Competition extends Model
         'name_en',
         'sport_id',
         'weeks_no',
+        'the_order',
         'logo',
         'mobile_app_header_comp',
     ];

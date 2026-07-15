@@ -3712,6 +3712,30 @@
                     "name": "Competitions & Matches",
                     "item": [
                         {
+                            "name": "0. Get Seasons",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept-Language",
+                                        "value": "ar",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v2/seasons",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "seasons"
+                                    ]
+                                }
+                            }
+                        },
+                        {
                             "name": "1. Get Grouped Matches (Previous)",
                             "request": {
                                 "method": "GET",
@@ -3736,11 +3760,18 @@
                                     "query": [
                                         {
                                             "key": "type",
-                                            "value": "previous"
+                                            "value": "previous",
+                                            "description": "previous | upcoming | today | week | (empty = all)"
                                         },
                                         {
                                             "key": "page",
                                             "value": "1"
+                                        },
+                                        {
+                                            "key": "season_id",
+                                            "value": "",
+                                            "disabled": true,
+                                            "description": "Optional: filter by season id"
                                         }
                                     ]
                                 }
@@ -3776,6 +3807,12 @@
                                         {
                                             "key": "page",
                                             "value": "1"
+                                        },
+                                        {
+                                            "key": "season_id",
+                                            "value": "",
+                                            "disabled": true,
+                                            "description": "Optional: filter by season id"
                                         }
                                     ]
                                 }
@@ -3811,6 +3848,12 @@
                                         {
                                             "key": "page",
                                             "value": "1"
+                                        },
+                                        {
+                                            "key": "season_id",
+                                            "value": "",
+                                            "disabled": true,
+                                            "description": "Optional: filter by season id"
                                         }
                                     ]
                                 }
@@ -3846,6 +3889,49 @@
                                         {
                                             "key": "page",
                                             "value": "1"
+                                        },
+                                        {
+                                            "key": "season_id",
+                                            "value": "",
+                                            "disabled": true,
+                                            "description": "Optional: filter by season id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "1. Get Grouped Matches (All - No Filter)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept-Language",
+                                        "value": "ar",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v2/matches/grouped?page=1",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "matches",
+                                        "grouped"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "page",
+                                            "value": "1"
+                                        },
+                                        {
+                                            "key": "season_id",
+                                            "value": "",
+                                            "disabled": true,
+                                            "description": "Optional: filter by season id"
                                         }
                                     ]
                                 }
@@ -3937,7 +4023,7 @@
                             }
                         },
                         {
-                            "name": "Get Competition Matches (Paginated)",
+                            "name": "Get Competition Matches (Previous)",
                             "request": {
                                 "method": "GET",
                                 "header": [
@@ -3962,11 +4048,110 @@
                                     "query": [
                                         {
                                             "key": "type",
-                                            "value": "previous"
+                                            "value": "previous",
+                                            "description": "previous | upcoming | today | week | (empty = all)"
                                         },
                                         {
                                             "key": "page",
                                             "value": "1"
+                                        },
+                                        {
+                                            "key": "page_size",
+                                            "value": "10"
+                                        },
+                                        {
+                                            "key": "season_id",
+                                            "value": "",
+                                            "disabled": true,
+                                            "description": "Optional: filter by season id (e.g. 8)"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Competition Matches (Upcoming)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept-Language",
+                                        "value": "ar",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v2/competitions/77/matches?type=upcoming&page=1",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "competitions",
+                                        "77",
+                                        "matches"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "type",
+                                            "value": "upcoming"
+                                        },
+                                        {
+                                            "key": "page",
+                                            "value": "1"
+                                        },
+                                        {
+                                            "key": "page_size",
+                                            "value": "10"
+                                        },
+                                        {
+                                            "key": "season_id",
+                                            "value": "",
+                                            "disabled": true,
+                                            "description": "Optional: filter by season id"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Competition Matches (All - No Filter)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept-Language",
+                                        "value": "ar",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v2/competitions/77/matches?page=1&page_size=10",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "competitions",
+                                        "77",
+                                        "matches"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "page",
+                                            "value": "1"
+                                        },
+                                        {
+                                            "key": "page_size",
+                                            "value": "10"
+                                        },
+                                        {
+                                            "key": "season_id",
+                                            "value": "",
+                                            "disabled": true,
+                                            "description": "Optional: filter by season id"
                                         }
                                     ]
                                 }
