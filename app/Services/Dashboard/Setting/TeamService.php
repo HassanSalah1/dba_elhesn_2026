@@ -17,9 +17,12 @@ class TeamService
     public static function addTeam(array $data)
     {
         $rules = [
-            'title' => 'required',
-            'name' => 'required',
-            'position' => 'required',
+            'title_ar' => 'required',
+            'name_ar' => 'required',
+            'position_ar' => 'required',
+            'title_en' => 'nullable',
+            'name_en' => 'nullable',
+            'position_en' => 'nullable',
         ];
         $validated = ValidationRepository::validateWebGeneral($data, $rules);
         if ($validated !== true) {
@@ -53,9 +56,12 @@ class TeamService
     public static function editTeam(array $data)
     {
         $rules = [
-            'title' => 'required',
-            'name' => 'required',
-            'position' => 'required',
+            'title_ar' => 'required',
+            'name_ar' => 'required',
+            'position_ar' => 'required',
+            'title_en' => 'nullable',
+            'name_en' => 'nullable',
+            'position_en' => 'nullable',
         ];
         $validated = ValidationRepository::validateWebGeneral($data, $rules);
         if ($validated !== true) {

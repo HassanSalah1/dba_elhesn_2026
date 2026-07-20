@@ -28,9 +28,12 @@ class TeamRepository
     {
         Team::where('order', '>=', $data['order'])->increment('order');
         $teamData = [
-            'title' => $data['title'],
-            'name' => $data['name'],
-            'position' => $data['position'],
+            'title_ar' => $data['title_ar'],
+            'title_en' => $data['title_en'],
+            'name_ar' => $data['name_ar'],
+            'name_en' => $data['name_en'],
+            'position_ar' => $data['position_ar'],
+            'position_en' => $data['position_en'],
             'order' => $data['order'],
         ];
         $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
@@ -85,9 +88,12 @@ class TeamRepository
                 Team::where('order', '>=', $data['order'])->increment('order');
             }
             $teamData = [
-                'title' => $data['title'],
-                'name' => $data['name'],
-                'position' => $data['position'],
+                'title_ar' => $data['title_ar'],
+                'title_en' => $data['title_en'],
+                'name_ar' => $data['name_ar'],
+                'name_en' => $data['name_en'],
+                'position_ar' => $data['position_ar'],
+                'position_en' => $data['position_en'],
                 'order' => $data['order'],
             ];
             $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));

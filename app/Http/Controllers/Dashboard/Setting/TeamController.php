@@ -17,8 +17,12 @@ class TeamController extends Controller
             'direction' => 'rtl'
         ];
         $data['title'] = trans('admin.teams_title');
-        $data['debatable_names'] = array(trans('admin.title'), trans('admin.name'),
-            trans('admin.position'), trans('admin.actions'));
+        $data['debatable_names'] = array(
+            trans('admin.title_ar'), trans('admin.title_en'),
+            trans('admin.name_ar'), trans('admin.name_en'),
+            trans('admin.position_ar'), trans('admin.position_en'),
+            trans('admin.actions')
+        );
         return view('admin.settings.teams')->with($data);
     }
 

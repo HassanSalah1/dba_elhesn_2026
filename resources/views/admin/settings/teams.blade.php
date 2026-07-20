@@ -26,28 +26,52 @@
 @section('form_input')
 
     <div class="mb-1">
-        <label class="form-label" for="title">{{trans('admin.title')}}</label>
-        <input type="text" name="title"
+        <label class="form-label" for="title_ar">{{trans('admin.title_ar')}}</label>
+        <input type="text" name="title_ar"
                class="form-control dt-full-name"
-               id="title"
-               placeholder="{{trans('admin.title')}}"/>
+               id="title_ar"
+               placeholder="{{trans('admin.title_ar')}}"/>
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label" for="title_en">{{trans('admin.title_en')}}</label>
+        <input type="text" name="title_en"
+               class="form-control dt-full-name"
+               id="title_en"
+               placeholder="{{trans('admin.title_en')}}"/>
     </div>
 
 
     <div class="mb-1">
-        <label class="form-label" for="name">{{trans('admin.name')}}</label>
-        <input type="text" name="name"
+        <label class="form-label" for="name_ar">{{trans('admin.name_ar')}}</label>
+        <input type="text" name="name_ar"
                class="form-control dt-full-name"
-               id="name"
-               placeholder="{{trans('admin.name')}}"/>
+               id="name_ar"
+               placeholder="{{trans('admin.name_ar')}}"/>
     </div>
 
     <div class="mb-1">
-        <label class="form-label" for="position">{{trans('admin.position')}}</label>
-        <input type="text" name="position"
+        <label class="form-label" for="name_en">{{trans('admin.name_en')}}</label>
+        <input type="text" name="name_en"
                class="form-control dt-full-name"
-               id="position"
-               placeholder="{{trans('admin.position')}}"/>
+               id="name_en"
+               placeholder="{{trans('admin.name_en')}}"/>
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label" for="position_ar">{{trans('admin.position_ar')}}</label>
+        <input type="text" name="position_ar"
+               class="form-control dt-full-name"
+               id="position_ar"
+               placeholder="{{trans('admin.position_ar')}}"/>
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label" for="position_en">{{trans('admin.position_en')}}</label>
+        <input type="text" name="position_en"
+               class="form-control dt-full-name"
+               id="position_en"
+               placeholder="{{trans('admin.position_en')}}"/>
     </div>
 
     <div class="mb-1">
@@ -119,7 +143,7 @@
             onClose();
 
             loadDataTables('{{ url("/admin/teams/data") }}',
-                ['title', 'name', 'position', 'actions'], '',
+                ['title_ar', 'title_en', 'name_ar', 'name_en', 'position_ar', 'position_en', 'actions'], '',
                 {
                     'show': '{{trans('admin.show')}}',
                     'first': '{{trans('admin.first')}}',
@@ -175,9 +199,12 @@
                 contentType: false,
                 headers: {'X-CSRF-TOKEN': csrf_token},
                 success: function (response) {
-                    $('#general-form input[name=name]').val(response.data.name);
-                    $('#general-form input[name=position]').val(response.data.position);
-                    $('#general-form input[name=title]').val(response.data.title);
+                    $('#general-form input[name=name_ar]').val(response.data.name_ar);
+                    $('#general-form input[name=name_en]').val(response.data.name_en);
+                    $('#general-form input[name=position_ar]').val(response.data.position_ar);
+                    $('#general-form input[name=position_en]').val(response.data.position_en);
+                    $('#general-form input[name=title_ar]').val(response.data.title_ar);
+                    $('#general-form input[name=title_en]').val(response.data.title_en);
                     $('#general-form input[name=order]').val(response.data.order);
                     initDropify(response.data.image ? response.data.image : null);
                     $('.general_modal').modal('toggle');

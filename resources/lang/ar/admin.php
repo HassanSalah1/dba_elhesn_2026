@@ -219,6 +219,8 @@ return [
     'add_team' => 'إضافة',
     'edit_team' => 'تعديل',
     'position' => 'الوظيفة',
+    'position_ar' => 'الوظيفة (عربى)',
+    'position_en' => 'الوظيفة (إنجليزى)',
     'gallery_title' => 'معرض الصور والفيديوهات',
     'add_gallery' => 'إضافة',
     'edit_gallery' => 'تعديل',
