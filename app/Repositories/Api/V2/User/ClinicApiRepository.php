@@ -97,7 +97,6 @@ class ClinicApiRepository
             'other_name' => $data['is_for_other'] ? $data['other_name'] : null,
             'other_phone' => $data['is_for_other'] ? $data['other_phone'] : null,
             'other_country_code' => $data['is_for_other'] ? (isset($data['other_country_code']) ? $data['other_country_code'] : null) : null,
-            'injury_type' => isset($data['injury_type']) ? $data['injury_type'] : null,
             'description' => isset($data['description']) ? $data['description'] : null,
             'status' => ClinicBooking::STATUS_PENDING,
         ]);
@@ -209,7 +208,8 @@ class ClinicApiRepository
         }
 
         $booking->update([
-            'status' => ClinicBooking::STATUS_CANCELLED
+            'status' => ClinicBooking::STATUS_CANCELLED,
+            'synced_to_sqlserver' => false,
         ]);
 
         return [

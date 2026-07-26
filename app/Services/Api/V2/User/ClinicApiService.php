@@ -36,7 +36,6 @@ class ClinicApiService
             'other_name' => 'required_if:is_for_other,1|nullable|string',
             'other_phone' => 'required_if:is_for_other,1|nullable|string',
             'other_country_code' => 'required_if:is_for_other,1|nullable|string',
-            'injury_type' => 'required|string',
             'description' => 'nullable|string',
             'attachments' => 'nullable|array',
             'attachments.*' => 'file|mimes:jpeg,png,pdf|max:5120',

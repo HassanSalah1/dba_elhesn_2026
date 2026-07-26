@@ -22,7 +22,6 @@ class ClinicBookingResource extends JsonResource
             'time_slot' => new ClinicTimeSlotResource($this->timeSlot),
             'status' => $this->status,
             'status_text' => trans('api.booking_status_' . $this->status),
-            'injury_type' => $this->injury_type,
             'description' => $this->description,
             'is_for_other' => $this->is_for_other,
             'other_name' => $this->other_name,

@@ -905,4 +905,172 @@ class SqlServerApiRepository
  
         return $stats;
     }
+ 
+    /**
+     * Sync clinic time slots from SQL Server (MobileApp_Clinic_TimeSlots view).
+     */
+    public static function syncClinicTimeSlotsWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0, 'deleted' => 0];
+ 
+        if (!$conn) {
+            return $stats;
+        }
+ 
+        $sql = "SELECT RowID, DayOfWeek, StartTime, EndTime, MaxBookings, Active FROM dbo.MobileApp_Clinic_TimeSlots";
+        $result = \sqlsrv_query($conn, $sql);
+ 
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+ 
+        $sqlServerIds = [];
+        while ($object = \sqlsrv_fetch_object($result)) {
+            // StartTime/EndTime come as datetime from SQL Server, extract time portion
+            $startTime = null;
+            if ($object->StartTime instanceof \DateTime) {
+                $startTime = $object->StartTime->format('H:i');
+            } elseif (is_string($object->StartTime)) {
+                $startTime = substr($object->StartTime, 0, 5);
+            }
+
+            $endTime = null;
+            if ($object->EndTime instanceof \DateTime) {
+                $endTime = $object->EndTime->format('H:i');
+            } elseif (is_string($object->EndTime)) {
+                $endTime = substr($object->EndTime, 0, 5);
+            }
+
+            \App\Models\ClinicTimeSlot::updateOrCreate(
+                ['row_id' => $object->RowID],
+                [
+                    'day_of_week'  => $object->DayOfWeek,
+                    'start_time'   => $startTime,
+                    'end_time'     => $endTime,
+                    'max_bookings' => $object->MaxBookings ?? 1,
+                    'status'       => $object->Active ?? 1,
+                ]
+            );
+            $sqlServerIds[] = $object->RowID;
+            $stats['upserted']++;
+        }
+ 
+        sqlsrv_close($conn);
+ 
+        if (!empty($sqlServerIds)) {
+            $stats['deleted'] = \App\Models\ClinicTimeSlot::whereNotNull('row_id')
+                ->whereNotIn('row_id', $sqlServerIds)->count();
+            \App\Models\ClinicTimeSlot::whereNotNull('row_id')
+                ->whereNotIn('row_id', $sqlServerIds)->delete();
+        }
+ 
+        return $stats;
+    }
+
+    /**
+     * Push un-synced clinic bookings TO SQL Server (MobileApp_Clinic_Bookings view/table).
+     * This is a REVERSE sync: we INSERT/UPDATE our bookings into Karim's database.
+     */
+    public static function pushClinicBookingsToSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['pushed' => 0, 'failed' => 0];
+ 
+        if (!$conn) {
+            return $stats;
+        }
+ 
+        // Get all bookings that haven't been synced yet, or were updated after last sync
+        $bookings = \App\Models\ClinicBooking::where('synced_to_sqlserver', false)
+            ->with(['user', 'timeSlot'])
+            ->get();
+ 
+        foreach ($bookings as $booking) {
+            $timeSlotRowId = $booking->timeSlot ? $booking->timeSlot->row_id : null;
+
+            // Skip if time slot has no row_id (not from SQL Server)
+            if (!$timeSlotRowId) {
+                continue;
+            }
+
+            $userName = $booking->user ? $booking->user->name : null;
+            $userPhone = $booking->user ? $booking->user->phone : null;
+
+            // Check if this booking already exists in SQL Server
+            $checkSql = "SELECT RowID FROM dbo.MobileApp_Clinic_Bookings WHERE AppBookingID = ?";
+            $checkResult = \sqlsrv_query($conn, $checkSql, [$booking->id]);
+            
+            if ($checkResult && \sqlsrv_fetch($checkResult)) {
+                // UPDATE existing
+                $updateSql = "UPDATE dbo.MobileApp_Clinic_Bookings SET 
+                    PatientName = ?, PatientPhone = ?, TimeSlotRowID = ?, 
+                    BookingDate = ?, IsForOther = ?, OtherName = ?, OtherPhone = ?,
+                    Description = ?, Status = ?, UpdatedAt = ?
+                    WHERE AppBookingID = ?";
+
+                $params = [
+                    $userName,
+                    $userPhone,
+                    $timeSlotRowId,
+                    $booking->booking_date,
+                    $booking->is_for_other,
+                    $booking->other_name,
+                    $booking->other_phone,
+                    $booking->description,
+                    $booking->status,
+                    $booking->updated_at ? $booking->updated_at->format('Y-m-d H:i:s') : now()->format('Y-m-d H:i:s'),
+                    $booking->id,
+                ];
+
+                $updateResult = \sqlsrv_query($conn, $updateSql, $params);
+                if ($updateResult !== false) {
+                    $booking->update(['synced_to_sqlserver' => true]);
+                    $stats['pushed']++;
+                } else {
+                    $stats['failed']++;
+                    Log::warning('Clinic booking UPDATE failed for ID: ' . $booking->id, [
+                        'errors' => \sqlsrv_errors()
+                    ]);
+                }
+            } else {
+                // INSERT new
+                $insertSql = "INSERT INTO dbo.MobileApp_Clinic_Bookings 
+                    (AppBookingID, PatientName, PatientPhone, TimeSlotRowID, BookingDate, 
+                     IsForOther, OtherName, OtherPhone, Description, Status, CreatedAt, UpdatedAt) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                $params = [
+                    $booking->id,
+                    $userName,
+                    $userPhone,
+                    $timeSlotRowId,
+                    $booking->booking_date,
+                    $booking->is_for_other,
+                    $booking->other_name,
+                    $booking->other_phone,
+                    $booking->description,
+                    $booking->status,
+                    $booking->created_at ? $booking->created_at->format('Y-m-d H:i:s') : now()->format('Y-m-d H:i:s'),
+                    $booking->updated_at ? $booking->updated_at->format('Y-m-d H:i:s') : now()->format('Y-m-d H:i:s'),
+                ];
+
+                $insertResult = \sqlsrv_query($conn, $insertSql, $params);
+                if ($insertResult !== false) {
+                    $booking->update(['synced_to_sqlserver' => true]);
+                    $stats['pushed']++;
+                } else {
+                    $stats['failed']++;
+                    Log::warning('Clinic booking INSERT failed for ID: ' . $booking->id, [
+                        'errors' => \sqlsrv_errors()
+                    ]);
+                }
+            }
+        }
+ 
+        sqlsrv_close($conn);
+ 
+        return $stats;
+    }
 }

@@ -12,6 +12,7 @@ class ClinicTimeSlot extends Model
     protected $table = 'clinic_time_slots';
 
     protected $fillable = [
+        'row_id',
         'day_of_week',
         'start_time',
         'end_time',

@@ -3513,11 +3513,6 @@
                                             "type": "text"
                                         },
                                         {
-                                            "key": "injury_type",
-                                            "value": "Muscle tear",
-                                            "type": "text"
-                                        },
-                                        {
                                             "key": "description",
                                             "value": "Injury during training match",
                                             "type": "text"

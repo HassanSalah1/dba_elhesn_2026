@@ -24,9 +24,9 @@ class ClinicBooking extends Model
         'other_name',
         'other_phone',
         'other_country_code',
-        'injury_type',
         'description',
         'status',
+        'synced_to_sqlserver',
     ];
 
     public function user()

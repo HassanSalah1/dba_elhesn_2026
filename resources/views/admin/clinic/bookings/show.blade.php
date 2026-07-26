@@ -74,10 +74,6 @@
                                 </div>
                             @endif
 
-                            <div class="col-12 mb-2">
-                                <h5><strong>{{ trans('admin.injury_type') }}:</strong></h5>
-                                <p class="card-text">{{ $bookingObj->injury_type ?: 'N/A' }}</p>
-                            </div>
 
                             <div class="col-12 mb-2">
                                 <h5><strong>{{ trans('admin.description') }}:</strong></h5>

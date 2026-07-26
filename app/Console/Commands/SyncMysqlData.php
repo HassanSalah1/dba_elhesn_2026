@@ -8,11 +8,11 @@ use Illuminate\Console\Command;
 
 class SyncMysqlData extends Command
 {
-    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, all)}';
+    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, clinic_time_slots, clinic_bookings, all)}';
 
     protected $description = 'Sync MySQL data with SQL Server: upsert existing records, delete orphaned ones';
 
-    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'matches', 'seasons', 'attend_reasons', 'clubs', 'competitions', 'standings', 'all'];
+    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'matches', 'seasons', 'attend_reasons', 'clubs', 'competitions', 'standings', 'clinic_time_slots', 'clinic_bookings', 'all'];
 
     public function __construct()
     {
@@ -29,7 +29,7 @@ class SyncMysqlData extends Command
         }
 
         $this->warn('⚠  This will DELETE any MySQL records not found in SQL Server.');
-        $this->warn('   Order of sync: teams → players → player_details → users → user_teams → matches → seasons → attend_reasons → clubs → competitions → standings');
+        $this->warn('   Order of sync: teams → players → player_details → users → user_teams → matches → seasons → attend_reasons → clubs → competitions → standings → clinic_time_slots → clinic_bookings');
         $this->newLine();
 
         if (!$this->confirm('Are you sure you want to continue?')) {
@@ -104,6 +104,18 @@ class SyncMysqlData extends Command
             $this->line('Syncing <info>league_standings</info>...');
             $stats  = V2SqlServerApiRepository::syncLeagueStandingsWithSqlServer();
             $rows[] = ['league_standings', $stats['upserted'], $stats['deleted']];
+        }
+
+        if (in_array($table, ['clinic_time_slots', 'all'])) {
+            $this->line('Syncing <info>clinic_time_slots</info> from SQL Server...');
+            $stats  = V2SqlServerApiRepository::syncClinicTimeSlotsWithSqlServer();
+            $rows[] = ['clinic_time_slots', $stats['upserted'], $stats['deleted']];
+        }
+
+        if (in_array($table, ['clinic_bookings', 'all'])) {
+            $this->line('Pushing <info>clinic_bookings</info> to SQL Server...');
+            $stats  = V2SqlServerApiRepository::pushClinicBookingsToSqlServer();
+            $rows[] = ['clinic_bookings (push)', $stats['pushed'], $stats['failed']];
         }
 
         $this->newLine();
