@@ -10,14 +10,14 @@ class ClinicRepository
 {
     public static function getBookingsData(array $data)
     {
-        $bookings = ClinicBooking::with(['user', 'timeSlot'])->orderBy('id', 'DESC');
+        $bookings = ClinicBooking::with(['timeSlot'])->orderBy('id', 'DESC');
         
         return DataTables::of($bookings)
             ->addColumn('user_name', function ($booking) {
                 if ($booking->is_for_other) {
-                    return $booking->other_name . ' (' . trans('api.booking_for_other') . ' - ' . ($booking->user ? $booking->user->name : '') . ')';
+                    return $booking->other_name . ' (' . trans('api.booking_for_other') . ' - ' . ($booking->patient_name ?? '') . ')';
                 }
-                return $booking->user ? $booking->user->name : '';
+                return $booking->patient_name ?? '';
             })
             ->addColumn('booking_time', function ($booking) {
                 return $booking->timeSlot ? $booking->timeSlot->start_time . ' - ' . $booking->timeSlot->end_time : '';

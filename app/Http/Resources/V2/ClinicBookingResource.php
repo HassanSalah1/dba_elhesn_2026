@@ -17,6 +17,8 @@ class ClinicBookingResource extends JsonResource
         return [
             'id' => $this->id,
             'booking_number' => $this->id,
+            'patient_name' => $this->patient_name,
+            'patient_phone' => $this->patient_phone,
             'date' => $this->booking_date,
             'time' => $this->timeSlot ? $this->timeSlot->start_time : null,
             'time_slot' => new ClinicTimeSlotResource($this->timeSlot),

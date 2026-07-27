@@ -90,7 +90,8 @@ class ClinicApiRepository
         }
 
         $booking = ClinicBooking::create([
-            'user_id' => auth()->id(),
+            'patient_name' => $data['patient_name'],
+            'patient_phone' => $data['patient_phone'],
             'time_slot_id' => $timeSlotId,
             'booking_date' => $date,
             'is_for_other' => $data['is_for_other'],
@@ -147,7 +148,13 @@ class ClinicApiRepository
     public static function getBookings(array $data)
     {
         $status = isset($data['status']) ? $data['status'] : null;
-        $query = ClinicBooking::where('user_id', auth()->id())->with('timeSlot', 'attachments');
+        $phone = isset($data['patient_phone']) ? $data['patient_phone'] : null;
+
+        $query = ClinicBooking::with('timeSlot', 'attachments');
+
+        if ($phone) {
+            $query->where('patient_phone', $phone);
+        }
 
         if ($status === 'active') {
             $query->active();
@@ -169,7 +176,6 @@ class ClinicApiRepository
     public static function getBookingDetails(array $data)
     {
         $booking = ClinicBooking::where('id', $data['id'])
-            ->where('user_id', auth()->id())
             ->with('timeSlot', 'attachments')
             ->first();
 
@@ -190,7 +196,6 @@ class ClinicApiRepository
     public static function cancelBooking(array $data)
     {
         $booking = ClinicBooking::where('id', $data['id'])
-            ->where('user_id', auth()->id())
             ->first();
 
         if (!$booking) {
@@ -221,7 +226,6 @@ class ClinicApiRepository
     public static function addAttachment(array $data)
     {
         $booking = ClinicBooking::where('id', $data['id'])
-            ->where('user_id', auth()->id())
             ->first();
 
         if (!$booking) {
@@ -268,7 +272,6 @@ class ClinicApiRepository
     public static function deleteAttachment(array $data)
     {
         $booking = ClinicBooking::where('id', $data['id'])
-            ->where('user_id', auth()->id())
             ->first();
 
         if (!$booking) {

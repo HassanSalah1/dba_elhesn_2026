@@ -3423,11 +3423,6 @@
                                         "key": "Accept",
                                         "value": "application/json",
                                         "type": "text"
-                                    },
-                                    {
-                                        "key": "Authorization",
-                                        "value": "Bearer {{token}}",
-                                        "type": "text"
                                     }
                                 ],
                                 "url": {
@@ -3460,11 +3455,6 @@
                                         "key": "Accept",
                                         "value": "application/json",
                                         "type": "text"
-                                    },
-                                    {
-                                        "key": "Authorization",
-                                        "value": "Bearer {{token}}",
-                                        "type": "text"
                                     }
                                 ],
                                 "url": {
@@ -3482,6 +3472,16 @@
                                 "body": {
                                     "mode": "formdata",
                                     "formdata": [
+                                        {
+                                            "key": "patient_name",
+                                            "value": "Ahmed Mohamed",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "patient_phone",
+                                            "value": "0501234567",
+                                            "type": "text"
+                                        },
                                         {
                                             "key": "booking_date",
                                             "value": "2026-06-24",
@@ -3535,15 +3535,10 @@
                                         "key": "Accept",
                                         "value": "application/json",
                                         "type": "text"
-                                    },
-                                    {
-                                        "key": "Authorization",
-                                        "value": "Bearer {{token}}",
-                                        "type": "text"
                                     }
                                 ],
                                 "url": {
-                                    "raw": "{{baseUrl}}/api/v2/clinic/bookings?status=active",
+                                    "raw": "{{baseUrl}}/api/v2/clinic/bookings?status=active&patient_phone=0501234567",
                                     "host": [
                                         "{{baseUrl}}"
                                     ],
@@ -3558,6 +3553,11 @@
                                             "key": "status",
                                             "value": "active",
                                             "description": "Filter by status: active, cancelled, pending, confirmed, completed"
+                                        },
+                                        {
+                                            "key": "patient_phone",
+                                            "value": "0501234567",
+                                            "description": "Filter by patient phone number"
                                         }
                                     ]
                                 }
@@ -3571,11 +3571,6 @@
                                     {
                                         "key": "Accept",
                                         "value": "application/json",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Authorization",
-                                        "value": "Bearer {{token}}",
                                         "type": "text"
                                     }
                                 ],
@@ -3603,11 +3598,6 @@
                                         "key": "Accept",
                                         "value": "application/json",
                                         "type": "text"
-                                    },
-                                    {
-                                        "key": "Authorization",
-                                        "value": "Bearer {{token}}",
-                                        "type": "text"
                                     }
                                 ],
                                 "url": {
@@ -3634,11 +3624,6 @@
                                     {
                                         "key": "Accept",
                                         "value": "application/json",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Authorization",
-                                        "value": "Bearer {{token}}",
                                         "type": "text"
                                     }
                                 ],
@@ -3676,11 +3661,6 @@
                                     {
                                         "key": "Accept",
                                         "value": "application/json",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Authorization",
-                                        "value": "Bearer {{token}}",
                                         "type": "text"
                                     }
                                 ],

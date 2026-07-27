@@ -30,6 +30,8 @@ class ClinicApiService
     public static function createBooking(array $data)
     {
         $keys = [
+            'patient_name' => 'required|string',
+            'patient_phone' => 'required|string',
             'booking_date' => 'required|date|date_format:Y-m-d',
             'time_slot_id' => 'required|integer',
             'is_for_other' => 'required|in:0,1',

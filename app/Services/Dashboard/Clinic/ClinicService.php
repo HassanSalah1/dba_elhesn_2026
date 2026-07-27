@@ -117,7 +117,8 @@ class ClinicService
         }
 
         $booking->update([
-            'status' => $data['status']
+            'status' => $data['status'],
+            'synced_to_sqlserver' => false,
         ]);
 
         return UtilsRepository::response(true, trans('admin.process_success_message'), trans('admin.success_title'));

@@ -42,7 +42,7 @@ class ClinicBookingController extends Controller
             'direction' => 'rtl'
         ];
         $data['title'] = trans('admin.clinic_bookings_title');
-        $data['bookingObj'] = ClinicBooking::with(['user', 'timeSlot', 'attachments'])->find($id);
+        $data['bookingObj'] = ClinicBooking::with(['timeSlot', 'attachments'])->find($id);
         
         if (!$data['bookingObj']) {
             abort(404);

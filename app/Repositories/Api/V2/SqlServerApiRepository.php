@@ -984,7 +984,7 @@ class SqlServerApiRepository
  
         // Get all bookings that haven't been synced yet, or were updated after last sync
         $bookings = \App\Models\ClinicBooking::where('synced_to_sqlserver', false)
-            ->with(['user', 'timeSlot'])
+            ->with(['timeSlot'])
             ->get();
  
         foreach ($bookings as $booking) {
@@ -995,8 +995,8 @@ class SqlServerApiRepository
                 continue;
             }
 
-            $userName = $booking->user ? $booking->user->name : null;
-            $userPhone = $booking->user ? $booking->user->phone : null;
+            $patientName = $booking->patient_name;
+            $patientPhone = $booking->patient_phone;
 
             // Check if this booking already exists in SQL Server
             $checkSql = "SELECT RowID FROM dbo.MobileApp_Clinic_Bookings WHERE AppBookingID = ?";
@@ -1011,8 +1011,8 @@ class SqlServerApiRepository
                     WHERE AppBookingID = ?";
 
                 $params = [
-                    $userName,
-                    $userPhone,
+                    $patientName,
+                    $patientPhone,
                     $timeSlotRowId,
                     $booking->booking_date,
                     $booking->is_for_other,
@@ -1043,8 +1043,8 @@ class SqlServerApiRepository
 
                 $params = [
                     $booking->id,
-                    $userName,
-                    $userPhone,
+                    $patientName,
+                    $patientPhone,
                     $timeSlotRowId,
                     $booking->booking_date,
                     $booking->is_for_other,

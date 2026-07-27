@@ -22,11 +22,11 @@
                                 </div>
                                 <p class="card-text mb-25">
                                     <strong>{{ trans('admin.player_name') }}: </strong> 
-                                    {{ $bookingObj->user ? $bookingObj->user->name : '' }}
+                                    {{ $bookingObj->patient_name ?? '' }}
                                 </p>
                                 <p class="card-text mb-0">
                                     <strong>{{ trans('admin.phone') }}: </strong>
-                                    {{ $bookingObj->user ? $bookingObj->user->phone : '' }}
+                                    {{ $bookingObj->patient_phone ?? '' }}
                                 </p>
                             </div>
                             <div class="mt-md-0 mt-2">

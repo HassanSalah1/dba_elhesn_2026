@@ -194,6 +194,16 @@ Route::group(['middleware' => 'lang'], function () {
 
         Route::get('/competitions/{id}', [UserV2Controller::class, 'getCompetitions']);
 
+
+        // Clinic Bookings (no auth required)
+        Route::get('/clinic/time-slots', [ClinicV2Controller::class, 'getTimeSlots']);
+        Route::post('/clinic/booking', [ClinicV2Controller::class, 'createBooking']);
+        Route::get('/clinic/bookings', [ClinicV2Controller::class, 'getBookings']);
+        Route::get('/clinic/booking/{id}', [ClinicV2Controller::class, 'getBookingDetails']);
+        Route::post('/clinic/booking/{id}/cancel', [ClinicV2Controller::class, 'cancelBooking']);
+        Route::post('/clinic/booking/{id}/attachment', [ClinicV2Controller::class, 'addAttachment']);
+        Route::delete('/clinic/booking/{id}/attachment/{attachmentId}', [ClinicV2Controller::class, 'deleteAttachment']);
+
         Route::group(['middleware' => ['auth:api', 'authApi']], function () {
 
             Route::post('/logout', [AuthV2Controller::class, 'logout']); // logout
@@ -226,15 +236,6 @@ Route::group(['middleware' => 'lang'], function () {
 
             Route::get('/matches', [UserV2Controller::class, 'getMatches']);
             Route::post('/match/update', [UserV2Controller::class, 'updateMatcheResult']);
-
-            // Clinic Bookings
-            Route::get('/clinic/time-slots', [ClinicV2Controller::class, 'getTimeSlots']);
-            Route::post('/clinic/booking', [ClinicV2Controller::class, 'createBooking']);
-            Route::get('/clinic/bookings', [ClinicV2Controller::class, 'getBookings']);
-            Route::get('/clinic/booking/{id}', [ClinicV2Controller::class, 'getBookingDetails']);
-            Route::post('/clinic/booking/{id}/cancel', [ClinicV2Controller::class, 'cancelBooking']);
-            Route::post('/clinic/booking/{id}/attachment', [ClinicV2Controller::class, 'addAttachment']);
-            Route::delete('/clinic/booking/{id}/attachment/{attachmentId}', [ClinicV2Controller::class, 'deleteAttachment']);
         });
     });
 });
