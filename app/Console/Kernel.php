@@ -27,12 +27,6 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('news:daily')->daily();
 //
         $schedule->command('teams_players_delete:daily')->everyMinute();
-//
-//        $schedule->command('teams_players:daily')->daily();
-//
-//        $schedule->command('player_photos:daily')->daily();
-//
-//        $schedule->command('team_photos:daily')->daily();
     }
 
     /**

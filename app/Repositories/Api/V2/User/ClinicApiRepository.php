@@ -38,6 +38,7 @@ class ClinicApiRepository
                 ->count();
                 
             $slot->is_available = $bookedCount < $slot->max_bookings;
+            $slot->max_bookings = max(0, $slot->max_bookings - $bookedCount);
         }
 
         // Return all slots with their availability status
@@ -132,6 +133,15 @@ class ClinicApiRepository
         }
 
         if ($booking) {
+            // Real-time sync to SQL Server (silent fail — cron job will retry)
+            try {
+                \App\Repositories\Api\V2\SqlServerApiRepository::pushSingleBookingToSqlServer($booking);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning('Real-time clinic booking sync failed for ID: ' . $booking->id, [
+                    'error' => $e->getMessage()
+                ]);
+            }
+
             return [
                 'data' => new ClinicBookingResource($booking->load('attachments', 'timeSlot')),
                 'message' => trans('api.booking_created'),

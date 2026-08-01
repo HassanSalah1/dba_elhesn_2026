@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>المتطلبات الفنية وقواعد البيانات - HR Module</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+
+        @page {
+            size: A4;
+            margin: 15mm 15mm 15mm 15mm;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+            font-size: 13px;
+            line-height: 1.6;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .header-container {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+            color: #ffffff;
+            padding: 24px 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-text h1 {
+            margin: 0 0 6px 0;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .header-text p {
+            margin: 0;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .meta-badge {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: left;
+        }
+
+        .meta-badge div {
+            font-size: 11px;
+            opacity: 0.85;
+        }
+
+        .meta-badge strong {
+            font-size: 13px;
+        }
+
+        .section-title {
+            color: #065f46;
+            font-size: 17px;
+            font-weight: 700;
+            border-bottom: 2px solid #a7f3d0;
+            padding-bottom: 6px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .screen-badge {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            overflow: hidden;
+            page-break-inside: avoid;
+        }
+
+        .card-header {
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 15px;
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .code-name {
+            font-family: 'Courier New', monospace;
+            background-color: #0f172a;
+            color: #38bdf8;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            direction: ltr;
+            display: inline-block;
+        }
+
+        .type-tag {
+            background-color: #dbeafe;
+            color: #1e40af;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .type-tag.table {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 700;
+            padding: 10px 14px;
+            font-size: 12px;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 12px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .field-name {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #0369a1;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .data-type {
+            font-family: 'Courier New', monospace;
+            color: #d97706;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .key-pk {
+            background-color: #dc2626;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .key-fk {
+            background-color: #2563eb;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .notes-box {
+            background-color: #eff6ff;
+            border-right: 4px solid #3b82f6;
+            padding: 14px 18px;
+            border-radius: 6px;
+            margin-top: 25px;
+            page-break-inside: avoid;
+        }
+
+        .notes-box h4 {
+            margin: 0 0 8px 0;
+            color: #1e40af;
+            font-size: 14px;
+        }
+
+        .notes-box ul {
+            margin: 0;
+            padding-right: 20px;
+        }
+
+        .notes-box li {
+            margin-bottom: 6px;
+            color: #1e3a8a;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 11px;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-text">
+            <h1>منظومة دبا الحصن الذكية</h1>
+            <p>المتطلبات الفنية وقواعد البيانات من طرف SQL Server — (المرحلة الثالثة: HR Module)</p>
+        </div>
+        <div class="meta-badge">
+            <div>الموجه إلى: <strong>البشمهندس كريم</strong></div>
+            <div>التاريخ: <strong>29 يوليو 2026</strong></div>
+        </div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section-title">
+        <span>1. شاشات الحضور والانصراف (Attendance & Work Schedule)</span>
+    </div>
+    <div class="screen-badge">
+        📱 <strong>الشاشات في التطبيق:</strong> شاشة حضور وانصراف الموظفين (مع الفلترة بالقسم والموظف) + شاشة سجل الحضور والتقويم الشهري والنسبة المئوية.
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>فئات الموظفين والأقسام (Employee Categories)</h3>
+            <div>
+                <span class="type-tag">VIEW</span>
+                <span class="code-name">MobileApp_HR_EmployeeCategories</span>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">اسم الحقل (SQL)</th>
+                    <th style="width: 20%;">نوع البيانات</th>
+                    <th style="width: 15%;">ملاحظة المفتاح</th>
+                    <th style="width: 40%;">الوصف والشرح</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">CategoryID</td>
+                    <td class="data-type">int</td>
+                    <td><span class="key-pk">PK</span></td>
+                    <td>المعرف الفريد للفئة / القسم (مثال: إدارة رياضية، أجهزة فنية...).</td>
+                </tr>
+                <tr>
+                    <td class="field-name">CategoryNameAR</td>
+                    <td class="data-type">nvarchar(150)</td>
+                    <td>—</td>
+                    <td>اسم الفئة بالعربية.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">CategoryNameEN</td>
+                    <td class="data-type">nvarchar(150)</td>
+                    <td>—</td>
+                    <td>اسم الفئة بالإنجليزية.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">Active</td>
+                    <td class="data-type">bit</td>
+                    <td>—</td>
+                    <td>حالة الفئة (1 = مفعل، 0 = غير مفعل).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>بيانات موظفي النظام (HR Employees)</h3>
+            <div>
+                <span class="type-tag">VIEW</span>
+                <span class="code-name">MobileApp_HR_Employees</span>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">اسم الحقل (SQL)</th>
+                    <th style="width: 20%;">نوع البيانات</th>
+                    <th style="width: 15%;">ملاحظة المفتاح</th>
+                    <th style="width: 40%;">الوصف والشرح</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">EmployeeRowID</td>
+                    <td class="data-type">int</td>
+                    <td><span class="key-pk">PK</span></td>
+                    <td>المعرف الفريد للموظف في نظام HR.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">UserID</td>
+                    <td class="data-type">int</td>
+                    <td><span class="key-fk">FK</span></td>
+                    <td>رقم الحساب المرتبط بالموظف في جدول <span style="font-family: monospace;">MobileApp_Users</span>.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">CategoryID</td>
+                    <td class="data-type">int</td>
+                    <td><span class="key-fk">FK</span></td>
+                    <td>معرف القسم التابع له الموظف.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">NameAR</td>
+                    <td class="data-type">nvarchar(150)</td>
+                    <td>—</td>
+                    <td>اسم الموظف بالعربية.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">NameEN</td>
+                    <td class="data-type">nvarchar(150)</td>
+                    <td>—</td>
+                    <td>اسم الموظف بالإنجليزية.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">JobTitle</td>
+                    <td class="data-type">nvarchar(150)</td>
+                    <td>—</td>
+                    <td>المسمى الوظيفي (اختياري).</td>
+                </tr>
+                <tr>
+                    <td class="field-name">Photo</td>
+                    <td class="data-type">nvarchar(500)</td>
+                    <td>—</td>
+                    <td>رابط أو مسار صورة الموظف.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>سجلات الحضور والانصراف اليومية (Attendance Records)</h3>
+            <div>
+                <span class="type-tag">VIEW</span>
+                <span class="code-name">MobileApp_HR_AttendanceRecords</span>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">اسم الحقل (SQL)</th>
+                    <th style="width: 20%;">نوع البيانات</th>
+                    <th style="width: 15%;">ملاحظة المفتاح</th>
+                    <th style="width: 40%;">الوصف والشرح</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">RowID</td>
+                    <td class="data-type">bigint</td>
+                    <td><span class="key-pk">PK</span></td>
+                    <td>معرف سجل الحضور.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">EmployeeRowID</td>
+                    <td class="data-type">int</td>
+                    <td><span class="key-fk">FK</span></td>
+                    <td>معرف الموظف صاحب السجل.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">AttendanceDate</td>
+                    <td class="data-type">date</td>
+                    <td>—</td>
+                    <td>تاريخ اليوم (مثال: <span style="font-family: monospace;">2026-03-18</span>).</td>
+                </tr>
+                <tr>
+                    <td class="field-name">CheckInTime</td>
+                    <td class="data-type">time / datetime</td>
+                    <td>—</td>
+                    <td>وقت الحضور والتوقيع.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">CheckOutTime</td>
+                    <td class="data-type">time / datetime</td>
+                    <td>—</td>
+                    <td>وقت الانصراف.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">Status</td>
+                    <td class="data-type">varchar / tinyint</td>
+                    <td>—</td>
+                    <td>حالة اليوم (1 = حاضر ✓ أخضر ، 2 = غائب ✗ أحمر ، 3 = إجازة/إذن برتقالي).</td>
+                </tr>
+                <tr>
+                    <td class="field-name">Notes</td>
+                    <td class="data-type">nvarchar(250)</td>
+                    <td>—</td>
+                    <td>ملاحظات أو سبب التأخير/الغياب.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-title">
+        <span>2. شاشات الإجازات والتقارير الإدارية (Leave Requests & Reports)</span>
+    </div>
+    <div class="screen-badge">
+        📱 <strong>الشاشات في التطبيق:</strong> إضافة طلب إجازة (اختيار النوع، التواريخ، وصف داعم، مرفقات) + أرشيف طلبات الإجازة وتفاصيل التقرير.
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>أنواع الإجازات المتاحة (Leave Types)</h3>
+            <div>
+                <span class="type-tag">VIEW</span>
+                <span class="code-name">MobileApp_HR_LeaveTypes</span>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">اسم الحقل (SQL)</th>
+                    <th style="width: 20%;">نوع البيانات</th>
+                    <th style="width: 15%;">ملاحظة المفتاح</th>
+                    <th style="width: 40%;">الوصف والشرح</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">TypeID</td>
+                    <td class="data-type">int</td>
+                    <td><span class="key-pk">PK</span></td>
+                    <td>معرف نوع الإجازة (مرضي، سنوي، طارئ، دراسية، بدون راتب، أمومة، حج...).</td>
+                </tr>
+                <tr>
+                    <td class="field-name">TypeNameAR</td>
+                    <td class="data-type">nvarchar(150)</td>
+                    <td>—</td>
+                    <td>اسم الإجازة بالعربية.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">TypeNameEN</td>
+                    <td class="data-type">nvarchar(150)</td>
+                    <td>—</td>
+                    <td>اسم الإجازة بالإنجليزية.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">Active</td>
+                    <td class="data-type">bit</td>
+                    <td>—</td>
+                    <td>حالة التفعيل (1 = مفعل).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>جدول استقبال وأرشيف الإجازات (Leave Requests Sync Table)</h3>
+            <div>
+                <span class="type-tag table">TABLE</span>
+                <span class="code-name">MobileApp_HR_LeaveRequests</span>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">اسم الحقل (SQL)</th>
+                    <th style="width: 20%;">نوع البيانات</th>
+                    <th style="width: 15%;">ملاحظة المفتاح</th>
+                    <th style="width: 40%;">الوصف والشرح</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">RequestID</td>
+                    <td class="data-type">bigint</td>
+                    <td><span class="key-pk">PK</span></td>
+                    <td>معرف الطلب القادم من التطبيق.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">EmployeeRowID</td>
+                    <td class="data-type">int</td>
+                    <td><span class="key-fk">FK</span></td>
+                    <td>معرف الموظف صاحب الطلب.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">TypeID</td>
+                    <td class="data-type">int</td>
+                    <td><span class="key-fk">FK</span></td>
+                    <td>معرف نوع الإجازة.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">StartDate</td>
+                    <td class="data-type">date</td>
+                    <td>—</td>
+                    <td>تاريخ بداية الإجازة.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">EndDate</td>
+                    <td class="data-type">date</td>
+                    <td>—</td>
+                    <td>تاريخ نهاية الإجازة.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">Description</td>
+                    <td class="data-type">nvarchar(max)</td>
+                    <td>—</td>
+                    <td>حقل "وصف داعم" / تفاصيل وسبب الإجازة.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">AttachmentUrl</td>
+                    <td class="data-type">nvarchar(500)</td>
+                    <td>—</td>
+                    <td>رابط المرفق الداعم المرفوع.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">Status</td>
+                    <td class="data-type">varchar / tinyint</td>
+                    <td>—</td>
+                    <td>حالة الطلب في الأرشيف (0 = قيد المراجعة، 1 = مقبول، 2 = مرفوض).</td>
+                </tr>
+                <tr>
+                    <td class="field-name">CreatedAt</td>
+                    <td class="data-type">datetime</td>
+                    <td>—</td>
+                    <td>تاريخ ووقت إضافة الطلب.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">AdminReplyNotes</td>
+                    <td class="data-type">nvarchar(500)</td>
+                    <td>—</td>
+                    <td>ملاحظات أو تعليق المسؤول عند القبول/الرفض.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-title">
+        <span>3. شاشات أرشيف المستندات الإدارية (Administrative Documents)</span>
+    </div>
+    <div class="screen-badge">
+        📱 <strong>الشاشات في التطبيق:</strong> أرشيف المستندات (تقارير الأداء، عقود، محاضر جلسات...) + إضافة مستند وتفاصيل المستند.
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>جدول مستندات وتقارير الموظفين (Employee HR Documents)</h3>
+            <div>
+                <span class="type-tag table">TABLE</span>
+                <span class="code-name">MobileApp_HR_Documents</span>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">اسم الحقل (SQL)</th>
+                    <th style="width: 20%;">نوع البيانات</th>
+                    <th style="width: 15%;">ملاحظة المفتاح</th>
+                    <th style="width: 40%;">الوصف والشرح</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">DocumentID</td>
+                    <td class="data-type">bigint</td>
+                    <td><span class="key-pk">PK</span></td>
+                    <td>المعرف الفريد للمستند.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">EmployeeRowID</td>
+                    <td class="data-type">int</td>
+                    <td><span class="key-fk">FK</span></td>
+                    <td>معرف الموظف المعني بالمستند.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">Description</td>
+                    <td class="data-type">nvarchar(max)</td>
+                    <td>—</td>
+                    <td>عنوان / "وصف المستند" (مثل: تقرير الأداء السنوي، خطة التسويق...).</td>
+                </tr>
+                <tr>
+                    <td class="field-name">AttachmentUrl</td>
+                    <td class="data-type">nvarchar(500)</td>
+                    <td>—</td>
+                    <td>رابط أو مسار الملف المرفوع قابل للتحميل والتصفح.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">CreatedAt</td>
+                    <td class="data-type">datetime</td>
+                    <td>—</td>
+                    <td>تاريخ رفع أو إضافة المستند.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="notes-box">
+        <h4>💡 آلية المزامنة البرمجية (Integration Workflow):</h4>
+        <ul>
+            <li><strong>طريقة نقل الطلبات والمستندات (Push Sync):</strong> عند قيام الموظف بإضافة طلب إجازة جديد أو رفع مستند، يتم عمل <span style="font-family: monospace;">INSERT</span> مباشر في جدولي <span style="font-family: monospace;">MobileApp_HR_LeaveRequests</span> و <span style="font-family: monospace;">MobileApp_HR_Documents</span> في قاعدة البيانات SQL Server.</li>
+            <li><strong>القراءة والمتابعة (Pull Sync):</strong> يقرأ التطبيق بيانات الحضور والغياب وأنواع الإجازات وأرشيف المستندات لعرضها بشكل فوريللمستخدم في شاشات الموبايل والويب.</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        منظومة نادي دبا الحصن الرياضي الثقافي الذكية — قسم الموارد البشرية (HR)
+    </div>
+
+</body>
+</html>

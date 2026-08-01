@@ -1073,4 +1073,91 @@ class SqlServerApiRepository
  
         return $stats;
     }
+    /**
+     * Push a SINGLE clinic booking to SQL Server in real-time.
+     * Called immediately after a new booking is created.
+     * If this fails, the cron-based pushClinicBookingsToSqlServer() will retry.
+     */
+    public static function pushSingleBookingToSqlServer(\App\Models\ClinicBooking $booking): bool
+    {
+        $conn = self::startConnection();
+        if (!$conn) {
+            return false;
+        }
+
+        $booking->load('timeSlot');
+        $timeSlotRowId = $booking->timeSlot ? $booking->timeSlot->row_id : null;
+
+        if (!$timeSlotRowId) {
+            sqlsrv_close($conn);
+            return false;
+        }
+
+        $patientName = $booking->patient_name;
+        $patientPhone = $booking->patient_phone;
+
+        // Check if already exists
+        $checkSql = "SELECT RowID FROM dbo.MobileApp_Clinic_Bookings WHERE AppBookingID = ?";
+        $checkResult = \sqlsrv_query($conn, $checkSql, [$booking->id]);
+
+        if ($checkResult && \sqlsrv_fetch($checkResult)) {
+            // UPDATE existing
+            $updateSql = "UPDATE dbo.MobileApp_Clinic_Bookings SET 
+                PatientName = ?, PatientPhone = ?, TimeSlotRowID = ?, 
+                BookingDate = ?, IsForOther = ?, OtherName = ?, OtherPhone = ?,
+                Description = ?, Status = ?, UpdatedAt = ?
+                WHERE AppBookingID = ?";
+
+            $params = [
+                $patientName,
+                $patientPhone,
+                $timeSlotRowId,
+                $booking->booking_date,
+                $booking->is_for_other,
+                $booking->other_name,
+                $booking->other_phone,
+                $booking->description,
+                $booking->status,
+                now()->format('Y-m-d H:i:s'),
+                $booking->id,
+            ];
+
+            $result = \sqlsrv_query($conn, $updateSql, $params);
+        } else {
+            // INSERT new
+            $insertSql = "INSERT INTO dbo.MobileApp_Clinic_Bookings 
+                (AppBookingID, PatientName, PatientPhone, TimeSlotRowID, BookingDate, 
+                 IsForOther, OtherName, OtherPhone, Description, Status, CreatedAt, UpdatedAt) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $params = [
+                $booking->id,
+                $patientName,
+                $patientPhone,
+                $timeSlotRowId,
+                $booking->booking_date,
+                $booking->is_for_other,
+                $booking->other_name,
+                $booking->other_phone,
+                $booking->description,
+                $booking->status,
+                $booking->created_at ? $booking->created_at->format('Y-m-d H:i:s') : now()->format('Y-m-d H:i:s'),
+                $booking->updated_at ? $booking->updated_at->format('Y-m-d H:i:s') : now()->format('Y-m-d H:i:s'),
+            ];
+
+            $result = \sqlsrv_query($conn, $insertSql, $params);
+        }
+
+        sqlsrv_close($conn);
+
+        if ($result !== false) {
+            $booking->update(['synced_to_sqlserver' => true]);
+            return true;
+        }
+
+        Log::warning('Real-time pushSingleBooking failed for ID: ' . $booking->id, [
+            'errors' => \sqlsrv_errors()
+        ]);
+        return false;
+    }
 }

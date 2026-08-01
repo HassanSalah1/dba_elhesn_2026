@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 
 class SyncMysqlData extends Command
 {
-    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, clinic_time_slots, clinic_bookings, all)}';
+    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, clinic_time_slots, clinic_bookings, all)} {--force : Skip confirmation prompt (for cron/scheduler)}';
 
     protected $description = 'Sync MySQL data with SQL Server: upsert existing records, delete orphaned ones';
 
@@ -32,7 +32,7 @@ class SyncMysqlData extends Command
         $this->warn('   Order of sync: teams → players → player_details → users → user_teams → matches → seasons → attend_reasons → clubs → competitions → standings → clinic_time_slots → clinic_bookings');
         $this->newLine();
 
-        if (!$this->confirm('Are you sure you want to continue?')) {
+        if (!$this->option('force') && !$this->confirm('Are you sure you want to continue?')) {
             $this->info('Cancelled.');
             return Command::SUCCESS;
         }
