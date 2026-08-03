@@ -4158,6 +4158,350 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "HR",
+                    "item": [
+                        {
+                            "name": "Employee Login (تسجيل دخول الموظف)",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "username",
+                                            "value": "test_emp",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "password",
+                                            "value": "123456",
+                                            "type": "text"
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/hr/login",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "hr",
+                                        "login"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Monthly Attendance (سجل الحضور الشهري)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/hr/attendance?month=8&year=2026",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "hr",
+                                        "attendance"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "month",
+                                            "value": "8",
+                                            "description": "Month number 1-12"
+                                        },
+                                        {
+                                            "key": "year",
+                                            "value": "2026",
+                                            "description": "Year e.g. 2026"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Leave Types (أنواع الإجازات)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/hr/leave-types",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "hr",
+                                        "leave-types"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Create Leave Request (إضافة طلب إجازة)",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "leave_type_id",
+                                            "value": "1",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "start_date",
+                                            "value": "2026-08-10",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "end_date",
+                                            "value": "2026-08-15",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "description",
+                                            "value": "إجازة سنوية",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "attachment",
+                                            "type": "file",
+                                            "src": ""
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/hr/leave-request",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "hr",
+                                        "leave-request"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Leave Requests Archive (أرشيف طلبات الإجازة)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/hr/leave-requests",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "hr",
+                                        "leave-requests"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Leave Request Details (تفاصيل طلب إجازة)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/hr/leave-request/1",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "hr",
+                                        "leave-request",
+                                        "1"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Create Document (إضافة مستند إداري)",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "description",
+                                            "value": "تقرير الأداء السنوي",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "attachment",
+                                            "type": "file",
+                                            "src": ""
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/hr/document",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "hr",
+                                        "document"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Documents Archive (أرشيف المستندات الإدارية)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/hr/documents",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "hr",
+                                        "documents"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Document Details (تفاصيل مستند إداري)",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v2/hr/document/1",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v2",
+                                        "hr",
+                                        "document",
+                                        "1"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
                 }
             ]
         }

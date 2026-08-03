@@ -28,6 +28,12 @@ use App\Models\News;
 use App\Models\Setting;
 use App\Models\SportGame;
 use App\Models\SportTeam;
+use App\Models\HrEmployeeCategory;
+use App\Models\HrEmployee;
+use App\Models\HrAttendanceRecord;
+use App\Models\HrLeaveType;
+use App\Models\HrLeaveRequest;
+use App\Models\HrDocument;
 use App\Models\Team;
 use App\Models\TeamPlayer;
 use App\Models\User;
@@ -1160,4 +1166,395 @@ class SqlServerApiRepository
         ]);
         return false;
     }
+
+    // ==========================================
+    // HR MODULE SYNC METHODS (PULL & PUSH)
+    // ==========================================
+
+    /**
+     * 1. Pull HR Employee Categories from SQL Server
+     */
+    public static function syncHrEmployeeCategoriesWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT CategoryID, CategoryNameAR, CategoryNameEN, Active FROM dbo.MobileApp_HR_EmployeeCategories";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        while ($object = \sqlsrv_fetch_object($result)) {
+            HrEmployeeCategory::updateOrCreate(
+                ['row_id' => $object->CategoryID],
+                [
+                    'name_ar' => $object->CategoryNameAR ?? '',
+                    'name_en' => $object->CategoryNameEN ?? null,
+                    'active'  => isset($object->Active) ? (bool)$object->Active : true,
+                ]
+            );
+            $stats['upserted']++;
+        }
+
+        sqlsrv_close($conn);
+        return $stats;
+    }
+
+    /**
+     * 2. Pull HR Employees from SQL Server
+     * Also creates/updates local User accounts with role = 'employee'
+     */
+    public static function syncHrEmployeesWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT EmployeeRowID, CategoryID, NameAR, NameEN, JobTitle, Photo, Username, Password FROM dbo.MobileApp_HR_Employees";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        while ($object = \sqlsrv_fetch_object($result)) {
+            $username = $object->Username ?? ('emp_' . $object->EmployeeRowID);
+            $password = $object->Password ?? '123456';
+
+            // Find category
+            $category = null;
+            if (!empty($object->CategoryID)) {
+                $category = HrEmployeeCategory::where('row_id', $object->CategoryID)->first();
+            }
+
+            // Update/Create local User
+            $user = User::updateOrCreate(
+                ['email' => $username . '@dhclubapp.xyz'],
+                [
+                    'user_id'  => $object->EmployeeRowID,
+                    'name'     => $object->NameAR ?: ($object->NameEN ?: $username),
+                    'password' => \Illuminate\Support\Facades\Hash::make($password),
+                    'role'     => 'employee',
+                    'status'   => Status::ACTIVE,
+                    'lang'     => 'ar',
+                ]
+            );
+
+            // Handle Photo if present
+            $photoPath = null;
+            if (!empty($object->Photo)) {
+                if (is_string($object->Photo) && (str_starts_with($object->Photo, 'http') || str_starts_with($object->Photo, '/uploads'))) {
+                    $photoPath = $object->Photo;
+                } else {
+                    // Binary or raw photo
+                    $dir = public_path('uploads/hr_employees');
+                    if (!file_exists($dir)) {
+                        @mkdir($dir, 0755, true);
+                    }
+                    $fileName = 'employee_' . $object->EmployeeRowID . '.png';
+                    file_put_contents($dir . '/' . $fileName, $object->Photo);
+                    $photoPath = 'uploads/hr_employees/' . $fileName;
+                }
+            }
+
+            HrEmployee::updateOrCreate(
+                ['row_id' => $object->EmployeeRowID],
+                [
+                    'user_id'       => $user->id,
+                    'category_id'   => $category ? $category->id : null,
+                    'name_ar'       => $object->NameAR ?? '',
+                    'name_en'       => $object->NameEN ?? null,
+                    'job_title'     => $object->JobTitle ?? null,
+                    'photo'         => $photoPath,
+                    'username'      => $username,
+                    'password_hash' => \Illuminate\Support\Facades\Hash::make($password),
+                ]
+            );
+
+            $stats['upserted']++;
+        }
+
+        sqlsrv_close($conn);
+        return $stats;
+    }
+
+    /**
+     * 3. Pull HR Attendance Records from SQL Server
+     */
+    public static function syncHrAttendanceRecordsWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT RowID, EmployeeRowID, AttendanceDate, CheckInTime, CheckOutTime, Status, Notes FROM dbo.MobileApp_HR_AttendanceRecords";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        while ($object = \sqlsrv_fetch_object($result)) {
+            $checkIn = null;
+            if ($object->CheckInTime) {
+                $checkIn = $object->CheckInTime instanceof \DateTime ? $object->CheckInTime->format('H:i:s') : (string)$object->CheckInTime;
+            }
+            $checkOut = null;
+            if ($object->CheckOutTime) {
+                $checkOut = $object->CheckOutTime instanceof \DateTime ? $object->CheckOutTime->format('H:i:s') : (string)$object->CheckOutTime;
+            }
+            $attDate = $object->AttendanceDate instanceof \DateTime ? $object->AttendanceDate->format('Y-m-d') : (string)$object->AttendanceDate;
+
+            HrAttendanceRecord::updateOrCreate(
+                ['row_id' => $object->RowID],
+                [
+                    'employee_row_id' => $object->EmployeeRowID,
+                    'attendance_date' => $attDate,
+                    'check_in_time'   => $checkIn,
+                    'check_out_time'  => $checkOut,
+                    'status'          => (int)($object->Status ?? 1),
+                    'notes'           => $object->Notes ?? null,
+                ]
+            );
+            $stats['upserted']++;
+        }
+
+        sqlsrv_close($conn);
+        return $stats;
+    }
+
+    /**
+     * 4. Pull HR Leave Types from SQL Server
+     */
+    public static function syncHrLeaveTypesWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['upserted' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT TypeID, TypeNameAR, TypeNameEN, Active FROM dbo.MobileApp_HR_LeaveTypes";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        while ($object = \sqlsrv_fetch_object($result)) {
+            HrLeaveType::updateOrCreate(
+                ['row_id' => $object->TypeID],
+                [
+                    'name_ar' => $object->TypeNameAR ?? '',
+                    'name_en' => $object->TypeNameEN ?? null,
+                    'active'  => isset($object->Active) ? (bool)$object->Active : true,
+                ]
+            );
+            $stats['upserted']++;
+        }
+
+        sqlsrv_close($conn);
+        return $stats;
+    }
+
+    /**
+     * 5. Push HR Leave Requests to SQL Server (Batch / Cron)
+     */
+    public static function pushHrLeaveRequestsToSqlServer(): array
+    {
+        $stats = ['pushed' => 0, 'failed' => 0];
+        $pendingRequests = HrLeaveRequest::where('synced_to_sqlserver', false)->get();
+
+        foreach ($pendingRequests as $req) {
+            if (self::pushSingleHrLeaveRequestToSqlServer($req)) {
+                $stats['pushed']++;
+            } else {
+                $stats['failed']++;
+            }
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Push a SINGLE HR Leave Request to SQL Server (Real-time + Binary attachment support)
+     */
+    public static function pushSingleHrLeaveRequestToSqlServer(HrLeaveRequest $leaveRequest): bool
+    {
+        $conn = self::startConnection();
+        if (!$conn) {
+            return false;
+        }
+
+        // Read attachment as Binary
+        $attachmentData = null;
+        if (!empty($leaveRequest->attachment_path)) {
+            $fullPath = public_path($leaveRequest->attachment_path);
+            if (!file_exists($fullPath)) {
+                $fullPath = storage_path('app/public/' . ltrim($leaveRequest->attachment_path, '/'));
+            }
+            if (file_exists($fullPath)) {
+                $attachmentData = file_get_contents($fullPath);
+            }
+        }
+
+        // Check if exists in SQL Server by RequestID
+        $checkSql = "SELECT RequestID FROM dbo.MobileApp_HR_LeaveRequests WHERE RequestID = ?";
+        $checkResult = \sqlsrv_query($conn, $checkSql, [$leaveRequest->id]);
+
+        $leaveTypeRowId = $leaveRequest->leaveType ? $leaveRequest->leaveType->row_id : $leaveRequest->leave_type_id;
+
+        if ($checkResult && \sqlsrv_fetch($checkResult)) {
+            $sql = "UPDATE dbo.MobileApp_HR_LeaveRequests SET 
+                    EmployeeRowID = ?, TypeID = ?, StartDate = ?, EndDate = ?, Description = ?, 
+                    AttachmentUrl = ?, Status = ?, AdminReplyNotes = ?
+                    WHERE RequestID = ?";
+
+            $params = [
+                $leaveRequest->employee_row_id,
+                $leaveTypeRowId,
+                $leaveRequest->start_date,
+                $leaveRequest->end_date,
+                $leaveRequest->description,
+                $attachmentData !== null ? [ $attachmentData, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY), SQLSRV_SQLTYPE_VARBINARY('max') ] : null,
+                $leaveRequest->status,
+                $leaveRequest->admin_reply_notes,
+                $leaveRequest->id,
+            ];
+            $result = \sqlsrv_query($conn, $sql, $params);
+        } else {
+            $sql = "INSERT INTO dbo.MobileApp_HR_LeaveRequests 
+                    (RequestID, EmployeeRowID, TypeID, StartDate, EndDate, Description, AttachmentUrl, Status, CreatedAt, AdminReplyNotes)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $params = [
+                $leaveRequest->id,
+                $leaveRequest->employee_row_id,
+                $leaveTypeRowId,
+                $leaveRequest->start_date,
+                $leaveRequest->end_date,
+                $leaveRequest->description,
+                $attachmentData !== null ? [ $attachmentData, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY), SQLSRV_SQLTYPE_VARBINARY('max') ] : null,
+                $leaveRequest->status,
+                $leaveRequest->created_at ? $leaveRequest->created_at->format('Y-m-d H:i:s') : now()->format('Y-m-d H:i:s'),
+                $leaveRequest->admin_reply_notes,
+            ];
+            $result = \sqlsrv_query($conn, $sql, $params);
+        }
+
+        sqlsrv_close($conn);
+
+        if ($result !== false) {
+            $leaveRequest->update(['synced_to_sqlserver' => true]);
+            return true;
+        }
+
+        Log::warning('Push HR LeaveRequest to SQL Server failed for ID: ' . $leaveRequest->id, [
+            'errors' => \sqlsrv_errors()
+        ]);
+        return false;
+    }
+
+    /**
+     * 6. Push HR Documents to SQL Server (Batch / Cron)
+     */
+    public static function pushHrDocumentsToSqlServer(): array
+    {
+        $stats = ['pushed' => 0, 'failed' => 0];
+        $pendingDocs = HrDocument::where('synced_to_sqlserver', false)->get();
+
+        foreach ($pendingDocs as $doc) {
+            if (self::pushSingleHrDocumentToSqlServer($doc)) {
+                $stats['pushed']++;
+            } else {
+                $stats['failed']++;
+            }
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Push a SINGLE HR Document to SQL Server (Real-time + Binary attachment support)
+     */
+    public static function pushSingleHrDocumentToSqlServer(HrDocument $doc): bool
+    {
+        $conn = self::startConnection();
+        if (!$conn) {
+            return false;
+        }
+
+        // Read attachment as Binary
+        $attachmentData = null;
+        if (!empty($doc->attachment_path)) {
+            $fullPath = public_path($doc->attachment_path);
+            if (!file_exists($fullPath)) {
+                $fullPath = storage_path('app/public/' . ltrim($doc->attachment_path, '/'));
+            }
+            if (file_exists($fullPath)) {
+                $attachmentData = file_get_contents($fullPath);
+            }
+        }
+
+        // Check if exists by DocumentID
+        $checkSql = "SELECT DocumentID FROM dbo.MobileApp_HR_Documents WHERE DocumentID = ?";
+        $checkResult = \sqlsrv_query($conn, $checkSql, [$doc->id]);
+
+        if ($checkResult && \sqlsrv_fetch($checkResult)) {
+            $sql = "UPDATE dbo.MobileApp_HR_Documents SET 
+                    EmployeeRowID = ?, Description = ?, AttachmentUrl = ?
+                    WHERE DocumentID = ?";
+
+            $params = [
+                $doc->employee_row_id,
+                $doc->description,
+                $attachmentData !== null ? [ $attachmentData, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY), SQLSRV_SQLTYPE_VARBINARY('max') ] : null,
+                $doc->id,
+            ];
+            $result = \sqlsrv_query($conn, $sql, $params);
+        } else {
+            $sql = "INSERT INTO dbo.MobileApp_HR_Documents 
+                    (DocumentID, EmployeeRowID, Description, AttachmentUrl, CreatedAt)
+                    VALUES (?, ?, ?, ?, ?)";
+
+            $params = [
+                $doc->id,
+                $doc->employee_row_id,
+                $doc->description,
+                $attachmentData !== null ? [ $attachmentData, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY), SQLSRV_SQLTYPE_VARBINARY('max') ] : null,
+                $doc->created_at ? $doc->created_at->format('Y-m-d H:i:s') : now()->format('Y-m-d H:i:s'),
+            ];
+            $result = \sqlsrv_query($conn, $sql, $params);
+        }
+
+        sqlsrv_close($conn);
+
+        if ($result !== false) {
+            $doc->update(['synced_to_sqlserver' => true]);
+            return true;
+        }
+
+        Log::warning('Push HR Document to SQL Server failed for ID: ' . $doc->id, [
+            'errors' => \sqlsrv_errors()
+        ]);
+        return false;
+    }
 }
+

@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V2\Setting\SettingController as SettingV2Controller
 use App\Http\Controllers\Api\V2\User\UserController as UserV2Controller;
 use App\Http\Controllers\Api\V2\SqlServerController as SqlServerV2Controller;
 use App\Http\Controllers\Api\V2\User\ClinicController as ClinicV2Controller;
+use App\Http\Controllers\Api\V2\User\HrController as HrV2Controller;
 
 
 /*
@@ -204,6 +205,9 @@ Route::group(['middleware' => 'lang'], function () {
         Route::post('/clinic/booking/{id}/attachment', [ClinicV2Controller::class, 'addAttachment']);
         Route::delete('/clinic/booking/{id}/attachment/{attachmentId}', [ClinicV2Controller::class, 'deleteAttachment']);
 
+        // HR Employee Auth (no auth required)
+        Route::post('/hr/login', [HrV2Controller::class, 'login']);
+
         Route::group(['middleware' => ['auth:api', 'authApi']], function () {
 
             Route::post('/logout', [AuthV2Controller::class, 'logout']); // logout
@@ -217,6 +221,16 @@ Route::group(['middleware' => 'lang'], function () {
             // get my notifications
             Route::get('/my/notifications', [UserV2Controller::class, 'getMyNotifications']); // get my notifications
             Route::get('/notifications/count', [UserV2Controller::class, 'getNotificationsCount']); // get my notifications
+
+            // HR Endpoints (Protected)
+            Route::get('/hr/attendance', [HrV2Controller::class, 'getAttendance']);
+            Route::get('/hr/leave-types', [HrV2Controller::class, 'getLeaveTypes']);
+            Route::post('/hr/leave-request', [HrV2Controller::class, 'createLeaveRequest']);
+            Route::get('/hr/leave-requests', [HrV2Controller::class, 'getLeaveRequests']);
+            Route::get('/hr/leave-request/{id}', [HrV2Controller::class, 'getLeaveRequestDetails']);
+            Route::post('/hr/document', [HrV2Controller::class, 'createDocument']);
+            Route::get('/hr/documents', [HrV2Controller::class, 'getDocuments']);
+            Route::get('/hr/document/{id}', [HrV2Controller::class, 'getDocumentDetails']);
 
 
 

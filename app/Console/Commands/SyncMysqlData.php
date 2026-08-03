@@ -8,11 +8,11 @@ use Illuminate\Console\Command;
 
 class SyncMysqlData extends Command
 {
-    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, clinic_time_slots, clinic_bookings, all)} {--force : Skip confirmation prompt (for cron/scheduler)}';
+    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, clinic_time_slots, clinic_bookings, hr_categories, hr_employees, hr_attendance, hr_leave_types, hr_leave_requests, hr_documents, all)} {--force : Skip confirmation prompt (for cron/scheduler)}';
 
     protected $description = 'Sync MySQL data with SQL Server: upsert existing records, delete orphaned ones';
 
-    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'matches', 'seasons', 'attend_reasons', 'clubs', 'competitions', 'standings', 'clinic_time_slots', 'clinic_bookings', 'all'];
+    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'matches', 'seasons', 'attend_reasons', 'clubs', 'competitions', 'standings', 'clinic_time_slots', 'clinic_bookings', 'hr_categories', 'hr_employees', 'hr_attendance', 'hr_leave_types', 'hr_leave_requests', 'hr_documents', 'all'];
 
     public function __construct()
     {
@@ -116,6 +116,43 @@ class SyncMysqlData extends Command
             $this->line('Pushing <info>clinic_bookings</info> to SQL Server...');
             $stats  = V2SqlServerApiRepository::pushClinicBookingsToSqlServer();
             $rows[] = ['clinic_bookings (push)', $stats['pushed'], $stats['failed']];
+        }
+
+        // HR Sync Steps
+        if (in_array($table, ['hr_categories', 'all'])) {
+            $this->line('Syncing <info>hr_employee_categories</info>...');
+            $stats  = V2SqlServerApiRepository::syncHrEmployeeCategoriesWithSqlServer();
+            $rows[] = ['hr_employee_categories', $stats['upserted'], 0];
+        }
+
+        if (in_array($table, ['hr_employees', 'all'])) {
+            $this->line('Syncing <info>hr_employees</info>...');
+            $stats  = V2SqlServerApiRepository::syncHrEmployeesWithSqlServer();
+            $rows[] = ['hr_employees', $stats['upserted'], 0];
+        }
+
+        if (in_array($table, ['hr_attendance', 'all'])) {
+            $this->line('Syncing <info>hr_attendance_records</info>...');
+            $stats  = V2SqlServerApiRepository::syncHrAttendanceRecordsWithSqlServer();
+            $rows[] = ['hr_attendance_records', $stats['upserted'], 0];
+        }
+
+        if (in_array($table, ['hr_leave_types', 'all'])) {
+            $this->line('Syncing <info>hr_leave_types</info>...');
+            $stats  = V2SqlServerApiRepository::syncHrLeaveTypesWithSqlServer();
+            $rows[] = ['hr_leave_types', $stats['upserted'], 0];
+        }
+
+        if (in_array($table, ['hr_leave_requests', 'all'])) {
+            $this->line('Pushing <info>hr_leave_requests</info> to SQL Server...');
+            $stats  = V2SqlServerApiRepository::pushHrLeaveRequestsToSqlServer();
+            $rows[] = ['hr_leave_requests (push)', $stats['pushed'], $stats['failed']];
+        }
+
+        if (in_array($table, ['hr_documents', 'all'])) {
+            $this->line('Pushing <info>hr_documents</info> to SQL Server...');
+            $stats  = V2SqlServerApiRepository::pushHrDocumentsToSqlServer();
+            $rows[] = ['hr_documents (push)', $stats['pushed'], $stats['failed']];
         }
 
         $this->newLine();
