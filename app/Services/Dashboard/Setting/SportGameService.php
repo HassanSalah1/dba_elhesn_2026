@@ -23,6 +23,8 @@ class SportGameService
             'description_en' => 'required',
             'history_ar' => 'nullable',
             'history_en' => 'nullable',
+            'championships_ar' => 'nullable',
+            'championships_en' => 'nullable',
             'image' => 'required',
         ];
         $validated = ValidationRepository::validateWebGeneral($data, $rules);
@@ -63,6 +65,8 @@ class SportGameService
             'description_en' => 'required',
             'history_ar' => 'nullable',
             'history_en' => 'nullable',
+            'championships_ar' => 'nullable',
+            'championships_en' => 'nullable',
         ];
         $validated = ValidationRepository::validateWebGeneral($data, $rules);
         if ($validated !== true) {

@@ -71,6 +71,20 @@
     </div>
 
     <div class="mb-1">
+        <label class="form-label" for="championships_ar">{{trans('admin.championships_ar') ?? 'سجل البطولات (عربي)'}}</label>
+        <textarea name="championships_ar"
+                  class="form-control dt-full-name" id="championships_ar"
+                  placeholder="{{trans('admin.championships_ar') ?? 'سجل البطولات (عربي)'}}"></textarea>
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label" for="championships_en">{{trans('admin.championships_en') ?? 'سجل البطولات (إنجليزي)'}}</label>
+        <textarea name="championships_en"
+                  class="form-control dt-full-name" id="championships_en"
+                  placeholder="{{trans('admin.championships_en') ?? 'سجل البطولات (إنجليزي)'}}"></textarea>
+    </div>
+
+    <div class="mb-1">
         <label class="form-label" for="order">{{trans('admin.order')}}</label>
         <input type="number" name="order" min="1"
                class="form-control dt-full-name"
@@ -202,6 +216,8 @@
                     $('#general-form textarea[name=description_en]').val(response.data.description_en);
                     $('#general-form textarea[name=history_ar]').val(response.data.history_ar);
                     $('#general-form textarea[name=history_en]').val(response.data.history_en);
+                    $('#general-form textarea[name=championships_ar]').val(response.data.championships_ar);
+                    $('#general-form textarea[name=championships_en]').val(response.data.championships_en);
                     initDropify(response.data.image ? response.data.image : null);
                     $('.general_modal').modal('toggle');
                     edit = true;

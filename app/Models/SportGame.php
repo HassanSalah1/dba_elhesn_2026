@@ -11,9 +11,9 @@ class SportGame extends Model
     use HasFactory;
 
     protected $table = 'sport_games';
-    protected $fillable = ['title_ar', 'title_en', 'description_ar', 'description_en', 'history_ar', 'history_en', 'image',
+    protected $fillable = ['title_ar', 'title_en', 'description_ar', 'description_en', 'history_ar', 'history_en', 'championships_ar', 'championships_en', 'image',
         'order', 'game_id'];
-    protected $appends = ['title', 'description', 'history'];
+    protected $appends = ['title', 'description', 'history', 'championships'];
 
     public function getImageUrlAttribute()
     {
@@ -37,5 +37,11 @@ class SportGame extends Model
     {
         $lang = App::getLocale();
         return $lang === 'en' ? $this->history_en : $this->history_ar;
+    }
+
+    public function getChampionshipsAttribute()
+    {
+        $lang = App::getLocale();
+        return $lang === 'en' ? $this->championships_en : $this->championships_ar;
     }
 }

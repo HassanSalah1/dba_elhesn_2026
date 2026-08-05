@@ -36,6 +36,8 @@ class SportGameRepository
             'description_en' => $data['description_en'],
             'history_ar' => $data['history_ar'] ?? null,
             'history_en' => $data['history_en'] ?? null,
+            'championships_ar' => $data['championships_ar'] ?? null,
+            'championships_en' => $data['championships_en'] ?? null,
             'order' => $data['order'],
         ];
         $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
@@ -96,6 +98,8 @@ class SportGameRepository
                 'description_en' => $data['description_en'],
                 'history_ar' => $data['history_ar'] ?? null,
                 'history_en' => $data['history_en'] ?? null,
+                'championships_ar' => $data['championships_ar'] ?? null,
+                'championships_en' => $data['championships_en'] ?? null,
                 'order' => $data['order'],
             ];
             $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
