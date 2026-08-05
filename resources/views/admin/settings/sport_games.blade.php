@@ -57,6 +57,20 @@
     </div>
 
     <div class="mb-1">
+        <label class="form-label" for="history_ar">{{trans('admin.history_ar') ?? 'النبذة التاريخية (عربي)'}}</label>
+        <textarea name="history_ar"
+                  class="form-control dt-full-name" id="history_ar"
+                  placeholder="{{trans('admin.history_ar') ?? 'النبذة التاريخية (عربي)'}}"></textarea>
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label" for="history_en">{{trans('admin.history_en') ?? 'النبذة التاريخية (إنجليزي)'}}</label>
+        <textarea name="history_en"
+                  class="form-control dt-full-name" id="history_en"
+                  placeholder="{{trans('admin.history_en') ?? 'النبذة التاريخية (إنجليزي)'}}"></textarea>
+    </div>
+
+    <div class="mb-1">
         <label class="form-label" for="order">{{trans('admin.order')}}</label>
         <input type="number" name="order" min="1"
                class="form-control dt-full-name"
@@ -186,6 +200,8 @@
                     $('#general-form input[name=order]').val(response.data.order);
                     $('#general-form textarea[name=description_ar]').val(response.data.description_ar);
                     $('#general-form textarea[name=description_en]').val(response.data.description_en);
+                    $('#general-form textarea[name=history_ar]').val(response.data.history_ar);
+                    $('#general-form textarea[name=history_en]').val(response.data.history_en);
                     initDropify(response.data.image ? response.data.image : null);
                     $('.general_modal').modal('toggle');
                     edit = true;

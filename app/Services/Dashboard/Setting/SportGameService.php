@@ -21,6 +21,8 @@ class SportGameService
             'title_en' => 'required',
             'description_ar' => 'required',
             'description_en' => 'required',
+            'history_ar' => 'nullable',
+            'history_en' => 'nullable',
             'image' => 'required',
         ];
         $validated = ValidationRepository::validateWebGeneral($data, $rules);
@@ -59,6 +61,8 @@ class SportGameService
             'title_en' => 'required',
             'description_ar' => 'required',
             'description_en' => 'required',
+            'history_ar' => 'nullable',
+            'history_en' => 'nullable',
         ];
         $validated = ValidationRepository::validateWebGeneral($data, $rules);
         if ($validated !== true) {
