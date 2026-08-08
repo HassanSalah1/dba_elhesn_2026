@@ -79,6 +79,11 @@
                 <i data-feather="plus"></i> {{trans('admin.add')}}
             </button>
         </div>
+        <div class="row text-muted small fw-bold mb-1">
+            <div class="col-md-5">🇦🇪 البطولة (بالعربية)</div>
+            <div class="col-md-5">🇬🇧 البطولة (بالإنجليزية)</div>
+            <div class="col-md-2 text-center">إجراء</div>
+        </div>
         <div id="championships_repeater_container">
             <!-- Dynamic championship rows will be added here -->
         </div>
@@ -282,13 +287,13 @@
             let rowHtml = `
                 <div class="row align-items-center mb-1 championship-item-row">
                     <div class="col-md-5">
-                        <input type="text" name="championships_ar[]" class="form-control" placeholder="{{trans('admin.championships_ar')}}" value="${arVal}">
+                        <input type="text" name="championships_ar[]" class="form-control" placeholder="مثال: الدوري الإماراتي" value="${arVal}">
                     </div>
                     <div class="col-md-5">
-                        <input type="text" name="championships_en[]" class="form-control" placeholder="{{trans('admin.championships_en')}}" value="${enVal}">
+                        <input type="text" name="championships_en[]" class="form-control" placeholder="Ex: UAE League" value="${enVal}">
                     </div>
                     <div class="col-md-2 text-center">
-                        <button type="button" class="btn btn-icon btn-outline-danger btn-sm remove-championship-btn">
+                        <button type="button" class="btn btn-icon btn-outline-danger btn-sm remove-championship-btn" title="حذف">
                             <i data-feather="trash-2"></i>
                         </button>
                     </div>
