@@ -42,6 +42,19 @@ class SportGame extends Model
     public function getChampionshipsAttribute()
     {
         $lang = App::getLocale();
-        return $lang === 'en' ? $this->championships_en : $this->championships_ar;
+        $text = $lang === 'en' ? $this->championships_en : $this->championships_ar;
+        if (empty($text)) {
+            return [];
+        }
+        if (is_string($text) && (str_starts_with(trim($text), '[') || str_starts_with(trim($text), '{'))) {
+            $decoded = json_decode($text, true);
+            if (is_array($decoded)) {
+                return array_values($decoded);
+            }
+        }
+        $lines = preg_split('/\r\n|\r|\n/', $text);
+        return array_values(array_filter(array_map('trim', $lines), function ($item) {
+            return $item !== '';
+        }));
     }
 }

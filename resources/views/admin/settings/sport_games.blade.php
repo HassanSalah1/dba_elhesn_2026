@@ -71,17 +71,17 @@
     </div>
 
     <div class="mb-1">
-        <label class="form-label" for="championships_ar">{{trans('admin.championships_ar') ?? 'سجل البطولات (عربي)'}}</label>
+        <label class="form-label" for="championships_ar">{{trans('admin.championships_ar') ?? 'سجل البطولات (عربي) - بطولة في كل سطر'}}</label>
         <textarea name="championships_ar"
                   class="form-control dt-full-name" id="championships_ar"
-                  placeholder="{{trans('admin.championships_ar') ?? 'سجل البطولات (عربي)'}}"></textarea>
+                  placeholder="أدخل كل بطولة في سطر مستقل..."></textarea>
     </div>
 
     <div class="mb-1">
-        <label class="form-label" for="championships_en">{{trans('admin.championships_en') ?? 'سجل البطولات (إنجليزي)'}}</label>
+        <label class="form-label" for="championships_en">{{trans('admin.championships_en') ?? 'سجل البطولات (إنجليزي) - بطولة في كل سطر'}}</label>
         <textarea name="championships_en"
                   class="form-control dt-full-name" id="championships_en"
-                  placeholder="{{trans('admin.championships_en') ?? 'سجل البطولات (إنجليزي)'}}"></textarea>
+                  placeholder="Enter each championship on a new line..."></textarea>
     </div>
 
     <div class="mb-1">
