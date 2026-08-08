@@ -29,6 +29,26 @@ class SportGameRepository
     public static function addSportGame(array $data)
     {
         SportGame::where('order', '>=', $data['order'])->increment('order');
+        $championships_ar = null;
+        if (isset($data['championships_ar'])) {
+            if (is_array($data['championships_ar'])) {
+                $cleanAr = array_values(array_filter(array_map('trim', $data['championships_ar']), function($v) { return $v !== ''; }));
+                $championships_ar = !empty($cleanAr) ? implode("\n", $cleanAr) : null;
+            } else {
+                $championships_ar = $data['championships_ar'];
+            }
+        }
+
+        $championships_en = null;
+        if (isset($data['championships_en'])) {
+            if (is_array($data['championships_en'])) {
+                $cleanEn = array_values(array_filter(array_map('trim', $data['championships_en']), function($v) { return $v !== ''; }));
+                $championships_en = !empty($cleanEn) ? implode("\n", $cleanEn) : null;
+            } else {
+                $championships_en = $data['championships_en'];
+            }
+        }
+
         $teamData = [
             'title_ar' => $data['title_ar'],
             'title_en' => $data['title_en'],
@@ -36,8 +56,8 @@ class SportGameRepository
             'description_en' => $data['description_en'],
             'history_ar' => $data['history_ar'] ?? null,
             'history_en' => $data['history_en'] ?? null,
-            'championships_ar' => $data['championships_ar'] ?? null,
-            'championships_en' => $data['championships_en'] ?? null,
+            'championships_ar' => $championships_ar,
+            'championships_en' => $championships_en,
             'order' => $data['order'],
         ];
         $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
@@ -91,6 +111,26 @@ class SportGameRepository
             if ($data['order'] != $team->order) {
                 SportGame::where('order', '>=', $data['order'])->increment('order');
             }
+            $championships_ar = null;
+            if (isset($data['championships_ar'])) {
+                if (is_array($data['championships_ar'])) {
+                    $cleanAr = array_values(array_filter(array_map('trim', $data['championships_ar']), function($v) { return $v !== ''; }));
+                    $championships_ar = !empty($cleanAr) ? implode("\n", $cleanAr) : null;
+                } else {
+                    $championships_ar = $data['championships_ar'];
+                }
+            }
+
+            $championships_en = null;
+            if (isset($data['championships_en'])) {
+                if (is_array($data['championships_en'])) {
+                    $cleanEn = array_values(array_filter(array_map('trim', $data['championships_en']), function($v) { return $v !== ''; }));
+                    $championships_en = !empty($cleanEn) ? implode("\n", $cleanEn) : null;
+                } else {
+                    $championships_en = $data['championships_en'];
+                }
+            }
+
             $teamData = [
                 'title_ar' => $data['title_ar'],
                 'title_en' => $data['title_en'],
@@ -98,8 +138,8 @@ class SportGameRepository
                 'description_en' => $data['description_en'],
                 'history_ar' => $data['history_ar'] ?? null,
                 'history_en' => $data['history_en'] ?? null,
-                'championships_ar' => $data['championships_ar'] ?? null,
-                'championships_en' => $data['championships_en'] ?? null,
+                'championships_ar' => $championships_ar,
+                'championships_en' => $championships_en,
                 'order' => $data['order'],
             ];
             $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));

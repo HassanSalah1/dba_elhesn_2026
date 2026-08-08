@@ -57,31 +57,31 @@
     </div>
 
     <div class="mb-1">
-        <label class="form-label" for="history_ar">{{trans('admin.history_ar') ?? 'النبذة التاريخية (عربي)'}}</label>
+        <label class="form-label" for="history_ar">{{trans('admin.history_ar')}}</label>
         <textarea name="history_ar"
                   class="form-control dt-full-name" id="history_ar"
-                  placeholder="{{trans('admin.history_ar') ?? 'النبذة التاريخية (عربي)'}}"></textarea>
+                  placeholder="{{trans('admin.history_ar')}}"></textarea>
     </div>
 
     <div class="mb-1">
-        <label class="form-label" for="history_en">{{trans('admin.history_en') ?? 'النبذة التاريخية (إنجليزي)'}}</label>
+        <label class="form-label" for="history_en">{{trans('admin.history_en')}}</label>
         <textarea name="history_en"
                   class="form-control dt-full-name" id="history_en"
-                  placeholder="{{trans('admin.history_en') ?? 'النبذة التاريخية (إنجليزي)'}}"></textarea>
+                  placeholder="{{trans('admin.history_en')}}"></textarea>
     </div>
 
-    <div class="mb-1">
-        <label class="form-label" for="championships_ar">{{trans('admin.championships_ar') ?? 'سجل البطولات (عربي) - بطولة في كل سطر'}}</label>
-        <textarea name="championships_ar"
-                  class="form-control dt-full-name" id="championships_ar"
-                  placeholder="أدخل كل بطولة في سطر مستقل..."></textarea>
-    </div>
-
-    <div class="mb-1">
-        <label class="form-label" for="championships_en">{{trans('admin.championships_en') ?? 'سجل البطولات (إنجليزي) - بطولة في كل سطر'}}</label>
-        <textarea name="championships_en"
-                  class="form-control dt-full-name" id="championships_en"
-                  placeholder="Enter each championship on a new line..."></textarea>
+    <div class="mb-2 p-2 border rounded bg-light">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="form-label fw-bold mb-0 text-primary">
+                <i data-feather="award"></i> {{trans('admin.championships_ar')}} / {{trans('admin.championships_en')}}
+            </label>
+            <button type="button" class="btn btn-sm btn-primary" id="add_championship_btn">
+                <i data-feather="plus"></i> {{trans('admin.add')}}
+            </button>
+        </div>
+        <div id="championships_repeater_container">
+            <!-- Dynamic championship rows will be added here -->
+        </div>
     </div>
 
     <div class="mb-1">
@@ -216,8 +216,33 @@
                     $('#general-form textarea[name=description_en]').val(response.data.description_en);
                     $('#general-form textarea[name=history_ar]').val(response.data.history_ar);
                     $('#general-form textarea[name=history_en]').val(response.data.history_en);
-                    $('#general-form textarea[name=championships_ar]').val(response.data.championships_ar);
-                    $('#general-form textarea[name=championships_en]').val(response.data.championships_en);
+                    
+                    $('#championships_repeater_container').empty();
+                    let arList = [];
+                    let enList = [];
+                    if (response.data.championships_ar) {
+                        if (typeof response.data.championships_ar === 'string') {
+                            arList = response.data.championships_ar.split('\n').map(s => s.trim()).filter(Boolean);
+                        } else if (Array.isArray(response.data.championships_ar)) {
+                            arList = response.data.championships_ar;
+                        }
+                    }
+                    if (response.data.championships_en) {
+                        if (typeof response.data.championships_en === 'string') {
+                            enList = response.data.championships_en.split('\n').map(s => s.trim()).filter(Boolean);
+                        } else if (Array.isArray(response.data.championships_en)) {
+                            enList = response.data.championships_en;
+                        }
+                    }
+                    let maxLen = Math.max(arList.length, enList.length);
+                    if (maxLen > 0) {
+                        for (let i = 0; i < maxLen; i++) {
+                            addChampionshipRow(arList[i] || '', enList[i] || '');
+                        }
+                    } else {
+                        addChampionshipRow();
+                    }
+
                     initDropify(response.data.image ? response.data.image : null);
                     $('.general_modal').modal('toggle');
                     edit = true;
@@ -252,5 +277,40 @@
                 cancel: "{{trans('admin.cancel')}}"
             });
         }
+
+        function addChampionshipRow(arVal = '', enVal = '') {
+            let rowHtml = `
+                <div class="row align-items-center mb-1 championship-item-row">
+                    <div class="col-md-5">
+                        <input type="text" name="championships_ar[]" class="form-control" placeholder="{{trans('admin.championships_ar')}}" value="${arVal}">
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" name="championships_en[]" class="form-control" placeholder="{{trans('admin.championships_en')}}" value="${enVal}">
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <button type="button" class="btn btn-icon btn-outline-danger btn-sm remove-championship-btn">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            $('#championships_repeater_container').append(rowHtml);
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+        }
+
+        $(document).on('click', '#add_championship_btn', function () {
+            addChampionshipRow();
+        });
+
+        $(document).on('click', '.remove-championship-btn', function () {
+            $(this).closest('.championship-item-row').remove();
+        });
+
+        $(document).on('click', '#add_btn', function () {
+            $('#championships_repeater_container').empty();
+            addChampionshipRow();
+        });
     </script>
 @endsection
