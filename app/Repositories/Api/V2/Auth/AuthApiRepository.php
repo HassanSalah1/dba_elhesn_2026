@@ -79,7 +79,18 @@ class AuthApiRepository
     {
         $remember = (isset($data['remember']) && $data['remember']);
         $user = null;
-        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']], $remember)) {
+        
+        $email = $data['email'];
+        // Allow HR employees to login with username in the email field
+        $employee = \App\Models\HrEmployee::where('username', $email)->first();
+        if ($employee) {
+            $linkedUser = \App\Models\User::find($employee->user_id);
+            if ($linkedUser) {
+                $email = $linkedUser->email;
+            }
+        }
+
+        if (Auth::attempt(['email' => $email, 'password' => $data['password']], $remember)) {
             $user = auth()->user();
             if (isset($data['device_token'])) {
                 $device = Devices::where([
@@ -104,7 +115,7 @@ class AuthApiRepository
         }
  
  
-        if ($user && in_array( $user->role , [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL,UserRoles::Foot])) {
+        if ($user && in_array( $user->role , [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL,UserRoles::Foot, UserRoles::EMPLOYEE])) {
             if ($user && $user->isBlocked()) {
                 return Response()->json([
                     'message' => trans('api.block_status_error_message')

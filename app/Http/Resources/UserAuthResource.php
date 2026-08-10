@@ -15,7 +15,7 @@ class UserAuthResource extends JsonResource
     public function toArray($request)
     {
         $country = @$this->city->country;
-        return [
+        $data = [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
@@ -24,5 +24,14 @@ class UserAuthResource extends JsonResource
             'token' => $this->createToken('damain')->accessToken,
             'role' => $this->role,
         ];
+
+        if ($this->role === 'employee') {
+            $employee = \App\Models\HrEmployee::where('user_id', $this->id)->with('category')->first();
+            if ($employee) {
+                $data['employee'] = new \App\Http\Resources\V2\HrEmployeeResource($employee);
+            }
+        }
+
+        return $data;
     }
 }
