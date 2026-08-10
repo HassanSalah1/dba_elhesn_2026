@@ -1220,7 +1220,7 @@ class SqlServerApiRepository
             return $stats;
         }
 
-        $sql = "SELECT EmployeeRowID, CategoryID, NameAR, NameEN, JobTitle, Photo, Username, Password FROM dbo.MobileApp_HR_Employees";
+        $sql = "SELECT EmployeeRowID, CategoryID, NameAR, NameEN, JobTitle, Username, Password, Email FROM dbo.MobileApp_HR_Employees";
         $result = \sqlsrv_query($conn, $sql);
 
         if ($result === false) {
@@ -1240,7 +1240,7 @@ class SqlServerApiRepository
 
             // Update/Create local User
             $user = User::updateOrCreate(
-                ['email' => $username . '@dhclubapp.xyz'],
+                ['email' => !empty($object->Email) ? $object->Email : ($username . '@dhclubapp.xyz')],
                 [
                     'user_id'  => $object->EmployeeRowID,
                     'name'     => $object->NameAR ?: ($object->NameEN ?: $username),
@@ -1253,7 +1253,7 @@ class SqlServerApiRepository
 
             // Handle Photo if present
             $photoPath = null;
-            if (!empty($object->Photo)) {
+            if (isset($object->Photo) && !empty($object->Photo)) {
                 if (is_string($object->Photo) && (str_starts_with($object->Photo, 'http') || str_starts_with($object->Photo, '/uploads'))) {
                     $photoPath = $object->Photo;
                 } else {
