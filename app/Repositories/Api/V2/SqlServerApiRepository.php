@@ -1229,8 +1229,16 @@ class SqlServerApiRepository
         }
 
         while ($object = \sqlsrv_fetch_object($result)) {
-            $username = $object->Username ?? ('emp_' . $object->EmployeeRowID);
-            $password = $object->Password ?? '123456';
+            $baseUsername = !empty(trim($object->Username ?? '')) ? trim($object->Username) : ('emp_' . $object->EmployeeRowID);
+            $username = $baseUsername;
+
+            // Ensure username uniqueness
+            $existingEmp = HrEmployee::where('username', $username)->where('row_id', '!=', $object->EmployeeRowID)->first();
+            if ($existingEmp) {
+                $username = $username . '_' . $object->EmployeeRowID;
+            }
+
+            $password = !empty(trim($object->Password ?? '')) ? trim($object->Password) : '123456';
 
             // Find category
             $category = null;
@@ -1238,18 +1246,34 @@ class SqlServerApiRepository
                 $category = HrEmployeeCategory::where('row_id', $object->CategoryID)->first();
             }
 
+            // Ensure email uniqueness
+            $email = !empty(trim($object->Email ?? '')) ? trim($object->Email) : ($username . '@dhclubapp.xyz');
+            $existingEmail = User::where('email', $email)->where(function($q) use ($object) {
+                $q->where('role', '!=', 'employee')->orWhere('user_id', '!=', $object->EmployeeRowID);
+            })->first();
+            if ($existingEmail) {
+                $email = $username . '_' . $object->EmployeeRowID . '@dhclubapp.xyz';
+            }
+
             // Update/Create local User
-            $user = User::updateOrCreate(
-                ['email' => !empty($object->Email) ? $object->Email : ($username . '@dhclubapp.xyz')],
-                [
+            $user = User::where('role', 'employee')->where('user_id', $object->EmployeeRowID)->first();
+            if ($user) {
+                $user->update([
+                    'email'    => $email,
+                    'name'     => $object->NameAR ?: ($object->NameEN ?: $username),
+                    'password' => \Illuminate\Support\Facades\Hash::make($password),
+                ]);
+            } else {
+                $user = User::create([
+                    'email'    => $email,
                     'user_id'  => $object->EmployeeRowID,
                     'name'     => $object->NameAR ?: ($object->NameEN ?: $username),
                     'password' => \Illuminate\Support\Facades\Hash::make($password),
                     'role'     => 'employee',
                     'status'   => Status::ACTIVE,
                     'lang'     => 'ar',
-                ]
-            );
+                ]);
+            }
 
             // Handle Photo if present
             $photoPath = null;
