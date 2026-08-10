@@ -86,13 +86,19 @@ class AuthApiRepository
         if (Auth::attempt(['email' => $email, 'password' => $data['password']], $remember)) {
             $user = auth()->user();
         } else {
-            // 2. If exact match fails, check if it's an HR employee logging in with username
-            $employee = \App\Models\HrEmployee::where('username', $email)->first();
-            if ($employee) {
-                $linkedUser = \App\Models\User::find($employee->user_id);
-                if ($linkedUser) {
-                    if (Auth::attempt(['email' => $linkedUser->email, 'password' => $data['password']], $remember)) {
-                        $user = auth()->user();
+            // 2. Try with @dhclubapp.xyz appended (in case they entered just username from mobile)
+            $emailWithDomain = str_contains($email, '@') ? $email : $email . '@dhclubapp.xyz';
+            if ($email !== $emailWithDomain && Auth::attempt(['email' => $emailWithDomain, 'password' => $data['password']], $remember)) {
+                $user = auth()->user();
+            } else {
+                // 3. If exact match fails, check if it's an HR employee logging in with username
+                $employee = \App\Models\HrEmployee::where('username', $email)->first();
+                if ($employee) {
+                    $linkedUser = \App\Models\User::find($employee->user_id);
+                    if ($linkedUser) {
+                        if (Auth::attempt(['email' => $linkedUser->email, 'password' => $data['password']], $remember)) {
+                            $user = auth()->user();
+                        }
                     }
                 }
             }
