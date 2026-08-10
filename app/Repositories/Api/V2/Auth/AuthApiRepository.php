@@ -81,17 +81,24 @@ class AuthApiRepository
         $user = null;
         
         $email = $data['email'];
-        // Allow HR employees to login with username in the email field
-        $employee = \App\Models\HrEmployee::where('username', $email)->first();
-        if ($employee) {
-            $linkedUser = \App\Models\User::find($employee->user_id);
-            if ($linkedUser) {
-                $email = $linkedUser->email;
+        
+        // 1. First attempt exact match (for existing Coaches/Officials)
+        if (Auth::attempt(['email' => $email, 'password' => $data['password']], $remember)) {
+            $user = auth()->user();
+        } else {
+            // 2. If exact match fails, check if it's an HR employee logging in with username
+            $employee = \App\Models\HrEmployee::where('username', $email)->first();
+            if ($employee) {
+                $linkedUser = \App\Models\User::find($employee->user_id);
+                if ($linkedUser) {
+                    if (Auth::attempt(['email' => $linkedUser->email, 'password' => $data['password']], $remember)) {
+                        $user = auth()->user();
+                    }
+                }
             }
         }
 
-        if (Auth::attempt(['email' => $email, 'password' => $data['password']], $remember)) {
-            $user = auth()->user();
+        if ($user) {
             if (isset($data['device_token'])) {
                 $device = Devices::where([
                     'user_id' => $user->id,
