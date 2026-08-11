@@ -435,179 +435,254 @@ class SqlServerApiRepository
  
     /**
      * Smart Player Image Sync — uses MD5 hash to detect changed images.
-     * Only re-downloads images that actually changed in SQL Server.
-     * Processes ALL players (not just NULL images).
+     * Step 1: Fetch ALL hashes from SQL Server in ONE query (fast, tiny data).
+     * Step 2: Compare locally with MySQL hashes.
+     * Step 3: Only download binary data for changed/new images.
      */
-    public static function syncPlayerImagesWithHash(callable $onProgress = null): array
+    public static function syncPlayerImagesWithHash(?callable $onProgress = null): array
     {
-        $conn = SqlServerApiRepository::startConnection();
-        $stats = ['processed' => 0, 'updated' => 0, 'unchanged' => 0, 'new' => 0, 'no_photo' => 0];
+        $stats = ['processed' => 0, 'updated' => 0, 'unchanged' => 0, 'new' => 0, 'no_photo' => 0, 'failed' => 0];
 
+        // ── Step 1: Fetch ALL hashes in one query ──
+        $conn = SqlServerApiRepository::startConnection();
         if (!$conn) {
             return $stats;
         }
 
-        TeamPlayer::orderBy('id')
-            ->chunk(50, function ($players) use (&$conn, &$stats, $onProgress) {
-                foreach ($players as $player) {
-                    $stats['processed']++;
+        $sql = "SELECT PlayerRowID, CONVERT(VARCHAR(32), HashBytes('MD5', PlayerPhoto), 2) AS PhotoHash
+                FROM dbo.MobileApp_PlayersPhotos
+                WHERE PlayerPhoto IS NOT NULL";
+        $result = \sqlsrv_query($conn, $sql);
 
-                    // Check connection
-                    if ($conn === false) {
-                        $conn = SqlServerApiRepository::startConnection();
-                    }
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
 
-                    // Get photo hash from SQL Server (much faster than downloading the entire image)
-                    $sql = "SELECT TOP 1 CONVERT(VARCHAR(32), HashBytes('MD5', PlayerPhoto), 2) AS PhotoHash FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID={$player->player_id} AND PlayerPhoto IS NOT NULL";
-                    $result = $conn ? \sqlsrv_query($conn, $sql) : false;
+        // Build a hashmap: player_id => hash (lowercase)
+        $remoteHashes = [];
+        while ($row = sqlsrv_fetch_object($result)) {
+            $remoteHashes[$row->PlayerRowID] = strtolower($row->PhotoHash);
+        }
+        sqlsrv_close($conn); // Done with this connection
+        
+        if ($onProgress) $onProgress($stats); // Signal: hashes loaded
 
-                    // If query fails, maybe connection dropped. Try reconnecting once.
-                    if ($result === false) {
-                        $conn = SqlServerApiRepository::startConnection();
-                        $result = $conn ? \sqlsrv_query($conn, $sql) : false;
-                    }
+        // ── Step 2: Compare with local data ──
+        $players = TeamPlayer::all();
+        $toDownload = []; // player_id => ['player' => model, 'hash' => new_hash]
 
-                    if ($result === false) {
-                        if ($onProgress) $onProgress($stats); // Make sure counter updates
-                        continue;
-                    }
+        foreach ($players as $player) {
+            $stats['processed']++;
 
-                    $object = sqlsrv_fetch_object($result);
-                    if (!$object || !$object->PhotoHash) {
-                        $stats['no_photo']++;
+            if (!isset($remoteHashes[$player->player_id])) {
+                $stats['no_photo']++;
+                continue;
+            }
+
+            $remoteHash = $remoteHashes[$player->player_id];
+
+            // Already has the same image — skip
+            if ($player->image && $player->image_hash === $remoteHash) {
+                $stats['unchanged']++;
+                if ($onProgress) $onProgress($stats);
+                continue;
+            }
+
+            // Needs download (new or changed)
+            $toDownload[] = [
+                'player'   => $player,
+                'hash'     => $remoteHash,
+                'is_new'   => empty($player->image),
+            ];
+        }
+
+        if ($onProgress) $onProgress($stats); // Signal: comparison done
+
+        // ── Step 3: Download only changed images (one by one with fresh connections) ──
+        $chunks = array_chunk($toDownload, 25); // Process 25 at a time per connection
+        foreach ($chunks as $chunk) {
+            $conn = SqlServerApiRepository::startConnection();
+            if (!$conn) {
+                $stats['failed'] += count($chunk);
+                continue;
+            }
+
+            foreach ($chunk as $item) {
+                $player = $item['player'];
+                $newHash = $item['hash'];
+
+                $dataSql = "SELECT TOP 1 PlayerPhoto FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID={$player->player_id}";
+                $dataResult = \sqlsrv_query($conn, $dataSql);
+
+                // If query fails, try reconnecting
+                if ($dataResult === false) {
+                    $conn = SqlServerApiRepository::startConnection();
+                    if (!$conn) {
+                        $stats['failed']++;
                         if ($onProgress) $onProgress($stats);
                         continue;
                     }
-
-                    // SQL Server returns uppercase, PHP md5 is lowercase
-                    $newHash = strtolower($object->PhotoHash);
-
-                    // Compare hash — skip if unchanged
-                    if ($player->image && $player->image_hash === $newHash) {
-                        $stats['unchanged']++;
-                        if ($onProgress) $onProgress($stats);
-                        continue;
-                    }
-
-                    // Image is new or changed — fetch the actual binary data now
-                    $dataSql = "SELECT TOP 1 PlayerPhoto FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID={$player->player_id}";
                     $dataResult = \sqlsrv_query($conn, $dataSql);
-                    $dataObject = sqlsrv_fetch_object($dataResult);
-                    
-                    if (!$dataObject || !$dataObject->PlayerPhoto) {
-                        continue; // Should not happen, but safety first
-                    }
-
-                    $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
-                    $image_path = 'uploads/players/';
-                    $base64 = base64_encode($dataObject->PlayerPhoto);
-                    $imagePath = UtilsRepository::createImageBase64($base64, $image_path, $file_id, 282, 561);
-
-                    if ($imagePath) {
-                        // Delete old image file if it exists and changed
-                        if ($player->image && file_exists(public_path($player->image))) {
-                            @unlink(public_path($player->image));
-                        }
-
-                        TeamPlayer::where(['player_id' => $player->player_id])->update([
-                            'image'      => $imagePath,
-                            'image_hash' => $newHash,
-                        ]);
-
-                        if ($player->image) {
-                            $stats['updated']++;
-                        } else {
-                            $stats['new']++;
-                        }
-                    }
-
-                    if ($onProgress) $onProgress($stats);
                 }
-            });
 
-        sqlsrv_close($conn);
+                if ($dataResult === false) {
+                    $stats['failed']++;
+                    if ($onProgress) $onProgress($stats);
+                    continue;
+                }
+
+                $dataObject = sqlsrv_fetch_object($dataResult);
+                if (!$dataObject || !$dataObject->PlayerPhoto) {
+                    $stats['failed']++;
+                    if ($onProgress) $onProgress($stats);
+                    continue;
+                }
+
+                $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+                $image_path = 'uploads/players/';
+                $base64 = base64_encode($dataObject->PlayerPhoto);
+                $imagePath = UtilsRepository::createImageBase64($base64, $image_path, $file_id, 282, 561);
+
+                if ($imagePath) {
+                    // Delete old image file if exists
+                    if ($player->image && file_exists(public_path($player->image))) {
+                        @unlink(public_path($player->image));
+                    }
+
+                    TeamPlayer::where(['player_id' => $player->player_id])->update([
+                        'image'      => $imagePath,
+                        'image_hash' => $newHash,
+                    ]);
+
+                    if ($item['is_new']) {
+                        $stats['new']++;
+                    } else {
+                        $stats['updated']++;
+                    }
+                } else {
+                    $stats['failed']++;
+                }
+
+                if ($onProgress) $onProgress($stats);
+            }
+
+            sqlsrv_close($conn);
+        }
+
         return $stats;
     }
 
     /**
      * Smart Team Image Sync — uses MD5 hash to detect changed images.
+     * Same batch approach as player images.
      */
     public static function syncTeamImagesWithHash(): array
     {
-        $conn = SqlServerApiRepository::startConnection();
-        $stats = ['processed' => 0, 'updated' => 0, 'unchanged' => 0, 'new' => 0, 'no_photo' => 0];
+        $stats = ['processed' => 0, 'updated' => 0, 'unchanged' => 0, 'new' => 0, 'no_photo' => 0, 'failed' => 0];
 
+        // ── Step 1: Fetch ALL team hashes in one query ──
+        $conn = SqlServerApiRepository::startConnection();
         if (!$conn) {
             return $stats;
         }
 
+        $sql = "SELECT TeamsRowID, CONVERT(VARCHAR(32), HashBytes('MD5', Photo), 2) AS PhotoHash
+                FROM dbo.MobileApp_TeamsPhotos
+                WHERE Photo IS NOT NULL";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        $remoteHashes = [];
+        while ($row = sqlsrv_fetch_object($result)) {
+            $remoteHashes[$row->TeamsRowID] = strtolower($row->PhotoHash);
+        }
+        sqlsrv_close($conn);
+
+        // ── Step 2: Compare with local data ──
         $teams = SportTeam::all();
+        $toDownload = [];
+
         foreach ($teams as $team) {
             $stats['processed']++;
 
-            if ($conn === false) {
-                $conn = SqlServerApiRepository::startConnection();
-            }
-
-            // Get photo hash from SQL Server
-            $sql = "SELECT TOP 1 CONVERT(VARCHAR(32), HashBytes('MD5', Photo), 2) AS PhotoHash FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID={$team->team_id} AND Photo IS NOT NULL";
-            $result = $conn ? \sqlsrv_query($conn, $sql) : false;
-
-            if ($result === false) {
-                $conn = SqlServerApiRepository::startConnection();
-                $result = $conn ? \sqlsrv_query($conn, $sql) : false;
-            }
-
-            if ($result === false) {
-                continue;
-            }
-
-            $object = sqlsrv_fetch_object($result);
-            if (!$object || !$object->PhotoHash) {
+            if (!isset($remoteHashes[$team->team_id])) {
                 $stats['no_photo']++;
                 continue;
             }
 
-            $newHash = strtolower($object->PhotoHash);
+            $remoteHash = $remoteHashes[$team->team_id];
 
-            // Compare hash — skip if unchanged
-            if ($team->image && $team->image_hash === $newHash) {
+            if ($team->image && $team->image_hash === $remoteHash) {
                 $stats['unchanged']++;
                 continue;
             }
 
-            // Image is new or changed — fetch the actual binary data now
-            $dataSql = "SELECT TOP 1 Photo FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID={$team->team_id}";
-            $dataResult = \sqlsrv_query($conn, $dataSql);
-            $dataObject = sqlsrv_fetch_object($dataResult);
+            $toDownload[] = [
+                'team'   => $team,
+                'hash'   => $remoteHash,
+                'is_new' => empty($team->image),
+            ];
+        }
 
-            if (!$dataObject || !$dataObject->Photo) {
+        // ── Step 3: Download only changed images ──
+        $chunks = array_chunk($toDownload, 25);
+        foreach ($chunks as $chunk) {
+            $conn = SqlServerApiRepository::startConnection();
+            if (!$conn) {
+                $stats['failed'] += count($chunk);
                 continue;
             }
 
-            $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
-            $image_path = 'uploads/sport_teams/';
-            $imagePath = UtilsRepository::createImageBase64(base64_encode($dataObject->Photo), $image_path, $file_id, 282, 561);
+            foreach ($chunk as $item) {
+                $team = $item['team'];
+                $newHash = $item['hash'];
 
-            if ($imagePath) {
-                if ($team->image && file_exists(public_path($team->image))) {
-                    @unlink(public_path($team->image));
+                $dataSql = "SELECT TOP 1 Photo FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID={$team->team_id}";
+                $dataResult = \sqlsrv_query($conn, $dataSql);
+
+                if ($dataResult === false) {
+                    $conn = SqlServerApiRepository::startConnection();
+                    if (!$conn) { $stats['failed']++; continue; }
+                    $dataResult = \sqlsrv_query($conn, $dataSql);
                 }
 
-                $team->update([
-                    'image'      => $imagePath,
-                    'image_hash' => $newHash,
-                ]);
+                if ($dataResult === false) { $stats['failed']++; continue; }
 
-                if ($team->image) {
-                    $stats['updated']++;
+                $dataObject = sqlsrv_fetch_object($dataResult);
+                if (!$dataObject || !$dataObject->Photo) { $stats['failed']++; continue; }
+
+                $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+                $image_path = 'uploads/sport_teams/';
+                $imagePath = UtilsRepository::createImageBase64(base64_encode($dataObject->Photo), $image_path, $file_id, 282, 561);
+
+                if ($imagePath) {
+                    if ($team->image && file_exists(public_path($team->image))) {
+                        @unlink(public_path($team->image));
+                    }
+
+                    $team->update([
+                        'image'      => $imagePath,
+                        'image_hash' => $newHash,
+                    ]);
+
+                    if ($item['is_new']) {
+                        $stats['new']++;
+                    } else {
+                        $stats['updated']++;
+                    }
                 } else {
-                    $stats['new']++;
+                    $stats['failed']++;
                 }
             }
+
+            sqlsrv_close($conn);
         }
 
-        sqlsrv_close($conn);
         return $stats;
     }
 
