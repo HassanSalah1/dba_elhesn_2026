@@ -452,8 +452,8 @@ class SqlServerApiRepository
                 foreach ($players as $player) {
                     $stats['processed']++;
 
-                    // Get photo binary + compute hash from SQL Server
-                    $sql = "SELECT TOP 1 PlayerPhoto FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID={$player->player_id} AND PlayerPhoto IS NOT NULL";
+                    // Get photo hash from SQL Server (much faster than downloading the entire image)
+                    $sql = "SELECT TOP 1 CONVERT(VARCHAR(32), HashBytes('MD5', PlayerPhoto), 2) AS PhotoHash FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID={$player->player_id} AND PlayerPhoto IS NOT NULL";
                     $result = \sqlsrv_query($conn, $sql);
 
                     if ($result === false) {
@@ -461,13 +461,14 @@ class SqlServerApiRepository
                     }
 
                     $object = sqlsrv_fetch_object($result);
-                    if (!$object || !$object->PlayerPhoto) {
+                    if (!$object || !$object->PhotoHash) {
                         $stats['no_photo']++;
                         if ($onProgress) $onProgress($stats);
                         continue;
                     }
 
-                    $newHash = md5($object->PlayerPhoto);
+                    // SQL Server returns uppercase, PHP md5 is lowercase
+                    $newHash = strtolower($object->PhotoHash);
 
                     // Compare hash — skip if unchanged
                     if ($player->image && $player->image_hash === $newHash) {
@@ -476,10 +477,18 @@ class SqlServerApiRepository
                         continue;
                     }
 
-                    // Image is new or changed — save it
+                    // Image is new or changed — fetch the actual binary data now
+                    $dataSql = "SELECT TOP 1 PlayerPhoto FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID={$player->player_id}";
+                    $dataResult = \sqlsrv_query($conn, $dataSql);
+                    $dataObject = sqlsrv_fetch_object($dataResult);
+                    
+                    if (!$dataObject || !$dataObject->PlayerPhoto) {
+                        continue; // Should not happen, but safety first
+                    }
+
                     $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
                     $image_path = 'uploads/players/';
-                    $base64 = base64_encode($object->PlayerPhoto);
+                    $base64 = base64_encode($dataObject->PlayerPhoto);
                     $imagePath = UtilsRepository::createImageBase64($base64, $image_path, $file_id, 282, 561);
 
                     if ($imagePath) {
@@ -524,7 +533,8 @@ class SqlServerApiRepository
         foreach ($teams as $team) {
             $stats['processed']++;
 
-            $sql = "SELECT TOP 1 Photo FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID={$team->team_id}";
+            // Get photo hash from SQL Server
+            $sql = "SELECT TOP 1 CONVERT(VARCHAR(32), HashBytes('MD5', Photo), 2) AS PhotoHash FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID={$team->team_id} AND Photo IS NOT NULL";
             $result = \sqlsrv_query($conn, $sql);
 
             if ($result === false) {
@@ -532,12 +542,12 @@ class SqlServerApiRepository
             }
 
             $object = sqlsrv_fetch_object($result);
-            if (!$object || !$object->Photo) {
+            if (!$object || !$object->PhotoHash) {
                 $stats['no_photo']++;
                 continue;
             }
 
-            $newHash = md5($object->Photo);
+            $newHash = strtolower($object->PhotoHash);
 
             // Compare hash — skip if unchanged
             if ($team->image && $team->image_hash === $newHash) {
@@ -545,10 +555,18 @@ class SqlServerApiRepository
                 continue;
             }
 
-            // Image is new or changed — save it
+            // Image is new or changed — fetch the actual binary data now
+            $dataSql = "SELECT TOP 1 Photo FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID={$team->team_id}";
+            $dataResult = \sqlsrv_query($conn, $dataSql);
+            $dataObject = sqlsrv_fetch_object($dataResult);
+
+            if (!$dataObject || !$dataObject->Photo) {
+                continue;
+            }
+
             $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
             $image_path = 'uploads/sport_teams/';
-            $imagePath = UtilsRepository::createImageBase64(base64_encode($object->Photo), $image_path, $file_id, 282, 561);
+            $imagePath = UtilsRepository::createImageBase64(base64_encode($dataObject->Photo), $image_path, $file_id, 282, 561);
 
             if ($imagePath) {
                 if ($team->image && file_exists(public_path($team->image))) {
