@@ -433,6 +433,145 @@ class SqlServerApiRepository
         return $stats;
     }
  
+    /**
+     * Smart Player Image Sync — uses MD5 hash to detect changed images.
+     * Only re-downloads images that actually changed in SQL Server.
+     * Processes ALL players (not just NULL images).
+     */
+    public static function syncPlayerImagesWithHash(callable $onProgress = null): array
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $stats = ['processed' => 0, 'updated' => 0, 'unchanged' => 0, 'new' => 0, 'no_photo' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        TeamPlayer::orderBy('id')
+            ->chunk(50, function ($players) use ($conn, &$stats, $onProgress) {
+                foreach ($players as $player) {
+                    $stats['processed']++;
+
+                    // Get photo binary + compute hash from SQL Server
+                    $sql = "SELECT TOP 1 PlayerPhoto FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID={$player->player_id} AND PlayerPhoto IS NOT NULL";
+                    $result = \sqlsrv_query($conn, $sql);
+
+                    if ($result === false) {
+                        continue;
+                    }
+
+                    $object = sqlsrv_fetch_object($result);
+                    if (!$object || !$object->PlayerPhoto) {
+                        $stats['no_photo']++;
+                        if ($onProgress) $onProgress($stats);
+                        continue;
+                    }
+
+                    $newHash = md5($object->PlayerPhoto);
+
+                    // Compare hash — skip if unchanged
+                    if ($player->image && $player->image_hash === $newHash) {
+                        $stats['unchanged']++;
+                        if ($onProgress) $onProgress($stats);
+                        continue;
+                    }
+
+                    // Image is new or changed — save it
+                    $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+                    $image_path = 'uploads/players/';
+                    $base64 = base64_encode($object->PlayerPhoto);
+                    $imagePath = UtilsRepository::createImageBase64($base64, $image_path, $file_id, 282, 561);
+
+                    if ($imagePath) {
+                        // Delete old image file if it exists and changed
+                        if ($player->image && file_exists(public_path($player->image))) {
+                            @unlink(public_path($player->image));
+                        }
+
+                        TeamPlayer::where(['player_id' => $player->player_id])->update([
+                            'image'      => $imagePath,
+                            'image_hash' => $newHash,
+                        ]);
+
+                        if ($player->image) {
+                            $stats['updated']++;
+                        } else {
+                            $stats['new']++;
+                        }
+                    }
+
+                    if ($onProgress) $onProgress($stats);
+                }
+            });
+
+        sqlsrv_close($conn);
+        return $stats;
+    }
+
+    /**
+     * Smart Team Image Sync — uses MD5 hash to detect changed images.
+     */
+    public static function syncTeamImagesWithHash(): array
+    {
+        $conn = SqlServerApiRepository::startConnection();
+        $stats = ['processed' => 0, 'updated' => 0, 'unchanged' => 0, 'new' => 0, 'no_photo' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $teams = SportTeam::all();
+        foreach ($teams as $team) {
+            $stats['processed']++;
+
+            $sql = "SELECT TOP 1 Photo FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID={$team->team_id}";
+            $result = \sqlsrv_query($conn, $sql);
+
+            if ($result === false) {
+                continue;
+            }
+
+            $object = sqlsrv_fetch_object($result);
+            if (!$object || !$object->Photo) {
+                $stats['no_photo']++;
+                continue;
+            }
+
+            $newHash = md5($object->Photo);
+
+            // Compare hash — skip if unchanged
+            if ($team->image && $team->image_hash === $newHash) {
+                $stats['unchanged']++;
+                continue;
+            }
+
+            // Image is new or changed — save it
+            $file_id = 'IMG_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
+            $image_path = 'uploads/sport_teams/';
+            $imagePath = UtilsRepository::createImageBase64(base64_encode($object->Photo), $image_path, $file_id, 282, 561);
+
+            if ($imagePath) {
+                if ($team->image && file_exists(public_path($team->image))) {
+                    @unlink(public_path($team->image));
+                }
+
+                $team->update([
+                    'image'      => $imagePath,
+                    'image_hash' => $newHash,
+                ]);
+
+                if ($team->image) {
+                    $stats['updated']++;
+                } else {
+                    $stats['new']++;
+                }
+            }
+        }
+
+        sqlsrv_close($conn);
+        return $stats;
+    }
+
     public static function getTeamImages()
     {
         $conn = SqlServerApiRepository::startConnection();

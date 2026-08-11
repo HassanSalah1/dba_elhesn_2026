@@ -8,11 +8,11 @@ use Illuminate\Console\Command;
 
 class SyncMysqlData extends Command
 {
-    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, clinic_time_slots, clinic_bookings, hr_categories, hr_employees, hr_attendance, hr_leave_types, hr_leave_requests, hr_documents, all)} {--force : Skip confirmation prompt (for cron/scheduler)}';
+    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, clinic_time_slots, clinic_bookings, hr_categories, hr_employees, hr_attendance, hr_leave_types, hr_leave_requests, hr_documents, player_images, team_images, all)} {--force : Skip confirmation prompt (for cron/scheduler)}';
 
     protected $description = 'Sync MySQL data with SQL Server: upsert existing records, delete orphaned ones';
 
-    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'matches', 'seasons', 'attend_reasons', 'clubs', 'competitions', 'standings', 'clinic_time_slots', 'clinic_bookings', 'hr_categories', 'hr_employees', 'hr_attendance', 'hr_leave_types', 'hr_leave_requests', 'hr_documents', 'all'];
+    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'matches', 'seasons', 'attend_reasons', 'clubs', 'competitions', 'standings', 'clinic_time_slots', 'clinic_bookings', 'hr_categories', 'hr_employees', 'hr_attendance', 'hr_leave_types', 'hr_leave_requests', 'hr_documents', 'player_images', 'team_images', 'all'];
 
     public function __construct()
     {
@@ -153,6 +153,22 @@ class SyncMysqlData extends Command
             $this->line('Pushing <info>hr_documents</info> to SQL Server...');
             $stats  = V2SqlServerApiRepository::pushHrDocumentsToSqlServer();
             $rows[] = ['hr_documents (push)', $stats['pushed'], $stats['failed']];
+        }
+
+        // Image Sync with Hash (smart change detection)
+        if (in_array($table, ['player_images', 'all'])) {
+            $this->line('Syncing <info>player_images</info> (hash-based change detection)...');
+            $stats  = V2SqlServerApiRepository::syncPlayerImagesWithHash(function($s) {
+                $this->output->write("\r  Processed: {$s['processed']} | New: {$s['new']} | Updated: {$s['updated']} | Unchanged: {$s['unchanged']}");
+            });
+            $this->newLine();
+            $rows[] = ['player_images', $stats['new'] + $stats['updated'], $stats['unchanged']];
+        }
+
+        if (in_array($table, ['team_images', 'all'])) {
+            $this->line('Syncing <info>team_images</info> (hash-based change detection)...');
+            $stats  = V2SqlServerApiRepository::syncTeamImagesWithHash();
+            $rows[] = ['team_images', $stats['new'] + $stats['updated'], $stats['unchanged']];
         }
 
         $this->newLine();

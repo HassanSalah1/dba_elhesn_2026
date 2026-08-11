@@ -11,7 +11,7 @@ class TeamPlayer extends Model
     use HasFactory;
 
     protected $table = 'team_players';
-    protected $fillable = ['team_id', 'player_id', 'number', 'name_en', 'name_ar', 'image',
+    protected $fillable = ['team_id', 'player_id', 'number', 'name_en', 'name_ar', 'image', 'image_hash',
         'birth_date', 'nationality_ar', 'nationality_en', 'height', 'weight',
         'position_ar', 'position_en', 'goals', 'wins', 'losses',
         'matches_played', 'minutes_played', 'yellow_cards', 'red_cards'];
