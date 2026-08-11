@@ -448,15 +448,27 @@ class SqlServerApiRepository
         }
 
         TeamPlayer::orderBy('id')
-            ->chunk(50, function ($players) use ($conn, &$stats, $onProgress) {
+            ->chunk(50, function ($players) use (&$conn, &$stats, $onProgress) {
                 foreach ($players as $player) {
                     $stats['processed']++;
 
+                    // Check connection
+                    if ($conn === false) {
+                        $conn = SqlServerApiRepository::startConnection();
+                    }
+
                     // Get photo hash from SQL Server (much faster than downloading the entire image)
                     $sql = "SELECT TOP 1 CONVERT(VARCHAR(32), HashBytes('MD5', PlayerPhoto), 2) AS PhotoHash FROM dbo.MobileApp_PlayersPhotos WHERE PlayerRowID={$player->player_id} AND PlayerPhoto IS NOT NULL";
-                    $result = \sqlsrv_query($conn, $sql);
+                    $result = $conn ? \sqlsrv_query($conn, $sql) : false;
+
+                    // If query fails, maybe connection dropped. Try reconnecting once.
+                    if ($result === false) {
+                        $conn = SqlServerApiRepository::startConnection();
+                        $result = $conn ? \sqlsrv_query($conn, $sql) : false;
+                    }
 
                     if ($result === false) {
+                        if ($onProgress) $onProgress($stats); // Make sure counter updates
                         continue;
                     }
 
@@ -533,9 +545,18 @@ class SqlServerApiRepository
         foreach ($teams as $team) {
             $stats['processed']++;
 
+            if ($conn === false) {
+                $conn = SqlServerApiRepository::startConnection();
+            }
+
             // Get photo hash from SQL Server
             $sql = "SELECT TOP 1 CONVERT(VARCHAR(32), HashBytes('MD5', Photo), 2) AS PhotoHash FROM dbo.MobileApp_TeamsPhotos WHERE TeamsRowID={$team->team_id} AND Photo IS NOT NULL";
-            $result = \sqlsrv_query($conn, $sql);
+            $result = $conn ? \sqlsrv_query($conn, $sql) : false;
+
+            if ($result === false) {
+                $conn = SqlServerApiRepository::startConnection();
+                $result = $conn ? \sqlsrv_query($conn, $sql) : false;
+            }
 
             if ($result === false) {
                 continue;
