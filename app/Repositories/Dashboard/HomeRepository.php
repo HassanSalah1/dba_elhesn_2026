@@ -118,112 +118,30 @@ class HomeRepository
 
     public static function saveSetting($data)
     {
-        // facebook
-        $facebook = Setting::where(['key' => Key::FACEBOOK])->first();
-        if ($facebook) {
-            $facebook->update([
-                'value' => (isset($data[Key::FACEBOOK])) ? $data[Key::FACEBOOK] : null
-            ]);
-        } else {
-            Setting::create([
-                'key' => Key::FACEBOOK,
-                'value' => (isset($data[Key::FACEBOOK])) ? $data[Key::FACEBOOK] : null
-            ]);
+        $keys = [
+            Key::FACEBOOK,
+            Key::TWITTER,
+            Key::YOUTUBE,
+            Key::INSTAGRAM,
+            Key::EMAIL,
+            Key::PHONE,
+            Key::LATITUDE,
+            Key::LONGITUDE,
+        ];
+
+        foreach ($keys as $key) {
+            $value = isset($data[$key]) ? $data[$key] : null;
+            if (Setting::where('key', $key)->exists()) {
+                Setting::where('key', $key)->update(['value' => $value]);
+            } else {
+                Setting::create([
+                    'key' => $key,
+                    'value' => $value
+                ]);
+            }
         }
 
-
-        // twitter
-        $twitter = Setting::where(['key' => Key::TWITTER])->first();
-        if ($twitter) {
-            $twitter->update([
-                'value' => (isset($data[Key::TWITTER])) ? $data[Key::TWITTER] : null
-            ]);
-        } else {
-            Setting::create([
-                'key' => Key::TWITTER,
-                'value' => (isset($data[Key::TWITTER])) ? $data[Key::TWITTER] : null
-            ]);
-        }
-
-        // youtube
-        $youtube = Setting::where(['key' => Key::YOUTUBE])->first();
-        if ($youtube) {
-            $youtube->update([
-                'value' => (isset($data[Key::YOUTUBE])) ? $data[Key::YOUTUBE] : null
-            ]);
-        } else {
-            Setting::create([
-                'key' => Key::YOUTUBE,
-                'value' => (isset($data[Key::YOUTUBE])) ? $data[Key::YOUTUBE] : null
-            ]);
-        }
-
-        // instagram
-        $instagram = Setting::where(['key' => Key::INSTAGRAM])->first();
-        if ($instagram) {
-            $instagram->update([
-                'value' => (isset($data[Key::INSTAGRAM])) ? $data[Key::INSTAGRAM] : null
-            ]);
-        } else {
-            Setting::create([
-                'key' => Key::INSTAGRAM,
-                'value' => (isset($data[Key::INSTAGRAM])) ? $data[Key::INSTAGRAM] : null
-            ]);
-        }
-
-        // email
-        $email = Setting::where(['key' => Key::EMAIL])->first();
-        if ($email) {
-            $email->update([
-                'value' => (isset($data[Key::EMAIL])) ? $data[Key::EMAIL] : null
-            ]);
-        } else {
-            Setting::create([
-                'key' => Key::EMAIL,
-                'value' => (isset($data[Key::EMAIL])) ? $data[Key::EMAIL] : null
-            ]);
-        }
-
-        // phone
-        $phone = Setting::where(['key' => Key::PHONE])->first();
-        if ($phone) {
-            $phone->update([
-                'value' => (isset($data[Key::PHONE])) ? $data[Key::PHONE] : null
-            ]);
-        } else {
-            Setting::create([
-                'key' => Key::PHONE,
-                'value' => (isset($data[Key::PHONE])) ? $data[Key::PHONE] : null
-            ]);
-        }
-
-        // latitude
-        $latitude = Setting::where(['key' => Key::LATITUDE])->first();
-        if ($latitude) {
-            $latitude->update([
-                'value' => (isset($data[Key::LATITUDE])) ? $data[Key::LATITUDE] : null
-            ]);
-        } else {
-            Setting::create([
-                'key' => Key::LATITUDE,
-                'value' => (isset($data[Key::LATITUDE])) ? $data[Key::LATITUDE] : null
-            ]);
-        }
-
-        // longitude
-        $longitude = Setting::where(['key' => Key::LONGITUDE])->first();
-        if ($longitude) {
-            $longitude->update([
-                'value' => (isset($data[Key::LONGITUDE])) ? $data[Key::LONGITUDE] : null
-            ]);
-        } else {
-            Setting::create([
-                'key' => Key::LONGITUDE,
-                'value' => (isset($data[Key::LONGITUDE])) ? $data[Key::LONGITUDE] : null
-            ]);
-        }
-
-        if ($data['request']->has(Key::CLUB_STRUCTURE)) {
+        if (isset($data['request']) && $data['request']->has(Key::CLUB_STRUCTURE)) {
             $CLUB_STRUCTURE = Setting::where(['key' => Key::CLUB_STRUCTURE])->first();
             $file_id = 'File_' . mt_rand(00000, 99999) . (time() + mt_rand(00000, 99999));
             $file_name = Key::CLUB_STRUCTURE;
@@ -232,7 +150,7 @@ class HomeRepository
             if ($file !== false) {
                 if ($CLUB_STRUCTURE) {
                     if (file_exists($CLUB_STRUCTURE->value)) {
-                        unlink($CLUB_STRUCTURE->value);
+                        @unlink($CLUB_STRUCTURE->value);
                     }
                     $CLUB_STRUCTURE->update([
                         'value' => $file
@@ -247,12 +165,9 @@ class HomeRepository
         }
 
         // show clinic
-        $showClinic = Setting::where(['key' => Key::SHOW_CLINIC])->first();
         $clinicValue = isset($data[Key::SHOW_CLINIC]) ? '1' : '0';
-        if ($showClinic) {
-            $showClinic->update([
-                'value' => $clinicValue
-            ]);
+        if (Setting::where('key', Key::SHOW_CLINIC)->exists()) {
+            Setting::where('key', Key::SHOW_CLINIC)->update(['value' => $clinicValue]);
         } else {
             Setting::create([
                 'key' => Key::SHOW_CLINIC,
@@ -260,8 +175,7 @@ class HomeRepository
             ]);
         }
 
-        return UtilsRepository::response(true, trans('admin.process_success_message')
-            , '');
+        return UtilsRepository::response(true, trans('admin.process_success_message'), '');
     }
 
     public static function saveElders($data)

@@ -166,7 +166,7 @@
 
             $('#general-form').submit(function (e) {
                 e.preventDefault();
-                sendAjaxRequest(this, '{{url('/admin/setting/save', [] , env('APP_ENV') === 'local' ?  false : true)}}', {
+                sendAjaxRequest(this, '{{url('/admin/setting/save')}}', {
                     error_message: '{{trans('admin.general_error_message')}}',
                     error_title: '',
                     loader: true,
