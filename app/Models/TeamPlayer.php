@@ -15,9 +15,16 @@ class TeamPlayer extends Model
         'birth_date', 'nationality_ar', 'nationality_en', 'height', 'weight',
         'position_ar', 'position_en', 'goals', 'wins', 'losses',
         'matches_played', 'minutes_played', 'yellow_cards', 'red_cards'];
-    protected $appends = ['name', 'position', 'nationality'];
+    protected $appends = ['name', 'position', 'nationality', 'warnings'];
     protected $casts = [
-        'birth_date' => 'date',
+        'birth_date'     => 'date',
+        'yellow_cards'   => 'integer',
+        'red_cards'      => 'integer',
+        'goals'          => 'integer',
+        'wins'           => 'integer',
+        'losses'         => 'integer',
+        'matches_played' => 'integer',
+        'minutes_played' => 'integer',
     ];
 
     public function getImageUrlAttribute()
@@ -50,6 +57,11 @@ class TeamPlayer extends Model
             return null;
         }
         return $this->birth_date->age;
+    }
+
+    public function getWarningsAttribute()
+    {
+        return (int)($this->yellow_cards ?? 0);
     }
 
     public function team(){

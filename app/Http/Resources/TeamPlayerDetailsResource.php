@@ -30,13 +30,14 @@ class TeamPlayerDetailsResource extends JsonResource
             'nationality'    => $this->nationality,
             'height'         => $this->height,
             'weight'         => $this->weight,
-            'goals'          => $this->goals,
-            'wins'           => $this->wins,
-            'losses'         => $this->losses,
-            'matches_played' => $this->matches_played,
-            'minutes_played' => $this->minutes_played,
-            'yellow_cards'   => $this->yellow_cards,
-            'red_cards'      => $this->red_cards,
+            'goals'          => (int) ($this->goals ?? 0),
+            'wins'           => (int) ($this->wins ?? 0),
+            'losses'         => (int) ($this->losses ?? 0),
+            'matches_played' => (int) ($this->matches_played ?? 0),
+            'minutes_played' => (int) ($this->minutes_played ?? 0),
+            'yellow_cards'   => (int) ($this->yellow_cards ?? 0),
+            'red_cards'      => (int) ($this->red_cards ?? 0),
+            'warnings'       => (int) ($this->yellow_cards ?? 0),
         ];
     }
 }

@@ -399,7 +399,7 @@ class SqlServerApiRepository
         }
     }
  
-    public static function syncPlayerImages(callable $onProgress = null): array
+    public static function syncPlayerImages(?callable $onProgress = null): array
     {
         $conn = SqlServerApiRepository::startConnection();
         $stats = ['processed' => 0, 'updated' => 0, 'skipped' => 0];
