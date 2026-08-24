@@ -17,7 +17,12 @@ class HrEmployee extends Model
         'job_title',
         'photo',
         'username',
+        'hr_admin',
         'password_hash',
+    ];
+
+    protected $casts = [
+        'hr_admin' => 'boolean',
     ];
 
     public function user()

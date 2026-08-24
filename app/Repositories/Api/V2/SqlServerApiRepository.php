@@ -1473,7 +1473,7 @@ class SqlServerApiRepository
             return $stats;
         }
 
-        $sql = "SELECT EmployeeRowID, CategoryID, NameAR, NameEN, JobTitle, Username, Password, Email FROM dbo.MobileApp_HR_Employees";
+        $sql = "SELECT EmployeeRowID, CategoryID, NameAR, NameEN, JobTitle, Username, Password, Email, HR_Admin FROM dbo.MobileApp_HR_Employees";
         $result = \sqlsrv_query($conn, $sql);
 
         if ($result === false) {
@@ -1545,6 +1545,8 @@ class SqlServerApiRepository
                 }
             }
 
+            $hrAdmin = isset($object->HR_Admin) && ((int)$object->HR_Admin === 1 || $object->HR_Admin === true || $object->HR_Admin === '1');
+
             HrEmployee::updateOrCreate(
                 ['row_id' => $object->EmployeeRowID],
                 [
@@ -1555,6 +1557,7 @@ class SqlServerApiRepository
                     'job_title'     => $object->JobTitle ?? null,
                     'photo'         => $photoPath,
                     'username'      => $username,
+                    'hr_admin'      => $hrAdmin,
                     'password_hash' => \Illuminate\Support\Facades\Hash::make($password),
                 ]
             );

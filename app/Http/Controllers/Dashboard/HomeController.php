@@ -92,7 +92,6 @@ class HomeController extends Controller
     }
 
 
-// show terms page
     public function showMagles()
     {
         $data['pageConfigs'] = [
@@ -102,6 +101,7 @@ class HomeController extends Controller
         ];
         $data['magles_ar'] = Setting::where(['key' => Key::MAGLES_AR])->first();
         $data['magles_en'] = Setting::where(['key' => Key::MAGLES_EN])->first();
+        $data['magles_image'] = Setting::where(['key' => Key::MAGLES_IMAGE])->first();
         $data['title'] = trans('admin.magles_title');
         return view('admin.settings.magles')->with($data);
     }
@@ -110,6 +110,7 @@ class HomeController extends Controller
     public function saveMagles(Request $request)
     {
         $data = $request->all();
+        $data['request'] = $request;
         return HomeRepository::saveMagles($data);
     }
 

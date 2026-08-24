@@ -17,6 +17,8 @@ class HrEmployeeResource extends JsonResource
             'job_title'   => $this->job_title,
             'photo'       => $this->photo ? (str_starts_with($this->photo, 'http') ? $this->photo : asset($this->photo)) : null,
             'username'    => $this->username,
+            'is_hr_admin' => (bool)($this->hr_admin ?? false),
+            'hr_admin'    => (int)($this->hr_admin ? 1 : 0),
             'category'    => new HrEmployeeCategoryResource($this->whenLoaded('category')),
         ];
     }

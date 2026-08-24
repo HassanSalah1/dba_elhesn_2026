@@ -62,11 +62,14 @@ class SettingApiRepository
         $lang = App::getLocale();
         $setting = Setting::where(['key' => ($lang === 'en') ?
             Key::MAGLES_EN : Key::MAGLES_AR])->first();
+        $imageSetting = Setting::where(['key' => Key::MAGLES_IMAGE])->first();
 
         // return success response
         return [
             'data' => [
                 'magles' => $setting ? $setting->value : null,
+                'image'  => ($imageSetting && $imageSetting->value) ? url($imageSetting->value) : null,
+                'cover'  => ($imageSetting && $imageSetting->value) ? url($imageSetting->value) : null,
             ],
             'message' => 'success',
             'code' => HttpCode::SUCCESS

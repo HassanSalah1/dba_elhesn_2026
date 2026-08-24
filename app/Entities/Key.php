@@ -36,6 +36,7 @@ class Key
     const name_4 = 'name_4';
     const position_4 = 'position_4';
     const SHOW_CLINIC = 'show_clinic';
+    const MAGLES_IMAGE = 'magles_image';
 }
 
 ?>

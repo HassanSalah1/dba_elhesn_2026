@@ -85,8 +85,31 @@ class HomeRepository
             }
         }
 
-        return UtilsRepository::response(true, trans('admin.process_success_message')
-            , '');
+        // magles image cover
+        if (isset($data['request']) && $data['request']->hasFile(Key::MAGLES_IMAGE)) {
+            $maglesImage = Setting::where(['key' => Key::MAGLES_IMAGE])->first();
+            $file_id = 'IMG_MAGLES_' . mt_rand(10000, 99999) . '_' . time();
+            $file_name = Key::MAGLES_IMAGE;
+            $file_path = 'uploads/settings/';
+            $file = UtilsRepository::uploadFiles($data['request'], $file_name, $file_path, $file_id);
+            if ($file !== false) {
+                if ($maglesImage) {
+                    if (!empty($maglesImage->value) && file_exists(public_path($maglesImage->value))) {
+                        @unlink(public_path($maglesImage->value));
+                    }
+                    $maglesImage->update([
+                        'value' => $file
+                    ]);
+                } else {
+                    Setting::create([
+                        'key'   => Key::MAGLES_IMAGE,
+                        'value' => $file
+                    ]);
+                }
+            }
+        }
+
+        return UtilsRepository::response(true, trans('admin.process_success_message'), '');
     }
 
     public static function saveHistory(array $data)

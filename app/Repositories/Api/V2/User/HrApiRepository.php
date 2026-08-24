@@ -183,10 +183,14 @@ class HrApiRepository
             ];
         }
 
-        $requests = HrLeaveRequest::with('leaveType')
-            ->where('employee_row_id', $employee->row_id)
-            ->orderBy('id', 'desc')
-            ->get();
+        $query = HrLeaveRequest::with(['leaveType', 'employee']);
+
+        // If not HR Admin, only show own requests
+        if (!$employee->hr_admin) {
+            $query->where('employee_row_id', $employee->row_id);
+        }
+
+        $requests = $query->orderBy('id', 'desc')->get();
 
         return [
             'data'    => HrLeaveRequestResource::collection($requests),
@@ -197,11 +201,24 @@ class HrApiRepository
 
     public static function getLeaveRequestDetails($id, User $user)
     {
-        $request = HrLeaveRequest::with('leaveType')->find($id);
+        $employee = HrEmployee::where('user_id', $user->id)->first();
+        if (!$employee) {
+            $employee = HrEmployee::where('row_id', $user->user_id)->first();
+        }
+
+        $request = HrLeaveRequest::with(['leaveType', 'employee'])->find($id);
 
         if (!$request) {
             return [
                 'message' => 'طلب الإجازة غير موجود',
+                'code'    => HttpCode::ERROR,
+            ];
+        }
+
+        // Authorization check: only allow HR admin or the owner
+        if ($employee && !$employee->hr_admin && $request->employee_row_id != $employee->row_id) {
+            return [
+                'message' => trans('api.unauthorized') ?: 'غير مصرح لك بعرض هذا الطلب',
                 'code'    => HttpCode::ERROR,
             ];
         }
@@ -248,7 +265,7 @@ class HrApiRepository
         SqlServerApiRepository::pushSingleHrDocumentToSqlServer($doc);
 
         return [
-            'data'    => new HrDocumentResource($doc),
+            'data'    => new HrDocumentResource($doc->load('employee')),
             'message' => 'تم إضافة المستند بنجاح',
             'code'    => HttpCode::SUCCESS,
         ];
@@ -269,9 +286,14 @@ class HrApiRepository
             ];
         }
 
-        $docs = HrDocument::where('employee_row_id', $employee->row_id)
-            ->orderBy('id', 'desc')
-            ->get();
+        $query = HrDocument::with('employee');
+
+        // If not HR Admin, only show own documents
+        if (!$employee->hr_admin) {
+            $query->where('employee_row_id', $employee->row_id);
+        }
+
+        $docs = $query->orderBy('id', 'desc')->get();
 
         return [
             'data'    => HrDocumentResource::collection($docs),
@@ -282,11 +304,24 @@ class HrApiRepository
 
     public static function getDocumentDetails($id, User $user)
     {
-        $doc = HrDocument::find($id);
+        $employee = HrEmployee::where('user_id', $user->id)->first();
+        if (!$employee) {
+            $employee = HrEmployee::where('row_id', $user->user_id)->first();
+        }
+
+        $doc = HrDocument::with('employee')->find($id);
 
         if (!$doc) {
             return [
                 'message' => 'المستند غير موجود',
+                'code'    => HttpCode::ERROR,
+            ];
+        }
+
+        // Authorization check: only allow HR admin or the owner
+        if ($employee && !$employee->hr_admin && $doc->employee_row_id != $employee->row_id) {
+            return [
+                'message' => trans('api.unauthorized') ?: 'غير مصرح لك بعرض هذا المستند',
                 'code'    => HttpCode::ERROR,
             ];
         }

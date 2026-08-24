@@ -60,10 +60,13 @@ class HrApiService
             'start_date'    => 'required|date|date_format:Y-m-d',
             'end_date'      => 'required|date|date_format:Y-m-d|after_or_equal:start_date',
             'description'   => 'nullable|string',
+            'attachment'    => 'nullable|file|mimes:pdf,png,jpg,jpeg,doc,docx|max:10240',
         ];
         $messages = [
-            'required'               => trans('api.required_error_message'),
-            'after_or_equal'         => trans('api.general_error_message'),
+            'required'       => trans('api.required_error_message'),
+            'after_or_equal' => trans('api.general_error_message'),
+            'mimes'          => trans('api.invalid_hr_file_type') ?: 'الصيغ المتاحة للملفات هي: PDF, PNG, JPG, JPEG, DOC, DOCX',
+            'max'            => trans('api.file_too_large_10mb') ?: 'حجم الملف يجب ألا يتجاوز 10 ميجابايت',
         ];
 
         $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);
@@ -91,9 +94,12 @@ class HrApiService
     {
         $keys = [
             'description' => 'required|string',
+            'attachment'  => 'nullable|file|mimes:pdf,png,jpg,jpeg,doc,docx|max:10240',
         ];
         $messages = [
             'required' => trans('api.required_error_message'),
+            'mimes'    => trans('api.invalid_hr_file_type') ?: 'الصيغ المتاحة للملفات هي: PDF, PNG, JPG, JPEG, DOC, DOCX',
+            'max'      => trans('api.file_too_large_10mb') ?: 'حجم الملف يجب ألا يتجاوز 10 ميجابايت',
         ];
 
         $validated = ValidationRepository::validateAPIGeneral($data, $keys, $messages);

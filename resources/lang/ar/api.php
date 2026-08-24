@@ -123,7 +123,11 @@ return [
     'invalid_file_type' => 'نوع الملف غير مسموح (JPEG, PNG, PDF فقط)',
     'file_too_large' => 'حجم الملف يتجاوز 5 ميجابايت',
     'booking_for_self' => 'الحجز لنفسك',
-    'booking_for_other' => 'الحجز لشخص آخر'
+    'booking_for_other' => 'الحجز لشخص آخر',
+    'invalid_hr_file_type' => 'الصيغ المتاحة للملفات هي: PDF, PNG, JPG, JPEG, DOC, DOCX',
+    'file_too_large_10mb' => 'حجم الملف يجب ألا يتجاوز 10 ميجابايت',
+    'file_formats_hint' => 'الصيغ المتاحة: PDF, PNG, JPG, JPEG, DOC, DOCX (الحد الأقصى 10 ميجابايت)',
+    'unauthorized' => 'غير مصرح لك بإجراء هذه العملية',
 ];
 
 ?>

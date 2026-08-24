@@ -108,6 +108,10 @@ return [
     'hello_user' => 'hello',
     'account_verification_message' => 'Enter the following verification code to activate your account : {code}',
     'max_size_error_message' => 'File size should not be more than 6MB',
-    'success_message' => 'done successfully'
+    'success_message' => 'done successfully',
+    'invalid_hr_file_type' => 'Allowed file formats are: PDF, PNG, JPG, JPEG, DOC, DOCX',
+    'file_too_large_10mb' => 'File size must not exceed 10 MB',
+    'file_formats_hint' => 'Allowed formats: PDF, PNG, JPG, JPEG, DOC, DOCX (Max 10 MB)',
+    'unauthorized' => 'You are not authorized to perform this action'
 ];
 ?>
