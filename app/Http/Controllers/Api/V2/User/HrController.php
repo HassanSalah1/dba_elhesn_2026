@@ -38,6 +38,12 @@ class HrController extends Controller
         return HrApiService::getLeaveRequests($user);
     }
 
+    public function getAdminLeaveRequests(Request $request)
+    {
+        $user = Auth::user();
+        return HrApiService::getAdminLeaveRequests($user);
+    }
+
     public function getLeaveRequestDetails(Request $request, $id)
     {
         $user = Auth::user();
@@ -55,6 +61,12 @@ class HrController extends Controller
     {
         $user = Auth::user();
         return HrApiService::getDocuments($user);
+    }
+
+    public function getAdminDocuments(Request $request)
+    {
+        $user = Auth::user();
+        return HrApiService::getAdminDocuments($user);
     }
 
     public function getDocumentDetails(Request $request, $id)

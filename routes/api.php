@@ -196,14 +196,8 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('/competitions/{id}', [UserV2Controller::class, 'getCompetitions']);
 
 
-        // Clinic Bookings (no auth required)
+        // Clinic Time Slots (Public)
         Route::get('/clinic/time-slots', [ClinicV2Controller::class, 'getTimeSlots']);
-        Route::post('/clinic/booking', [ClinicV2Controller::class, 'createBooking']);
-        Route::get('/clinic/bookings', [ClinicV2Controller::class, 'getBookings']);
-        Route::get('/clinic/booking/{id}', [ClinicV2Controller::class, 'getBookingDetails']);
-        Route::post('/clinic/booking/{id}/cancel', [ClinicV2Controller::class, 'cancelBooking']);
-        Route::post('/clinic/booking/{id}/attachment', [ClinicV2Controller::class, 'addAttachment']);
-        Route::delete('/clinic/booking/{id}/attachment/{attachmentId}', [ClinicV2Controller::class, 'deleteAttachment']);
 
         // HR Employee Auth (no auth required)
         Route::post('/hr/login', [HrV2Controller::class, 'login']);
@@ -218,11 +212,24 @@ Route::group(['middleware' => 'lang'], function () {
 
             Route::get('/profile/download/card', [UserV2Controller::class, 'downloadProfileCard']); // download Profile Card
 
+            // Clinic Endpoints (Protected - User Self Service)
+            Route::post('/clinic/booking', [ClinicV2Controller::class, 'createBooking']);
+            Route::get('/clinic/bookings', [ClinicV2Controller::class, 'getBookings']);
+            Route::get('/clinic/booking/{id}', [ClinicV2Controller::class, 'getBookingDetails']);
+            Route::post('/clinic/booking/{id}/cancel', [ClinicV2Controller::class, 'cancelBooking']);
+            Route::post('/clinic/booking/{id}/attachment', [ClinicV2Controller::class, 'addAttachment']);
+            Route::delete('/clinic/booking/{id}/attachment/{attachmentId}', [ClinicV2Controller::class, 'deleteAttachment']);
+
+            // Clinic Endpoints (Protected - Medical Admin / Doctor)
+            Route::get('/clinic/admin/bookings', [ClinicV2Controller::class, 'getAdminBookings']);
+            Route::get('/clinic/admin/booking/{id}', [ClinicV2Controller::class, 'getBookingDetails']);
+            Route::post('/clinic/admin/booking/{id}/status', [ClinicV2Controller::class, 'updateBookingStatus']);
+
             // get my notifications
             Route::get('/my/notifications', [UserV2Controller::class, 'getMyNotifications']); // get my notifications
             Route::get('/notifications/count', [UserV2Controller::class, 'getNotificationsCount']); // get my notifications
 
-            // HR Endpoints (Protected)
+            // HR Endpoints (Protected - Employee Self Service)
             Route::get('/hr/attendance', [HrV2Controller::class, 'getAttendance']);
             Route::get('/hr/leave-types', [HrV2Controller::class, 'getLeaveTypes']);
             Route::post('/hr/leave-request', [HrV2Controller::class, 'createLeaveRequest']);
@@ -231,6 +238,12 @@ Route::group(['middleware' => 'lang'], function () {
             Route::post('/hr/document', [HrV2Controller::class, 'createDocument']);
             Route::get('/hr/documents', [HrV2Controller::class, 'getDocuments']);
             Route::get('/hr/document/{id}', [HrV2Controller::class, 'getDocumentDetails']);
+
+            // HR Endpoints (Protected - HR Admin / Manager)
+            Route::get('/hr/admin/leave-requests', [HrV2Controller::class, 'getAdminLeaveRequests']);
+            Route::get('/hr/admin/leave-request/{id}', [HrV2Controller::class, 'getLeaveRequestDetails']);
+            Route::get('/hr/admin/documents', [HrV2Controller::class, 'getAdminDocuments']);
+            Route::get('/hr/admin/document/{id}', [HrV2Controller::class, 'getDocumentDetails']);
 
 
 

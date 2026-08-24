@@ -17,6 +17,7 @@ class ClinicBooking extends Model
     const STATUS_CANCELLED = 'cancelled';
 
     protected $fillable = [
+        'user_id',
         'patient_name',
         'patient_phone',
         'time_slot_id',
@@ -29,6 +30,11 @@ class ClinicBooking extends Model
         'status',
         'synced_to_sqlserver',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function timeSlot()
     {

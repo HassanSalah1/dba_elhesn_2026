@@ -49,7 +49,7 @@ class ClinicApiRepository
         ];
     }
 
-    public static function createBooking(array $data)
+    public static function createBooking(array $data, $user = null)
     {
         $date = $data['booking_date'];
         $timeSlotId = $data['time_slot_id'];
@@ -90,20 +90,25 @@ class ClinicApiRepository
             ];
         }
 
+        $userId = $user ? $user->id : (isset($data['user_id']) ? $data['user_id'] : null);
+        $patientName = !empty($data['patient_name']) ? $data['patient_name'] : ($user ? $user->name : '');
+        $patientPhone = !empty($data['patient_phone']) ? $data['patient_phone'] : ($user ? $user->phone : '');
+
         $booking = ClinicBooking::create([
-            'patient_name' => $data['patient_name'],
-            'patient_phone' => $data['patient_phone'],
-            'time_slot_id' => $timeSlotId,
-            'booking_date' => $date,
-            'is_for_other' => $data['is_for_other'],
-            'other_name' => $data['is_for_other'] ? $data['other_name'] : null,
-            'other_phone' => $data['is_for_other'] ? $data['other_phone'] : null,
-            'other_country_code' => $data['is_for_other'] ? (isset($data['other_country_code']) ? $data['other_country_code'] : null) : null,
-            'description' => isset($data['description']) ? $data['description'] : null,
-            'status' => ClinicBooking::STATUS_PENDING,
+            'user_id'            => $userId,
+            'patient_name'       => $patientName,
+            'patient_phone'      => $patientPhone,
+            'time_slot_id'       => $timeSlotId,
+            'booking_date'       => $date,
+            'is_for_other'       => isset($data['is_for_other']) ? (bool)$data['is_for_other'] : false,
+            'other_name'         => (isset($data['is_for_other']) && $data['is_for_other']) ? $data['other_name'] : null,
+            'other_phone'        => (isset($data['is_for_other']) && $data['is_for_other']) ? $data['other_phone'] : null,
+            'other_country_code' => (isset($data['is_for_other']) && $data['is_for_other']) ? (isset($data['other_country_code']) ? $data['other_country_code'] : null) : null,
+            'description'        => isset($data['description']) ? $data['description'] : null,
+            'status'             => ClinicBooking::STATUS_PENDING,
         ]);
 
-        if ($booking && $data['request']->hasFile('attachments')) {
+        if ($booking && isset($data['request']) && $data['request']->hasFile('attachments')) {
             $files = $data['request']->file('attachments');
             if (!is_array($files)) {
                 $files = [$files];
@@ -143,7 +148,7 @@ class ClinicApiRepository
             }
 
             return [
-                'data' => new ClinicBookingResource($booking->load('attachments', 'timeSlot')),
+                'data' => new ClinicBookingResource($booking->load('attachments', 'timeSlot', 'user')),
                 'message' => trans('api.booking_created'),
                 'code' => HttpCode::SUCCESS
             ];
@@ -155,15 +160,21 @@ class ClinicApiRepository
         ];
     }
 
-    public static function getBookings(array $data)
+    public static function getBookings(array $data, $user = null)
     {
         $status = isset($data['status']) ? $data['status'] : null;
-        $phone = isset($data['patient_phone']) ? $data['patient_phone'] : null;
+        $query = ClinicBooking::with('timeSlot', 'attachments', 'user');
 
-        $query = ClinicBooking::with('timeSlot', 'attachments');
-
-        if ($phone) {
-            $query->where('patient_phone', $phone);
+        if ($user) {
+            // Only show bookings of the authenticated user
+            $query->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+                if (!empty($user->phone)) {
+                    $q->orWhere('patient_phone', $user->phone);
+                }
+            });
+        } elseif (isset($data['patient_phone']) && !empty($data['patient_phone'])) {
+            $query->where('patient_phone', $data['patient_phone']);
         }
 
         if ($status === 'active') {
@@ -183,10 +194,56 @@ class ClinicApiRepository
         ];
     }
 
-    public static function getBookingDetails(array $data)
+    public static function getAdminBookings(array $data, $user)
+    {
+        if (!$user || !$user->isMedical()) {
+            return [
+                'message' => trans('api.unauthorized') ?: 'غير مصرح لك بإجراء هذه العملية',
+                'code'    => HttpCode::ERROR
+            ];
+        }
+
+        $query = ClinicBooking::with('timeSlot', 'attachments', 'user');
+
+        // Optional filters for Medical Admin
+        if (isset($data['status']) && !empty($data['status'])) {
+            if ($data['status'] === 'active') {
+                $query->active();
+            } elseif ($data['status'] === 'cancelled') {
+                $query->cancelled();
+            } else {
+                $query->where('status', $data['status']);
+            }
+        }
+
+        if (isset($data['date']) && !empty($data['date'])) {
+            $query->where('booking_date', $data['date']);
+        }
+
+        if (isset($data['search']) && !empty($data['search'])) {
+            $search = $data['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('patient_name', 'LIKE', "%{$search}%")
+                    ->orWhere('patient_phone', 'LIKE', "%{$search}%")
+                    ->orWhere('other_name', 'LIKE', "%{$search}%")
+                    ->orWhere('other_phone', 'LIKE', "%{$search}%")
+                    ->orWhere('id', $search);
+            });
+        }
+
+        $bookings = $query->orderBy('booking_date', 'desc')->orderBy('id', 'desc')->get();
+
+        return [
+            'data'    => ClinicBookingResource::collection($bookings),
+            'message' => 'success',
+            'code'    => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getBookingDetails(array $data, $user = null)
     {
         $booking = ClinicBooking::where('id', $data['id'])
-            ->with('timeSlot', 'attachments')
+            ->with('timeSlot', 'attachments', 'user')
             ->first();
 
         if (!$booking) {
@@ -196,6 +253,18 @@ class ClinicApiRepository
             ];
         }
 
+        // Authorization check: allow owner or medical admin
+        if ($user && !$user->isMedical()) {
+            $isOwner = ($booking->user_id && $booking->user_id == $user->id) ||
+                       (!empty($user->phone) && $booking->patient_phone == $user->phone);
+            if (!$isOwner) {
+                return [
+                    'message' => trans('api.unauthorized') ?: 'غير مصرح لك بعرض هذا الحجز',
+                    'code'    => HttpCode::ERROR
+                ];
+            }
+        }
+
         return [
             'data' => new ClinicBookingResource($booking),
             'message' => 'success',
@@ -203,7 +272,7 @@ class ClinicApiRepository
         ];
     }
 
-    public static function cancelBooking(array $data)
+    public static function cancelBooking(array $data, $user = null)
     {
         $booking = ClinicBooking::where('id', $data['id'])
             ->first();
@@ -213,6 +282,18 @@ class ClinicApiRepository
                 'message' => trans('api.booking_not_found'),
                 'code' => HttpCode::ERROR
             ];
+        }
+
+        // Authorization check: allow owner or medical admin
+        if ($user && !$user->isMedical()) {
+            $isOwner = ($booking->user_id && $booking->user_id == $user->id) ||
+                       (!empty($user->phone) && $booking->patient_phone == $user->phone);
+            if (!$isOwner) {
+                return [
+                    'message' => trans('api.unauthorized') ?: 'غير مصرح لك بإلغاء هذا الحجز',
+                    'code'    => HttpCode::ERROR
+                ];
+            }
         }
 
         if (in_array($booking->status, [ClinicBooking::STATUS_COMPLETED, ClinicBooking::STATUS_CANCELLED])) {
@@ -233,7 +314,45 @@ class ClinicApiRepository
         ];
     }
 
-    public static function addAttachment(array $data)
+    public static function updateBookingStatus(array $data, $user)
+    {
+        if (!$user || !$user->isMedical()) {
+            return [
+                'message' => trans('api.unauthorized') ?: 'غير مصرح لك بإجراء هذه العملية',
+                'code'    => HttpCode::ERROR
+            ];
+        }
+
+        $booking = ClinicBooking::where('id', $data['id'])->with('timeSlot', 'attachments', 'user')->first();
+
+        if (!$booking) {
+            return [
+                'message' => trans('api.booking_not_found'),
+                'code'    => HttpCode::ERROR
+            ];
+        }
+
+        $status = $data['status'];
+        if (!in_array($status, [ClinicBooking::STATUS_PENDING, ClinicBooking::STATUS_CONFIRMED, ClinicBooking::STATUS_COMPLETED, ClinicBooking::STATUS_CANCELLED])) {
+            return [
+                'message' => 'حالة الحجز غير صحيحة',
+                'code'    => HttpCode::ERROR
+            ];
+        }
+
+        $booking->update([
+            'status'              => $status,
+            'synced_to_sqlserver' => false,
+        ]);
+
+        return [
+            'data'    => new ClinicBookingResource($booking),
+            'message' => 'تم تحديث حالة الحجز بنجاح',
+            'code'    => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function addAttachment(array $data, $user = null)
     {
         $booking = ClinicBooking::where('id', $data['id'])
             ->first();
@@ -243,6 +362,18 @@ class ClinicApiRepository
                 'message' => trans('api.booking_not_found'),
                 'code' => HttpCode::ERROR
             ];
+        }
+
+        // Authorization check: allow owner or medical admin
+        if ($user && !$user->isMedical()) {
+            $isOwner = ($booking->user_id && $booking->user_id == $user->id) ||
+                       (!empty($user->phone) && $booking->patient_phone == $user->phone);
+            if (!$isOwner) {
+                return [
+                    'message' => trans('api.unauthorized') ?: 'غير مصرح لك بتعديل هذا الحجز',
+                    'code'    => HttpCode::ERROR
+                ];
+            }
         }
 
         $file = $data['request']->file('file');
@@ -279,7 +410,7 @@ class ClinicApiRepository
         ];
     }
 
-    public static function deleteAttachment(array $data)
+    public static function deleteAttachment(array $data, $user = null)
     {
         $booking = ClinicBooking::where('id', $data['id'])
             ->first();
@@ -289,6 +420,18 @@ class ClinicApiRepository
                 'message' => trans('api.booking_not_found'),
                 'code' => HttpCode::ERROR
             ];
+        }
+
+        // Authorization check: allow owner or medical admin
+        if ($user && !$user->isMedical()) {
+            $isOwner = ($booking->user_id && $booking->user_id == $user->id) ||
+                       (!empty($user->phone) && $booking->patient_phone == $user->phone);
+            if (!$isOwner) {
+                return [
+                    'message' => trans('api.unauthorized') ?: 'غير مصرح لك بحذف مرفق من هذا الحجز',
+                    'code'    => HttpCode::ERROR
+                ];
+            }
         }
 
         $attachment = ClinicBookingAttachment::where('id', $data['attachment_id'])

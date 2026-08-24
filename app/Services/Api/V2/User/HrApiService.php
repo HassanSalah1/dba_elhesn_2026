@@ -84,6 +84,12 @@ class HrApiService
         return UtilsRepository::handleResponseApi($response);
     }
 
+    public static function getAdminLeaveRequests(User $user)
+    {
+        $response = HrApiRepository::getAdminLeaveRequests($user);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
     public static function getLeaveRequestDetails($id, User $user)
     {
         $response = HrApiRepository::getLeaveRequestDetails($id, $user);
@@ -114,6 +120,12 @@ class HrApiService
     public static function getDocuments(User $user)
     {
         $response = HrApiRepository::getDocuments($user);
+        return UtilsRepository::handleResponseApi($response);
+    }
+
+    public static function getAdminDocuments(User $user)
+    {
+        $response = HrApiRepository::getAdminDocuments($user);
         return UtilsRepository::handleResponseApi($response);
     }
 

@@ -183,14 +183,37 @@ class HrApiRepository
             ];
         }
 
-        $query = HrLeaveRequest::with(['leaveType', 'employee']);
+        // Always return only the logged-in user's own requests
+        $requests = HrLeaveRequest::with(['leaveType', 'employee'])
+            ->where('employee_row_id', $employee->row_id)
+            ->orderBy('id', 'desc')
+            ->get();
 
-        // If not HR Admin, only show own requests
-        if (!$employee->hr_admin) {
-            $query->where('employee_row_id', $employee->row_id);
+        return [
+            'data'    => HrLeaveRequestResource::collection($requests),
+            'message' => 'success',
+            'code'    => HttpCode::SUCCESS,
+        ];
+    }
+
+    public static function getAdminLeaveRequests(User $user)
+    {
+        $employee = HrEmployee::where('user_id', $user->id)->first();
+        if (!$employee) {
+            $employee = HrEmployee::where('row_id', $user->user_id)->first();
         }
 
-        $requests = $query->orderBy('id', 'desc')->get();
+        if (!$employee || !$employee->hr_admin) {
+            return [
+                'message' => trans('api.unauthorized') ?: 'غير مصرح لك بإجراء هذه العملية',
+                'code'    => HttpCode::ERROR,
+            ];
+        }
+
+        // Return all leave requests for all employees
+        $requests = HrLeaveRequest::with(['leaveType', 'employee'])
+            ->orderBy('id', 'desc')
+            ->get();
 
         return [
             'data'    => HrLeaveRequestResource::collection($requests),
@@ -286,14 +309,37 @@ class HrApiRepository
             ];
         }
 
-        $query = HrDocument::with('employee');
+        // Always return only the logged-in user's own documents
+        $docs = HrDocument::with('employee')
+            ->where('employee_row_id', $employee->row_id)
+            ->orderBy('id', 'desc')
+            ->get();
 
-        // If not HR Admin, only show own documents
-        if (!$employee->hr_admin) {
-            $query->where('employee_row_id', $employee->row_id);
+        return [
+            'data'    => HrDocumentResource::collection($docs),
+            'message' => 'success',
+            'code'    => HttpCode::SUCCESS,
+        ];
+    }
+
+    public static function getAdminDocuments(User $user)
+    {
+        $employee = HrEmployee::where('user_id', $user->id)->first();
+        if (!$employee) {
+            $employee = HrEmployee::where('row_id', $user->user_id)->first();
         }
 
-        $docs = $query->orderBy('id', 'desc')->get();
+        if (!$employee || !$employee->hr_admin) {
+            return [
+                'message' => trans('api.unauthorized') ?: 'غير مصرح لك بإجراء هذه العملية',
+                'code'    => HttpCode::ERROR,
+            ];
+        }
+
+        // Return all documents for all employees
+        $docs = HrDocument::with('employee')
+            ->orderBy('id', 'desc')
+            ->get();
 
         return [
             'data'    => HrDocumentResource::collection($docs),

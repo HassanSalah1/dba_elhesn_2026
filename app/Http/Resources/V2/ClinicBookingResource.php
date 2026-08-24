@@ -28,7 +28,13 @@ class ClinicBookingResource extends JsonResource
             'is_for_other' => $this->is_for_other,
             'other_name' => $this->other_name,
             'other_phone' => $this->other_phone,
-            'other_country_code' => $this->other_country_code,
+            'user_id' => $this->user_id,
+            'user' => $this->user ? [
+                'id'    => $this->user->id,
+                'name'  => $this->user->name,
+                'phone' => $this->user->phone,
+                'email' => $this->user->email,
+            ] : null,
             'attachments' => ClinicAttachmentResource::collection($this->attachments),
         ];
     }

@@ -291,15 +291,17 @@ class SqlServerApiRepository
  
         $sqlServerIds = [];
         while ($object = \sqlsrv_fetch_object($result)) {
+            $isMedical = in_array(strtolower($object->Role ?? ''), ['medical', 'doctor', 'clinic']);
             User::updateOrCreate(
                 ['email' => $object->Username . '@dhclubapp.xyz'],
                 [
-                    'user_id'  => $object->UserID,
-                    'name'     => $object->UserEN,
-                    'password' => Hash::make($object->Password),
-                    'role'     => $object->Role,
-                    'status'   => Status::ACTIVE,
-                    'lang'     => 'en',
+                    'user_id'    => $object->UserID,
+                    'name'       => $object->UserEN,
+                    'password'   => Hash::make($object->Password),
+                    'role'       => $object->Role,
+                    'is_medical' => $isMedical,
+                    'status'     => Status::ACTIVE,
+                    'lang'       => 'en',
                 ]
             );
             $sqlServerIds[] = $object->UserID;

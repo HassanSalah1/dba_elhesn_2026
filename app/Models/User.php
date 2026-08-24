@@ -21,7 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'phone', 'email', 'password', 'role', 'status', 'lang',
+        'name', 'phone', 'email', 'password', 'role', 'status', 'is_medical', 'lang',
         'image', 'edited_email' , 'group_id' , 'user_id'
     ];
 
@@ -41,8 +41,14 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $casts = [
-        'status' => 'integer',
+        'status'     => 'integer',
+        'is_medical' => 'boolean',
     ];
+
+    public function isMedical(): bool
+    {
+        return (bool)($this->is_medical || in_array($this->role, [UserRoles::MEDICAL, 'Doctor', UserRoles::ADMIN]));
+    }
 
 
     public function getImageUrlAttribute()
