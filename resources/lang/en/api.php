@@ -112,6 +112,8 @@ return [
     'invalid_hr_file_type' => 'Allowed file formats are: PDF, PNG, JPG, JPEG, DOC, DOCX',
     'file_too_large_10mb' => 'File size must not exceed 10 MB',
     'file_formats_hint' => 'Allowed formats: PDF, PNG, JPG, JPEG, DOC, DOCX (Max 10 MB)',
-    'unauthorized' => 'You are not authorized to perform this action'
+    'unauthorized' => 'You are not authorized to perform this action',
+    'leave_end_date_after_or_equal' => 'The leave end date must be on or after the start date',
+    'date_format_error_message' => 'Invalid date format',
 ];
 ?>

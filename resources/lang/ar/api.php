@@ -128,6 +128,8 @@ return [
     'file_too_large_10mb' => 'حجم الملف يجب ألا يتجاوز 10 ميجابايت',
     'file_formats_hint' => 'الصيغ المتاحة: PDF, PNG, JPG, JPEG, DOC, DOCX (الحد الأقصى 10 ميجابايت)',
     'unauthorized' => 'غير مصرح لك بإجراء هذه العملية',
+    'leave_end_date_after_or_equal' => 'تاريخ نهاية الإجازة يجب أن يكون مساوياً لتاريخ بداية الإجازة أو بعده',
+    'date_format_error_message' => 'صيغة التاريخ غير صحيحة',
 ];
 
 ?>

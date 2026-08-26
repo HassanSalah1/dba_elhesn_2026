@@ -14,7 +14,7 @@ class ClinicTimeSlotResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'day_of_week' => $this->day_of_week,
             'start_time' => $this->start_time,
@@ -22,5 +22,15 @@ class ClinicTimeSlotResource extends JsonResource
             'max_bookings' => $this->max_bookings,
             'status' => $this->status,
         ];
+
+        if (isset($this->date)) {
+            $data['date'] = $this->date;
+        }
+
+        if (isset($this->is_available)) {
+            $data['is_available'] = (bool) $this->is_available;
+        }
+
+        return $data;
     }
 }

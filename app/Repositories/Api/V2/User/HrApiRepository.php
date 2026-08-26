@@ -31,7 +31,7 @@ class HrApiRepository
         if (!$employee || !Hash::check($password, $employee->password_hash)) {
             return [
                 'message' => trans('api.invalid_username_or_password') ?: 'بيانات الدخول غير صحيحة',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
@@ -41,12 +41,12 @@ class HrApiRepository
             $user = User::updateOrCreate(
                 ['email' => $username . '@dhclubapp.xyz'],
                 [
-                    'user_id'  => $employee->row_id,
-                    'name'     => $employee->name_ar ?: ($employee->name_en ?: $username),
+                    'user_id' => $employee->row_id,
+                    'name' => $employee->name_ar ?: ($employee->name_en ?: $username),
                     'password' => Hash::make($password),
-                    'role'     => 'employee',
-                    'status'   => 1,
-                    'lang'     => 'ar',
+                    'role' => 'employee',
+                    'status' => 1,
+                    'lang' => 'ar',
                 ]
             );
             $employee->update(['user_id' => $user->id]);
@@ -56,11 +56,11 @@ class HrApiRepository
 
         return [
             'data' => [
-                'token'    => $token,
+                'token' => $token,
                 'employee' => new HrEmployeeResource($employee->load('category')),
             ],
             'message' => trans('api.login_success') ?: 'تم تسجيل الدخول بنجاح',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -74,23 +74,23 @@ class HrApiRepository
         if (!$employee) {
             return [
                 'message' => 'بيانات الموظف غير موجودة',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
         $query = HrAttendanceRecord::where('employee_row_id', $employee->row_id);
 
-        $month = isset($data['month']) ? (int)$data['month'] : Carbon::now()->month;
-        $year  = isset($data['year']) ? (int)$data['year'] : Carbon::now()->year;
+        $month = isset($data['month']) ? (int) $data['month'] : Carbon::now()->month;
+        $year = isset($data['year']) ? (int) $data['year'] : Carbon::now()->year;
 
         $query->whereYear('attendance_date', $year)
-              ->whereMonth('attendance_date', $month);
+            ->whereMonth('attendance_date', $month);
 
         $records = $query->orderBy('attendance_date', 'asc')->get();
 
         $presentCount = $records->where('status', 1)->count();
-        $absentCount  = $records->where('status', 2)->count();
-        $leaveCount   = $records->where('status', 3)->count();
+        $absentCount = $records->where('status', 2)->count();
+        $leaveCount = $records->where('status', 3)->count();
         $holidayCount = $records->where('status', 4)->count();
 
         $totalWorkingDays = $presentCount + $absentCount;
@@ -98,17 +98,17 @@ class HrApiRepository
 
         return [
             'data' => [
-                'month'                  => $month,
-                'year'                   => $year,
-                'attendance_percentage'  => $percentage,
-                'present_days'           => $presentCount,
-                'absent_days'            => $absentCount,
-                'leave_days'             => $leaveCount,
-                'holiday_days'           => $holidayCount,
-                'records'                => HrAttendanceRecordResource::collection($records),
+                'month' => $month,
+                'year' => $year,
+                'attendance_percentage' => $percentage,
+                'present_days' => $presentCount,
+                'absent_days' => $absentCount,
+                'leave_days' => $leaveCount,
+                'holiday_days' => $holidayCount,
+                'records' => HrAttendanceRecordResource::collection($records),
             ],
             'message' => 'success',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -117,9 +117,9 @@ class HrApiRepository
         $types = HrLeaveType::where('active', true)->get();
 
         return [
-            'data'    => HrLeaveTypeResource::collection($types),
+            'data' => HrLeaveTypeResource::collection($types),
             'message' => 'success',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -133,7 +133,7 @@ class HrApiRepository
         if (!$employee) {
             return [
                 'message' => 'بيانات الموظف غير موجودة',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
@@ -150,21 +150,21 @@ class HrApiRepository
 
         $leaveRequest = HrLeaveRequest::create([
             'employee_row_id' => $employee->row_id,
-            'leave_type_id'   => $data['leave_type_id'],
-            'start_date'      => $data['start_date'],
-            'end_date'        => $data['end_date'],
-            'description'     => $data['description'] ?? null,
+            'leave_type_id' => $data['leave_type_id'],
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'description' => $data['description'] ?? null,
             'attachment_path' => $attachmentPath,
-            'status'          => 0, // Pending
+            'status' => 0, // Pending
         ]);
 
         // Push real-time to SQL Server
         SqlServerApiRepository::pushSingleHrLeaveRequestToSqlServer($leaveRequest);
 
         return [
-            'data'    => new HrLeaveRequestResource($leaveRequest->load('leaveType')),
+            'data' => new HrLeaveRequestResource($leaveRequest->load('leaveType')),
             'message' => 'تم إضافة طلب الإجازة بنجاح',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -177,9 +177,9 @@ class HrApiRepository
 
         if (!$employee) {
             return [
-                'data'    => [],
+                'data' => [],
                 'message' => 'success',
-                'code'    => HttpCode::SUCCESS,
+                'code' => HttpCode::SUCCESS,
             ];
         }
 
@@ -190,9 +190,9 @@ class HrApiRepository
             ->get();
 
         return [
-            'data'    => HrLeaveRequestResource::collection($requests),
+            'data' => HrLeaveRequestResource::collection($requests),
             'message' => 'success',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -206,7 +206,7 @@ class HrApiRepository
         if (!$employee || !$employee->hr_admin) {
             return [
                 'message' => trans('api.unauthorized') ?: 'غير مصرح لك بإجراء هذه العملية',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
@@ -216,9 +216,9 @@ class HrApiRepository
             ->get();
 
         return [
-            'data'    => HrLeaveRequestResource::collection($requests),
+            'data' => HrLeaveRequestResource::collection($requests),
             'message' => 'success',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -234,7 +234,7 @@ class HrApiRepository
         if (!$request) {
             return [
                 'message' => 'طلب الإجازة غير موجود',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
@@ -242,14 +242,14 @@ class HrApiRepository
         if ($employee && !$employee->hr_admin && $request->employee_row_id != $employee->row_id) {
             return [
                 'message' => trans('api.unauthorized') ?: 'غير مصرح لك بعرض هذا الطلب',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
         return [
-            'data'    => new HrLeaveRequestResource($request),
+            'data' => new HrLeaveRequestResource($request),
             'message' => 'success',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -263,7 +263,7 @@ class HrApiRepository
         if (!$employee) {
             return [
                 'message' => 'بيانات الموظف غير موجودة',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
@@ -280,7 +280,7 @@ class HrApiRepository
 
         $doc = HrDocument::create([
             'employee_row_id' => $employee->row_id,
-            'description'     => $data['description'],
+            'description' => $data['description'],
             'attachment_path' => $attachmentPath,
         ]);
 
@@ -288,9 +288,9 @@ class HrApiRepository
         SqlServerApiRepository::pushSingleHrDocumentToSqlServer($doc);
 
         return [
-            'data'    => new HrDocumentResource($doc->load('employee')),
+            'data' => new HrDocumentResource($doc->load('employee')),
             'message' => 'تم إضافة المستند بنجاح',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -303,9 +303,9 @@ class HrApiRepository
 
         if (!$employee) {
             return [
-                'data'    => [],
+                'data' => [],
                 'message' => 'success',
-                'code'    => HttpCode::SUCCESS,
+                'code' => HttpCode::SUCCESS,
             ];
         }
 
@@ -316,9 +316,9 @@ class HrApiRepository
             ->get();
 
         return [
-            'data'    => HrDocumentResource::collection($docs),
+            'data' => HrDocumentResource::collection($docs),
             'message' => 'success',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -332,7 +332,7 @@ class HrApiRepository
         if (!$employee || !$employee->hr_admin) {
             return [
                 'message' => trans('api.unauthorized') ?: 'غير مصرح لك بإجراء هذه العملية',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
@@ -342,9 +342,9 @@ class HrApiRepository
             ->get();
 
         return [
-            'data'    => HrDocumentResource::collection($docs),
+            'data' => HrDocumentResource::collection($docs),
             'message' => 'success',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 
@@ -360,7 +360,7 @@ class HrApiRepository
         if (!$doc) {
             return [
                 'message' => 'المستند غير موجود',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
@@ -368,14 +368,14 @@ class HrApiRepository
         if ($employee && !$employee->hr_admin && $doc->employee_row_id != $employee->row_id) {
             return [
                 'message' => trans('api.unauthorized') ?: 'غير مصرح لك بعرض هذا المستند',
-                'code'    => HttpCode::ERROR,
+                'code' => HttpCode::ERROR,
             ];
         }
 
         return [
-            'data'    => new HrDocumentResource($doc),
+            'data' => new HrDocumentResource($doc),
             'message' => 'success',
-            'code'    => HttpCode::SUCCESS,
+            'code' => HttpCode::SUCCESS,
         ];
     }
 }

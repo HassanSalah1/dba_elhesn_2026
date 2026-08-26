@@ -15,15 +15,66 @@ class ClinicApiRepository
 {
     public static function getTimeSlots(array $data)
     {
-        $date = isset($data['date']) ? $data['date'] : date('Y-m-d');
-        
+        $today = Carbon::now('Asia/Dubai')->format('Y-m-d');
+        $currentTime = Carbon::now('Asia/Dubai')->format('H:i:s');
+        $isDateProvided = !empty($data['date']);
+        $requestedDate = $isDateProvided ? $data['date'] : $today;
+
         try {
-            $dayOfWeek = Carbon::parse($date)->format('l');
+            $requestedCarbon = Carbon::parse($requestedDate);
+            $requestedDate = $requestedCarbon->format('Y-m-d');
         } catch (\Exception $e) {
             return [
                 'message' => trans('api.general_error_message'),
                 'code' => HttpCode::ERROR
             ];
+        }
+
+        // If no date was provided, or the date is today or in the past (current day / initial screen load)
+        if (!$isDateProvided || $requestedDate <= $today) {
+            $targetCarbon = Carbon::parse($today);
+            $targetDate = $today;
+            $timeSlots = collect();
+
+            // Search starting from today for up to 30 days until a day with available slots is found
+            for ($i = 0; $i < 30; $i++) {
+                $checkDate = $targetCarbon->format('Y-m-d');
+                $slots = self::getTimeSlotsForDate($checkDate, $today, $currentTime);
+
+                if ($slots->contains('is_available', true)) {
+                    $timeSlots = $slots;
+                    $targetDate = $checkDate;
+                    break;
+                }
+
+                $targetCarbon->addDay();
+            }
+
+            // Fallback: if no available slots found in 30 days, load today's slots
+            if ($timeSlots->isEmpty()) {
+                $timeSlots = self::getTimeSlotsForDate($today, $today, $currentTime);
+                $targetDate = $today;
+            }
+        } else {
+            // A specific future date was requested
+            $timeSlots = self::getTimeSlotsForDate($requestedDate, $today, $currentTime);
+            $targetDate = $requestedDate;
+        }
+
+        return [
+            'data' => ClinicTimeSlotResource::collection($timeSlots),
+            'date' => $targetDate,
+            'message' => 'success',
+            'code' => HttpCode::SUCCESS
+        ];
+    }
+
+    public static function getTimeSlotsForDate($date, $today, $currentTime)
+    {
+        try {
+            $dayOfWeek = Carbon::parse($date)->format('l');
+        } catch (\Exception $e) {
+            return collect();
         }
 
         $timeSlots = ClinicTimeSlot::where('day_of_week', $dayOfWeek)
@@ -36,17 +87,16 @@ class ClinicApiRepository
                 ->where('time_slot_id', $slot->id)
                 ->where('status', '!=', ClinicBooking::STATUS_CANCELLED)
                 ->count();
-                
-            $slot->is_available = $bookedCount < $slot->max_bookings;
-            $slot->max_bookings = max(0, $slot->max_bookings - $bookedCount);
+
+            $isPast = ($date < $today) || ($date == $today && $slot->start_time <= $currentTime);
+            $remainingBookings = max(0, $slot->max_bookings - $bookedCount);
+
+            $slot->is_available = !$isPast && ($remainingBookings > 0);
+            $slot->max_bookings = $remainingBookings;
+            $slot->date = $date;
         }
 
-        // Return all slots with their availability status
-        return [
-            'data' => ClinicTimeSlotResource::collection($timeSlots),
-            'message' => 'success',
-            'code' => HttpCode::SUCCESS
-        ];
+        return $timeSlots;
     }
 
     public static function createBooking(array $data, $user = null)
@@ -74,6 +124,15 @@ class ClinicApiRepository
         } catch (\Exception $e) {
             return [
                 'message' => trans('api.general_error_message'),
+                'code' => HttpCode::ERROR
+            ];
+        }
+
+        $today = Carbon::now('Asia/Dubai')->format('Y-m-d');
+        $currentTime = Carbon::now('Asia/Dubai')->format('H:i:s');
+        if ($date < $today || ($date == $today && $slot->start_time <= $currentTime)) {
+            return [
+                'message' => trans('api.time_slot_not_available'),
                 'code' => HttpCode::ERROR
             ];
         }
