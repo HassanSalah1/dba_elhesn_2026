@@ -17,7 +17,7 @@ class UserRepository
     // get Users and create datatable data.
     public static function getUsersData(array $data)
     {
-        $users = User::whereIn('role', [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL , UserRoles::Foot])
+        $users = User::whereIn('role', [UserRoles::FAN, UserRoles::COACH, UserRoles::CoachGK, UserRoles::CoachGKJunior, UserRoles::OFFICIAL, UserRoles::Foot, UserRoles::MEDICAL])
             ->select([
                 'id',
                 'name',

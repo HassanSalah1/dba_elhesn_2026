@@ -7,6 +7,7 @@ use App\Models\TeamPlayer;
 use App\Models\User;
 use App\Models\UserTeam;
 use App\Repositories\Api\SqlServerApiRepository;
+use App\Repositories\Api\V2\SqlServerApiRepository as V2SqlServerApiRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -58,7 +59,7 @@ class FreshMysqlData extends Command
         $rows[] = ['team_players', $stats['upserted'], $stats['deleted']];
 
         $this->line('Importing <info>users</info>...');
-        $stats  = SqlServerApiRepository::syncUsersWithSqlServer();
+        $stats  = V2SqlServerApiRepository::syncUsersWithSqlServer();
         $rows[] = ['users', $stats['upserted'], $stats['deleted']];
 
         $this->line('Importing <info>user_teams</info>...');

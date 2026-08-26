@@ -47,7 +47,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isMedical(): bool
     {
-        return (bool)($this->is_medical || in_array($this->role, [UserRoles::MEDICAL, 'Doctor', UserRoles::ADMIN]));
+        $role = strtolower((string)$this->role);
+        return (bool)(
+            $this->is_medical ||
+            str_starts_with($role, 'medical') ||
+            in_array($role, ['doctor', 'clinic', 'admin'])
+        );
     }
 
 

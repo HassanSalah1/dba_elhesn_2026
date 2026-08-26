@@ -291,7 +291,8 @@ class SqlServerApiRepository
  
         $sqlServerIds = [];
         while ($object = \sqlsrv_fetch_object($result)) {
-            $isMedical = in_array(strtolower($object->Role ?? ''), ['medical', 'doctor', 'clinic']);
+            $roleLower = strtolower($object->Role ?? '');
+            $isMedical = str_starts_with($roleLower, 'medical') || in_array($roleLower, ['doctor', 'clinic']);
             User::updateOrCreate(
                 ['email' => $object->Username . '@dhclubapp.xyz'],
                 [

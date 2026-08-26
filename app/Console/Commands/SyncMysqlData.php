@@ -60,7 +60,7 @@ class SyncMysqlData extends Command
 
         if (in_array($table, ['users', 'all'])) {
             $this->line('Syncing <info>users</info> (SQL Server origin only)...');
-            $stats  = SqlServerApiRepository::syncUsersWithSqlServer();
+            $stats  = V2SqlServerApiRepository::syncUsersWithSqlServer();
             $rows[] = ['users', $stats['upserted'], $stats['deleted']];
         }
 
