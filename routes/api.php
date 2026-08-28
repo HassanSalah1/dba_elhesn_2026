@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V2\User\UserController as UserV2Controller;
 use App\Http\Controllers\Api\V2\SqlServerController as SqlServerV2Controller;
 use App\Http\Controllers\Api\V2\User\ClinicController as ClinicV2Controller;
 use App\Http\Controllers\Api\V2\User\HrController as HrV2Controller;
+use App\Http\Controllers\Api\V2\User\OfficialV2Controller;
 
 
 /*
@@ -245,7 +246,29 @@ Route::group(['middleware' => 'lang'], function () {
             Route::get('/hr/admin/documents', [HrV2Controller::class, 'getAdminDocuments']);
             Route::get('/hr/admin/document/{id}', [HrV2Controller::class, 'getDocumentDetails']);
 
+            // Official Endpoints (Protected - Official / Team Admin)
+            Route::prefix('official')->group(function () {
+                // Attendance
+                Route::get('/attendance-reasons', [OfficialV2Controller::class, 'getAttendanceReasons']);
+                Route::post('/presence-absence', [OfficialV2Controller::class, 'recordAttendance']);
 
+                // Administrative Reports
+                Route::post('/administrative-report', [OfficialV2Controller::class, 'createAdministrativeReport']);
+                Route::get('/administrative-reports', [OfficialV2Controller::class, 'getAdministrativeReports']);
+
+                // Advance Requests
+                Route::post('/advance-request', [OfficialV2Controller::class, 'createAdvanceRequest']);
+                Route::get('/advance-requests', [OfficialV2Controller::class, 'getAdvanceRequests']);
+
+                // Teams & Players
+                Route::get('/teams', [OfficialV2Controller::class, 'getTeams']);
+                Route::get('/team/{id}/players', [OfficialV2Controller::class, 'getTeamPlayers']);
+
+                // Missing Figma Screens (Mocked for now)
+                Route::get('/events', [OfficialV2Controller::class, 'getEvents']);
+                Route::get('/player/{id}/profile', [OfficialV2Controller::class, 'getPlayerProfile']);
+                Route::get('/player/{id}/coach-instructions', [OfficialV2Controller::class, 'getCoachInstructions']);
+            });
 
             Route::get('/my/teams', [UserV2Controller::class, 'getMyTeams']);
             Route::post('/administrative_report', [UserV2Controller::class, 'administrativeReport']);

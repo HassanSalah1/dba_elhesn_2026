@@ -11,13 +11,16 @@ class AdvanceRequest extends Model
 
     protected $table = 'advance_requests';
     protected $fillable = [
+        'row_id',
         'user_team_id',
+        'team_row_id',
         'user_id',
         'players_count',
         'escorts_count',
         'cost',
         'location',
         'statement',
+        'details',
         'tournament',
         'match_timing',
         'move_date',
@@ -25,7 +28,15 @@ class AdvanceRequest extends Model
         'breakfast',
         'lunch',
         'dinner',
-        'snacks'
+        'snacks',
+        'type',
+        'status',
+        'synced_to_sqlserver',
+    ];
+
+    protected $casts = [
+        'synced_to_sqlserver' => 'boolean',
+        'cost' => 'decimal:2',
     ];
 
     public function user_team()

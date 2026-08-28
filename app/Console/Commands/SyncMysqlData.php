@@ -8,11 +8,11 @@ use Illuminate\Console\Command;
 
 class SyncMysqlData extends Command
 {
-    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, clinic_time_slots, clinic_bookings, hr_categories, hr_employees, hr_attendance, hr_leave_types, hr_leave_requests, hr_documents, player_images, team_images, all)} {--force : Skip confirmation prompt (for cron/scheduler)}';
+    protected $signature = 'mysql:sync {--table=all : Table to sync (teams, players, player_details, users, user_teams, matches, seasons, attend_reasons, clubs, competitions, standings, clinic_time_slots, clinic_bookings, hr_categories, hr_employees, hr_attendance, hr_leave_types, hr_leave_requests, hr_documents, official_reports, advance_requests, player_images, team_images, all)} {--force : Skip confirmation prompt (for cron/scheduler)}';
 
     protected $description = 'Sync MySQL data with SQL Server: upsert existing records, delete orphaned ones';
 
-    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'matches', 'seasons', 'attend_reasons', 'clubs', 'competitions', 'standings', 'clinic_time_slots', 'clinic_bookings', 'hr_categories', 'hr_employees', 'hr_attendance', 'hr_leave_types', 'hr_leave_requests', 'hr_documents', 'player_images', 'team_images', 'all'];
+    private array $validTables = ['teams', 'players', 'player_details', 'users', 'user_teams', 'matches', 'seasons', 'attend_reasons', 'clubs', 'competitions', 'standings', 'clinic_time_slots', 'clinic_bookings', 'hr_categories', 'hr_employees', 'hr_attendance', 'hr_leave_types', 'hr_leave_requests', 'hr_documents', 'official_reports', 'advance_requests', 'player_images', 'team_images', 'all'];
 
     public function __construct()
     {
@@ -153,6 +153,19 @@ class SyncMysqlData extends Command
             $this->line('Pushing <info>hr_documents</info> to SQL Server...');
             $stats  = V2SqlServerApiRepository::pushHrDocumentsToSqlServer();
             $rows[] = ['hr_documents (push)', $stats['pushed'], $stats['failed']];
+        }
+
+        // Official Reports & Advance Requests
+        if (in_array($table, ['official_reports', 'all'])) {
+            $this->line('Syncing <info>administrative_reports</info>...');
+            $stats  = V2SqlServerApiRepository::syncAdministrativeReportsWithSqlServer();
+            $rows[] = ['administrative_reports', $stats['upserted'], $stats['deleted']];
+        }
+
+        if (in_array($table, ['advance_requests', 'all'])) {
+            $this->line('Syncing <info>advance_requests</info>...');
+            $stats  = V2SqlServerApiRepository::syncAdvanceRequestsWithSqlServer();
+            $rows[] = ['advance_requests', $stats['upserted'], $stats['deleted']];
         }
 
         // Image Sync with Hash (smart change detection)

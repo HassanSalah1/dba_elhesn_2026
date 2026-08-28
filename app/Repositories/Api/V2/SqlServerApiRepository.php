@@ -34,6 +34,8 @@ use App\Models\HrAttendanceRecord;
 use App\Models\HrLeaveType;
 use App\Models\HrLeaveRequest;
 use App\Models\HrDocument;
+use App\Models\AdministrativeReport;
+use App\Models\AdvanceRequest;
 use App\Models\Team;
 use App\Models\TeamPlayer;
 use App\Models\User;
@@ -969,34 +971,41 @@ class SqlServerApiRepository
             return $stats;
         }
  
-        $sql = "SELECT RowID, TheReason, ReasonKey, TheOrder, GlobalReason FROM FBall.dbo.tbl_Attend_Reasons";
+        // Try the MobileApp view first, fallback to FBall tbl_Attend_Reasons if needed
+        $sql = "SELECT ReasonKey, TheReason, TheOrder, GlobalReason FROM dbo.MobileApp_Attendance_Reasons ORDER BY TheOrder ASC";
         $result = \sqlsrv_query($conn, $sql);
- 
+
+        $hasRowId = false;
         if ($result === false) {
-            sqlsrv_close($conn);
-            return $stats;
+            $sql = "SELECT RowID, TheReason, ReasonKey, TheOrder, GlobalReason FROM FBall.dbo.tbl_Attend_Reasons";
+            $result = \sqlsrv_query($conn, $sql);
+            $hasRowId = true;
+            if ($result === false) {
+                sqlsrv_close($conn);
+                return $stats;
+            }
         }
- 
-        $sqlServerIds = [];
+
+        $reasonKeys = [];
         while ($object = \sqlsrv_fetch_object($result)) {
             \App\Models\AttendReason::updateOrCreate(
-                ['row_id' => $object->RowID],
+                ['reason_key' => $object->ReasonKey],
                 [
+                    'row_id'        => $hasRowId ? $object->RowID : ($object->ReasonKey ?: 0),
                     'reason'        => $object->TheReason,
-                    'reason_key'    => $object->ReasonKey,
                     'the_order'     => $object->TheOrder,
                     'global_reason' => $object->GlobalReason,
                 ]
             );
-            $sqlServerIds[] = $object->RowID;
+            $reasonKeys[] = $object->ReasonKey;
             $stats['upserted']++;
         }
- 
+
         sqlsrv_close($conn);
- 
-        if (!empty($sqlServerIds)) {
-            $stats['deleted'] = \App\Models\AttendReason::whereNotIn('row_id', $sqlServerIds)->count();
-            \App\Models\AttendReason::whereNotIn('row_id', $sqlServerIds)->delete();
+
+        if (!empty($reasonKeys)) {
+            $stats['deleted'] = \App\Models\AttendReason::whereNotIn('reason_key', $reasonKeys)->count();
+            \App\Models\AttendReason::whereNotIn('reason_key', $reasonKeys)->delete();
         }
  
         return $stats;
@@ -1838,6 +1847,249 @@ class SqlServerApiRepository
             'errors' => \sqlsrv_errors()
         ]);
         return false;
+    }
+
+    /**
+     * Push unsynced administrative reports to SQL Server
+     */
+    public static function pushAdministrativeReportsToSqlServer(): array
+    {
+        $stats = ['pushed' => 0, 'failed' => 0];
+        $reports = AdministrativeReport::where('synced_to_sqlserver', false)->get();
+
+        if ($reports->isEmpty()) {
+            return $stats;
+        }
+
+        $conn = self::startConnection();
+        if (!$conn) {
+            return $stats;
+        }
+
+        foreach ($reports as $report) {
+            $user = $report->user;
+            $userTeam = $report->user_team;
+            $officialId = $report->official_id ?: ($userTeam ? $userTeam->official_id : 0);
+            $userId = $user ? $user->user_id : 0;
+
+            $sql = "INSERT INTO FBall.dbo.tblOfficial_Actions (OfficialID, UserID, InsertedDateTime, Topic, ActionDate, ActionPlace, TheEvents, Negativity, Positivity, Recommendations) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $params = [
+                $officialId,
+                $userId,
+                $report->created_at ? $report->created_at->format('Y-m-d H:i:s') : date('Y-m-d H:i:s'),
+                $report->subject,
+                $report->date ? date('Y-m-d H:i:s', strtotime($report->date)) : date('Y-m-d H:i:s'),
+                $report->location,
+                $report->events,
+                $report->cons,
+                $report->pros,
+                $report->recommendations,
+            ];
+
+            $stmt = \sqlsrv_prepare($conn, $sql, $params);
+            if ($stmt && \sqlsrv_execute($stmt)) {
+                $report->update(['synced_to_sqlserver' => true]);
+                $stats['pushed']++;
+            } else {
+                $stats['failed']++;
+                Log::warning('Push AdministrativeReport failed for ID: ' . $report->id, [
+                    'errors' => \sqlsrv_errors()
+                ]);
+            }
+        }
+
+        \sqlsrv_close($conn);
+        return $stats;
+    }
+
+    /**
+     * Sync administrative reports from SQL Server View MobileApp_Official_Actions
+     */
+    public static function syncAdministrativeReportsWithSqlServer(): array
+    {
+        // First push any pending local reports
+        self::pushAdministrativeReportsToSqlServer();
+
+        $stats = ['upserted' => 0, 'deleted' => 0];
+        $conn = self::startConnection();
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT RowID, OfficialID, UserID, InsertedDateTime, Topic, ActionDate, ActionPlace, TheEvents, Negativity, Positivity, Recommendations FROM dbo.MobileApp_Official_Actions ORDER BY RowID DESC";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            \sqlsrv_close($conn);
+            return $stats;
+        }
+
+        while ($row = \sqlsrv_fetch_object($result)) {
+            $user = User::where('user_id', $row->UserID)->first();
+            $userTeam = UserTeam::where('official_id', $row->OfficialID)->first();
+
+            $date = null;
+            if ($row->ActionDate instanceof \DateTime) {
+                $date = $row->ActionDate->format('Y-m-d');
+            } elseif (!empty($row->ActionDate)) {
+                $date = date('Y-m-d', strtotime((string)$row->ActionDate));
+            }
+
+            AdministrativeReport::updateOrCreate(
+                ['row_id' => $row->RowID],
+                [
+                    'user_id'             => $user ? $user->id : 0,
+                    'user_team_id'        => $userTeam ? $userTeam->id : 0,
+                    'official_id'         => $row->OfficialID,
+                    'subject'             => $row->Topic,
+                    'date'                => $date ?: date('Y-m-d'),
+                    'location'            => $row->ActionPlace,
+                    'events'              => $row->TheEvents,
+                    'cons'                => $row->Negativity,
+                    'pros'                => $row->Positivity,
+                    'recommendations'     => $row->Recommendations,
+                    'synced_to_sqlserver' => true,
+                ]
+            );
+
+            $stats['upserted']++;
+        }
+
+        \sqlsrv_close($conn);
+        return $stats;
+    }
+
+    /**
+     * Push unsynced advance requests to SQL Server tbl_RequestRelease
+     */
+    public static function pushAdvanceRequestsToSqlServer(): array
+    {
+        $stats = ['pushed' => 0, 'failed' => 0];
+        $requests = AdvanceRequest::where('synced_to_sqlserver', false)->get();
+
+        if ($requests->isEmpty()) {
+            return $stats;
+        }
+
+        $conn = self::startConnection();
+        if (!$conn) {
+            return $stats;
+        }
+
+        foreach ($requests as $req) {
+            $user = $req->user;
+            $userTeam = $req->user_team;
+            $teamRowId = $req->team_row_id ?: ($userTeam && $userTeam->team ? $userTeam->team->team_id : 0);
+            $userId = $user ? $user->user_id : 0;
+
+            $sql = "INSERT INTO FBall.dbo.tbl_RequestRelease (TeamRowID, Players, Officials, TheCost, Details, WhoInsert, WhenInsert, Match, TheDate, Place, MatchTime, LeaveTime, ReturnTime, Type, BreakfastCount, BreakfastCost, LunchCount, LunchCost, DinnerCount, DinnerCost, SnackCount, SnackCost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            $moveDate = $req->move_date ? date('Y-m-d H:i:s', strtotime($req->move_date)) : null;
+
+            $params = [
+                $teamRowId,
+                $req->players_count,
+                $req->escorts_count,
+                $req->cost,
+                $req->details,
+                $userId,
+                $req->created_at ? $req->created_at->format('Y-m-d H:i:s') : date('Y-m-d H:i:s'),
+                $req->tournament,
+                $moveDate,
+                $req->location,
+                $req->match_timing,
+                null,
+                $req->return_date,
+                $req->type ?: 'سلفة',
+                intval($req->breakfast),
+                0,
+                intval($req->lunch),
+                0,
+                intval($req->dinner),
+                0,
+                intval($req->snacks),
+                0,
+            ];
+
+            $stmt = \sqlsrv_prepare($conn, $sql, $params);
+            if ($stmt && \sqlsrv_execute($stmt)) {
+                $req->update(['synced_to_sqlserver' => true]);
+                $stats['pushed']++;
+            } else {
+                $stats['failed']++;
+                Log::warning('Push AdvanceRequest failed for ID: ' . $req->id, [
+                    'errors' => \sqlsrv_errors()
+                ]);
+            }
+        }
+
+        \sqlsrv_close($conn);
+        return $stats;
+    }
+
+    /**
+     * Sync advance requests from SQL Server tbl_RequestRelease
+     */
+    public static function syncAdvanceRequestsWithSqlServer(): array
+    {
+        // First push any pending local requests
+        self::pushAdvanceRequestsToSqlServer();
+
+        $stats = ['upserted' => 0, 'deleted' => 0];
+        $conn = self::startConnection();
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT RowID, TeamRowID, Players, Officials, TheCost, Details, WhoInsert, WhenInsert, Match, TheDate, Place, MatchTime, LeaveTime, ReturnTime, Type, BreakfastCount, LunchCount, DinnerCount, SnackCount FROM FBall.dbo.tbl_RequestRelease ORDER BY RowID DESC";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            \sqlsrv_close($conn);
+            return $stats;
+        }
+
+        while ($row = \sqlsrv_fetch_object($result)) {
+            $user = User::where('user_id', $row->WhoInsert)->first();
+            $userTeam = UserTeam::where('team_id', $row->TeamRowID)->first();
+
+            $date = null;
+            if ($row->TheDate instanceof \DateTime) {
+                $date = $row->TheDate->format('Y-m-d');
+            } elseif (!empty($row->TheDate)) {
+                $date = date('Y-m-d', strtotime((string)$row->TheDate));
+            }
+
+            AdvanceRequest::updateOrCreate(
+                ['row_id' => $row->RowID],
+                [
+                    'user_id'             => $user ? $user->id : 0,
+                    'user_team_id'        => $userTeam ? $userTeam->id : 0,
+                    'team_row_id'         => $row->TeamRowID,
+                    'players_count'       => $row->Players ?? 0,
+                    'escorts_count'       => $row->Officials ?? 0,
+                    'cost'                => $row->TheCost ?? 0,
+                    'details'             => $row->Details,
+                    'tournament'          => $row->Match,
+                    'move_date'           => $date,
+                    'location'            => $row->Place,
+                    'match_timing'        => $row->MatchTime,
+                    'return_date'         => $row->ReturnTime,
+                    'type'                => $row->Type,
+                    'status'              => 'approved',
+                    'breakfast'           => $row->BreakfastCount ? (string)$row->BreakfastCount : null,
+                    'lunch'               => $row->LunchCount ? (string)$row->LunchCount : null,
+                    'dinner'              => $row->DinnerCount ? (string)$row->DinnerCount : null,
+                    'snacks'              => $row->SnackCount ? (string)$row->SnackCount : null,
+                    'synced_to_sqlserver' => true,
+                ]
+            );
+
+            $stats['upserted']++;
+        }
+
+        \sqlsrv_close($conn);
+        return $stats;
     }
 }
 
