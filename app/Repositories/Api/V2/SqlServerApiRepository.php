@@ -283,7 +283,7 @@ class SqlServerApiRepository
             return $stats;
         }
  
-        $sql = "SELECT UserID, UserEN, UserAR, Username, Password, Role FROM dbo.MobileApp_Users ORDER BY UserID DESC";
+        $sql = "SELECT UserID, UserEN, UserAR, Username, Password, Role FROM dbo.MobileApp_Users ORDER BY UserID ASC";
         $result = \sqlsrv_query($conn, $sql);
  
         if ($result === false) {
@@ -351,10 +351,12 @@ class SqlServerApiRepository
  
             if ($user && $sportTeam) {
                 UserTeam::updateOrCreate(
-                    ['official_id' => $object->OfficialID],
                     [
-                        'user_id'        => $user->id,
-                        'team_id'        => $sportTeam->id,
+                        'user_id' => $user->id,
+                        'team_id' => $sportTeam->id,
+                    ],
+                    [
+                        'official_id'    => $object->OfficialID,
                         'full_team_name' => $object->FullTeamNames,
                     ]
                 );
