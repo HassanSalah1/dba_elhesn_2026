@@ -5009,6 +5009,11 @@
                                         "type": "text"
                                     },
                                     {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
                                         "key": "Authorization",
                                         "value": "Bearer {{token}}",
                                         "type": "text"
@@ -5025,6 +5030,10 @@
                                         "official",
                                         "administrative-report"
                                     ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"date\": \"2026-08-29\",\n    \"subject\": \"تقرير عن تدريب الفريق الأول\",\n    \"location\": \"الملعب الرئيسي\",\n    \"events\": \"تم الانتهاء من الحصة التدريبية المسائية بحضور جميع اللاعبين.\",\n    \"pros\": \"التزام عالي من جميع اللاعبين بالخطة التدريبية.\",\n    \"cons\": \"لا توجد سلبيات ملحوظة.\",\n    \"recommendations\": \"الاستمرار على نفس البرنامج البدني.\"\n}"
                                 }
                             }
                         },
@@ -5069,6 +5078,11 @@
                                         "type": "text"
                                     },
                                     {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
                                         "key": "Authorization",
                                         "value": "Bearer {{token}}",
                                         "type": "text"
@@ -5085,6 +5099,10 @@
                                         "official",
                                         "advance-request"
                                     ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"cost\": 1500,\n    \"statement\": \"مصاريف إعاشة وانتقالات لمباراة الدوري\",\n    \"date\": \"2026-08-30\",\n    \"return_date\": \"2026-08-30 22:00:00\",\n    \"location\": \"أبوظبي\",\n    \"tournament\": \"دوري الدرجة الأولى\",\n    \"match_timing\": \"18:00\",\n    \"players_count\": 22,\n    \"escorts_count\": 5,\n    \"breakfast\": 0,\n    \"lunch\": 27,\n    \"dinner\": 27,\n    \"snacks\": 27,\n    \"type\": \"سلفة\"\n}"
                                 }
                             }
                         },
@@ -5159,6 +5177,11 @@
                                         "type": "text"
                                     },
                                     {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
                                         "key": "Authorization",
                                         "value": "Bearer {{token}}",
                                         "type": "text"
@@ -5175,6 +5198,10 @@
                                         "official",
                                         "presence-absence"
                                     ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"team_id\": 1,\n    \"date\": \"2026-08-29\",\n    \"period\": \"one_period_day\",\n    \"players\": [\n        {\n            \"player_id\": 101,\n            \"attendance_status\": 1,\n            \"notes\": \"حضور\"\n        },\n        {\n            \"player_id\": 102,\n            \"attendance_status\": 2,\n            \"notes\": \"غياب بعذر\"\n        }\n    ]\n}"
                                 }
                             }
                         },
