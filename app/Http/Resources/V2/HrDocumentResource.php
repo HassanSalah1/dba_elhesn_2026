@@ -13,6 +13,9 @@ class HrDocumentResource extends JsonResource
             'employee_row_id' => $this->employee_row_id,
             'description'     => $this->description,
             'attachment_url'  => $this->attachment_path ? asset($this->attachment_path) : null,
+            'status_id'       => (int) ($this->status_id ?: 1),
+            'status'          => app()->getLocale() == 'ar' ? $this->status_text_ar : $this->status_text,
+            'status_text'     => $this->status_text,
             'employee'        => $this->employee ? [
                 'id'        => $this->employee->id,
                 'row_id'    => $this->employee->row_id,

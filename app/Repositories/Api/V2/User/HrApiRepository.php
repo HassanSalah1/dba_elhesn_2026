@@ -282,6 +282,7 @@ class HrApiRepository
             'employee_row_id' => $employee->row_id,
             'description' => $data['description'],
             'attachment_path' => $attachmentPath,
+            'status_id' => HrDocument::STATUS_WAITING_FOR_APPROVAL,
         ]);
 
         // Push real-time to SQL Server

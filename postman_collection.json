@@ -4921,7 +4921,7 @@
                                     }
                                 ],
                                 "url": {
-                                    "raw": "{{baseUrl}}/api/v2/official/events",
+                                    "raw": "{{baseUrl}}/api/v2/official/events?date=",
                                     "host": [
                                         "{{baseUrl}}"
                                     ],
@@ -4930,6 +4930,13 @@
                                         "v2",
                                         "official",
                                         "events"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "date",
+                                            "value": "",
+                                            "description": "Optional: Filter events by date (YYYY-MM-DD), defaults to today"
+                                        }
                                     ]
                                 }
                             }

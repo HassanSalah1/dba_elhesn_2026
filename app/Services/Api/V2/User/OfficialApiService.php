@@ -2,6 +2,7 @@
 
 namespace App\Services\Api\V2\User;
 
+use App\Entities\HttpCode;
 use App\Repositories\Api\V2\User\OfficialApiRepository;
 use App\Repositories\General\UtilsRepository;
 use App\Repositories\General\ValidationRepository;
@@ -139,24 +140,45 @@ class OfficialApiService
     }
 
     /**
-     * Get Today's Events / Calendar (Mocked)
+     * Get Today's Events / Calendar (Mocked with date filter)
      */
     public static function getEvents(array $data)
     {
+        // Filter by date if provided, otherwise default to today
+        $targetDate = !empty($data['date']) ? date('Y-m-d', strtotime($data['date'])) : date('Y-m-d');
+
         // TODO: Replace with real database queries once Views are provided by Eng. Karim
         $mockEvents = [
             [
-                'id' => 1,
-                'title' => 'تدريب صباحي',
-                'time' => '10:00',
+                'id'       => 1,
+                'title'    => 'تدريب صباحي',
+                'type'     => 'تدريب',
+                'time'     => '10:00 ص',
                 'location' => 'ملعب الصالة الرئيسي',
-                'date' => date('Y-m-d')
-            ]
+                'date'     => $targetDate,
+            ],
+            [
+                'id'       => 2,
+                'title'    => 'محاضرة فنية وتكتيكية',
+                'type'     => 'اجتماع',
+                'time'     => '04:30 م',
+                'location' => 'قاعة المحاضرات',
+                'date'     => $targetDate,
+            ],
+            [
+                'id'       => 3,
+                'title'    => 'تدريب مسائي وإحماء',
+                'type'     => 'تدريب',
+                'time'     => '06:00 م',
+                'location' => 'الملعب الفرعي 1',
+                'date'     => $targetDate,
+            ],
         ];
 
         return UtilsRepository::handleResponseApi([
-            'status' => 'success',
-            'data' => $mockEvents
+            'code'    => HttpCode::SUCCESS,
+            'message' => 'success',
+            'data'    => $mockEvents,
         ]);
     }
 
@@ -205,8 +227,9 @@ class OfficialApiService
         ];
 
         return UtilsRepository::handleResponseApi([
-            'status' => 'success',
-            'data' => $mockProfile
+            'code'    => HttpCode::SUCCESS,
+            'message' => 'success',
+            'data'    => $mockProfile,
         ]);
     }
 
@@ -229,8 +252,9 @@ class OfficialApiService
         ];
 
         return UtilsRepository::handleResponseApi([
-            'status' => 'success',
-            'data' => $mockInstructions
+            'code'    => HttpCode::SUCCESS,
+            'message' => 'success',
+            'data'    => $mockInstructions,
         ]);
     }
 }

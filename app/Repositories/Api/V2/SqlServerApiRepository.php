@@ -1813,20 +1813,21 @@ class SqlServerApiRepository
 
         if ($checkResult && \sqlsrv_fetch($checkResult)) {
             $sql = "UPDATE dbo.MobileApp_HR_Documents SET 
-                    EmployeeRowID = ?, Description = ?, AttachmentUrl = ?
+                    EmployeeRowID = ?, Description = ?, AttachmentUrl = ?, SatusID = ?
                     WHERE DocumentID = ?";
 
             $params = [
                 $doc->employee_row_id,
                 $doc->description,
                 $attachmentData !== null ? [ $attachmentData, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY), SQLSRV_SQLTYPE_VARBINARY('max') ] : null,
+                $doc->status_id ?: 1,
                 $doc->id,
             ];
             $result = \sqlsrv_query($conn, $sql, $params);
         } else {
             $sql = "INSERT INTO dbo.MobileApp_HR_Documents 
-                    (DocumentID, EmployeeRowID, Description, AttachmentUrl, CreatedAt)
-                    VALUES (?, ?, ?, ?, ?)";
+                    (DocumentID, EmployeeRowID, Description, AttachmentUrl, CreatedAt, SatusID)
+                    VALUES (?, ?, ?, ?, ?, ?)";
 
             $params = [
                 $doc->id,
@@ -1834,6 +1835,7 @@ class SqlServerApiRepository
                 $doc->description,
                 $attachmentData !== null ? [ $attachmentData, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY), SQLSRV_SQLTYPE_VARBINARY('max') ] : null,
                 $doc->created_at ? $doc->created_at->format('Y-m-d H:i:s') : now()->format('Y-m-d H:i:s'),
+                $doc->status_id ?: 1,
             ];
             $result = \sqlsrv_query($conn, $sql, $params);
         }
@@ -1849,6 +1851,40 @@ class SqlServerApiRepository
             'errors' => \sqlsrv_errors()
         ]);
         return false;
+    }
+
+    /**
+     * Sync HR Document statuses from SQL Server
+     */
+    public static function syncHrDocumentsStatusWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['updated' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT DocumentID, SatusID FROM dbo.MobileApp_HR_Documents WHERE SatusID IS NOT NULL";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        while ($object = \sqlsrv_fetch_object($result)) {
+            if (!empty($object->DocumentID) && !empty($object->SatusID)) {
+                $doc = HrDocument::find($object->DocumentID);
+                if ($doc && $doc->status_id != $object->SatusID) {
+                    $doc->update(['status_id' => (int) $object->SatusID]);
+                    $stats['updated']++;
+                }
+            }
+        }
+
+        sqlsrv_close($conn);
+        return $stats;
     }
 
     /**
