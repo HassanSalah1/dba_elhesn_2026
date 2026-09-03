@@ -2020,7 +2020,9 @@ class SqlServerApiRepository
             $teamRowId = $req->team_row_id ?: ($userTeam && $userTeam->team ? $userTeam->team->team_id : 0);
             $userId = $user ? $user->user_id : 0;
 
-            $sql = "INSERT INTO FBall.dbo.tbl_RequestRelease (TeamRowID, Players, Officials, TheCost, Details, WhoInsert, WhenInsert, Match, TheDate, Place, MatchTime, LeaveTime, ReturnTime, Type, BreakfastCount, BreakfastCost, LunchCount, LunchCost, DinnerCount, DinnerCost, SnackCount, SnackCost) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO FBall.dbo.tbl_RequestRelease 
+                    (TeamRowID, Players, Officials, TheCost, Details, WhoInsert, WhenInsert, Match, TheDate, Place, MatchTime, LeaveTime, ReturnTime, Type, BreakfastCount, BreakfastCost, LunchCount, LunchCost, DinnerCount, DinnerCost, SnackCount, SnackCost) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             $moveDate = $req->move_date ? date('Y-m-d H:i:s', strtotime($req->move_date)) : null;
 
@@ -2036,17 +2038,17 @@ class SqlServerApiRepository
                 $moveDate,
                 $req->location,
                 $req->match_timing,
-                null,
+                $req->leave_time,
                 $req->return_date,
                 $req->type ?: 'سلفة',
-                intval($req->breakfast),
-                0,
-                intval($req->lunch),
-                0,
-                intval($req->dinner),
-                0,
-                intval($req->snacks),
-                0,
+                $req->breakfast_count ?: intval($req->breakfast),
+                $req->breakfast_cost ?: 0,
+                $req->lunch_count ?: intval($req->lunch),
+                $req->lunch_cost ?: 0,
+                $req->dinner_count ?: intval($req->dinner),
+                $req->dinner_cost ?: 0,
+                $req->snack_count ?: intval($req->snacks),
+                $req->snack_cost ?: 0,
             ];
 
             $stmt = \sqlsrv_prepare($conn, $sql, $params);
@@ -2079,7 +2081,7 @@ class SqlServerApiRepository
             return $stats;
         }
 
-        $sql = "SELECT RowID, TeamRowID, Players, Officials, TheCost, Details, WhoInsert, WhenInsert, Match, TheDate, Place, MatchTime, LeaveTime, ReturnTime, Type, BreakfastCount, LunchCount, DinnerCount, SnackCount FROM FBall.dbo.tbl_RequestRelease ORDER BY RowID DESC";
+        $sql = "SELECT RowID, TeamRowID, Players, Officials, TheCost, Details, WhoInsert, WhenInsert, Match, TheDate, Place, MatchTime, LeaveTime, ReturnTime, Type, BreakfastCount, BreakfastCost, LunchCount, LunchCost, DinnerCount, DinnerCost, SnackCount, SnackCost FROM FBall.dbo.tbl_RequestRelease ORDER BY RowID DESC";
         $result = \sqlsrv_query($conn, $sql);
 
         if ($result === false) {
@@ -2087,9 +2089,22 @@ class SqlServerApiRepository
             return $stats;
         }
 
+        $teamNameMap = [];
+        $teamQuery = "SELECT DISTINCT TeamsRowID, FullTeamNames FROM dbo.V_Official_Teams WHERE TeamsRowID IS NOT NULL";
+        $teamRes = \sqlsrv_query($conn, $teamQuery);
+        if ($teamRes) {
+            while ($tObj = \sqlsrv_fetch_object($teamRes)) {
+                if (!empty($tObj->TeamsRowID) && !empty($tObj->FullTeamNames)) {
+                    $teamNameMap[$tObj->TeamsRowID] = $tObj->FullTeamNames;
+                }
+            }
+        }
+
         while ($row = \sqlsrv_fetch_object($result)) {
             $user = User::where('user_id', $row->WhoInsert)->first();
-            $userTeam = UserTeam::where('team_id', $row->TeamRowID)->first();
+            $sportTeam = SportTeam::where('team_id', $row->TeamRowID)->first();
+            $userTeam = $sportTeam ? UserTeam::where('team_id', $sportTeam->id)->first() : null;
+            $teamName = $teamNameMap[$row->TeamRowID] ?? ($sportTeam ? $sportTeam->name_ar : ($userTeam ? $userTeam->full_team_name : null));
 
             $date = null;
             if ($row->TheDate instanceof \DateTime) {
@@ -2104,21 +2119,32 @@ class SqlServerApiRepository
                     'user_id'             => $user ? $user->id : 0,
                     'user_team_id'        => $userTeam ? $userTeam->id : 0,
                     'team_row_id'         => $row->TeamRowID,
+                    'team_name'           => $teamName,
                     'players_count'       => $row->Players ?? 0,
                     'escorts_count'       => $row->Officials ?? 0,
                     'cost'                => $row->TheCost ?? 0,
                     'details'             => $row->Details,
+                    'statement'           => $row->Details,
                     'tournament'          => $row->Match,
                     'move_date'           => $date,
                     'location'            => $row->Place,
                     'match_timing'        => $row->MatchTime,
+                    'leave_time'          => $row->LeaveTime,
                     'return_date'         => $row->ReturnTime,
-                    'type'                => $row->Type,
+                    'type'                => $row->Type ?: 'سلفة',
                     'status'              => 'approved',
-                    'breakfast'           => $row->BreakfastCount ? (string)$row->BreakfastCount : null,
-                    'lunch'               => $row->LunchCount ? (string)$row->LunchCount : null,
-                    'dinner'              => $row->DinnerCount ? (string)$row->DinnerCount : null,
-                    'snacks'              => $row->SnackCount ? (string)$row->SnackCount : null,
+                    'breakfast'           => (string)($row->BreakfastCount ?? 0),
+                    'breakfast_count'     => (int)($row->BreakfastCount ?? 0),
+                    'breakfast_cost'      => (float)($row->BreakfastCost ?? 0),
+                    'lunch'               => (string)($row->LunchCount ?? 0),
+                    'lunch_count'         => (int)($row->LunchCount ?? 0),
+                    'lunch_cost'          => (float)($row->LunchCost ?? 0),
+                    'dinner'              => (string)($row->DinnerCount ?? 0),
+                    'dinner_count'        => (int)($row->DinnerCount ?? 0),
+                    'dinner_cost'         => (float)($row->DinnerCost ?? 0),
+                    'snacks'              => (string)($row->SnackCount ?? 0),
+                    'snack_count'         => (int)($row->SnackCount ?? 0),
+                    'snack_cost'          => (float)($row->SnackCost ?? 0),
                     'synced_to_sqlserver' => true,
                 ]
             );

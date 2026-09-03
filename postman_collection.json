@@ -5109,7 +5109,7 @@
                                 },
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n    \"team_id\": 1,\n    \"cost\": 1500,\n    \"statement\": \"مصاريف إعاشة وانتقالات لمباراة الدوري\",\n    \"date\": \"2026-08-30\",\n    \"return_date\": \"2026-08-30 22:00:00\",\n    \"location\": \"أبوظبي\",\n    \"tournament\": \"دوري الدرجة الأولى\",\n    \"match_timing\": \"18:00\",\n    \"players_count\": 22,\n    \"escorts_count\": 5,\n    \"breakfast\": 0,\n    \"lunch\": 27,\n    \"dinner\": 27,\n    \"snacks\": 27,\n    \"type\": \"سلفة\"\n}"
+                                    "raw": "{\n    \"team_id\": 1,\n    \"statement\": \"مصاريف إعاشة وانتقالات لمباراة الدوري\",\n    \"details\": \"سناكس + غداء + عشاء\",\n    \"date\": \"2026-08-30\",\n    \"match_timing\": \"18:00\",\n    \"leave_time\": \"15:00\",\n    \"return_date\": \"22:00\",\n    \"location\": \"أبوظبي\",\n    \"tournament\": \"دوري الدرجة الأولى\",\n    \"players_count\": 22,\n    \"escorts_count\": 5,\n    \"breakfast_count\": 0,\n    \"breakfast_cost\": 0,\n    \"lunch_count\": 27,\n    \"lunch_cost\": 810,\n    \"dinner_count\": 27,\n    \"dinner_cost\": 810,\n    \"snack_count\": 27,\n    \"snack_cost\": 270,\n    \"cost\": 1890,\n    \"type\": \"سلفة\"\n}"
                                 }
                             }
                         },
@@ -5130,7 +5130,7 @@
                                     }
                                 ],
                                 "url": {
-                                    "raw": "{{baseUrl}}/api/v2/official/advance-requests",
+                                    "raw": "{{baseUrl}}/api/v2/official/advance-requests?team_id=&date=",
                                     "host": [
                                         "{{baseUrl}}"
                                     ],
@@ -5139,6 +5139,18 @@
                                         "v2",
                                         "official",
                                         "advance-requests"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "team_id",
+                                            "value": "",
+                                            "description": "Optional: Filter by team ID"
+                                        },
+                                        {
+                                            "key": "date",
+                                            "value": "",
+                                            "description": "Optional: Filter by date (YYYY-MM-DD)"
+                                        }
                                     ]
                                 }
                             }
@@ -5229,7 +5241,7 @@
                                     }
                                 ],
                                 "url": {
-                                    "raw": "{{baseUrl}}/api/v2/official/team/{id}/players",
+                                    "raw": "{{baseUrl}}/api/v2/official/team/{id}/players?date=",
                                     "host": [
                                         "{{baseUrl}}"
                                     ],
@@ -5240,6 +5252,13 @@
                                         "team",
                                         "{id}",
                                         "players"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "date",
+                                            "value": "",
+                                            "description": "Optional: Date to check attendance status and lock indicator (YYYY-MM-DD). Defaults to today."
+                                        }
                                     ]
                                 }
                             }
