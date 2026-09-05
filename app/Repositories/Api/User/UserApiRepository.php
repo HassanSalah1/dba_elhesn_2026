@@ -625,13 +625,6 @@ class UserApiRepository
     public
     static function getMatches(array $data)
     {
-        $user = auth()->user();
-        if (!in_array($user->role, [UserRoles::Foot])) {
-            return [
-                'message' => trans('api.not_login_message'),
-                'code' => HttpCode::AUTH_ERROR
-            ];
-        }
         $conn = SqlServerApiRepository::startConnection();
         $resultData = [];
         if ($conn) {

@@ -603,14 +603,6 @@ class UserApiRepository
  
     public static function getMatches(array $data)
     {
-        $user = auth()->user();
-        if (!in_array($user->role, [UserRoles::Foot])) {
-            return [
-                'message' => trans('api.not_login_message'),
-                'code' => HttpCode::AUTH_ERROR
-            ];
-        }
-
         $type = isset($data['type']) ? $data['type'] : (isset($data['filter']) ? $data['filter'] : null);
         $todayStr = date('Y-m-d');
 
