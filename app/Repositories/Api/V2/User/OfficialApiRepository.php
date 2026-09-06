@@ -290,19 +290,25 @@ class OfficialApiRepository
         }
         $teamRowId = $userTeam && $userTeam->team ? $userTeam->team->team_id : ($userTeam ? $userTeam->team_id : ($data['team_id'] ?? null));
 
-        // 2. Meal counts and costs
-        $breakfastCount = intval($data['breakfast_count'] ?? $data['breakfast'] ?? 0);
-        $breakfastCost  = floatval($data['breakfast_cost'] ?? 0);
-        $lunchCount     = intval($data['lunch_count'] ?? $data['lunch'] ?? 0);
-        $lunchCost      = floatval($data['lunch_cost'] ?? 0);
-        $dinnerCount    = intval($data['dinner_count'] ?? $data['dinner'] ?? 0);
-        $dinnerCost     = floatval($data['dinner_cost'] ?? 0);
-        $snackCount     = intval($data['snack_count'] ?? $data['snacks'] ?? 0);
-        $snackCost      = floatval($data['snack_cost'] ?? 0);
+        // 2. Meal counts and costs (support both singular and plural key formats from mobile clients)
+        $breakfastCount = intval($data['breakfast_count'] ?? $data['breakfasts_count'] ?? $data['breakfast'] ?? 0);
+        $breakfastCost  = floatval($data['breakfast_cost'] ?? $data['breakfasts_cost'] ?? $data['breakfast_price'] ?? $data['breakfasts_price'] ?? 0);
+        $lunchCount     = intval($data['lunch_count'] ?? $data['lunches_count'] ?? $data['lunch'] ?? 0);
+        $lunchCost      = floatval($data['lunch_cost'] ?? $data['lunches_cost'] ?? $data['lunch_price'] ?? $data['lunches_price'] ?? 0);
+        $dinnerCount    = intval($data['dinner_count'] ?? $data['dinners_count'] ?? $data['dinner'] ?? 0);
+        $dinnerCost     = floatval($data['dinner_cost'] ?? $data['dinners_cost'] ?? $data['dinner_price'] ?? $data['dinners_price'] ?? 0);
+        $snackCount     = intval($data['snack_count'] ?? $data['snacks_count'] ?? $data['snacks'] ?? $data['snack'] ?? 0);
+        $snackCost      = floatval($data['snack_cost'] ?? $data['snacks_cost'] ?? $data['snack_price'] ?? $data['snacks_price'] ?? 0);
 
-        // Calculate total cost automatically from meal costs if provided
-        $calculatedCost = $breakfastCost + $lunchCost + $dinnerCost + $snackCost;
-        $totalCost = ($calculatedCost > 0) ? $calculatedCost : floatval($data['cost'] ?? 0);
+        // Calculate total cost automatically if not explicitly provided
+        $explicitCost = floatval($data['cost'] ?? 0);
+        if ($explicitCost > 0) {
+            $totalCost = $explicitCost;
+        } else {
+            $mealTotal = ($breakfastCount * $breakfastCost) + ($lunchCount * $lunchCost) + ($dinnerCount * $dinnerCost) + ($snackCount * $snackCost);
+            $mealSum   = $breakfastCost + $lunchCost + $dinnerCost + $snackCost;
+            $totalCost = ($mealTotal > 0) ? $mealTotal : $mealSum;
+        }
 
         $leaveTime = $data['leave_time'] ?? $data['move_time'] ?? null;
         $moveDate  = !empty($data['date']) ? date('Y-m-d', strtotime($data['date'])) : ($data['move_date'] ?? null);

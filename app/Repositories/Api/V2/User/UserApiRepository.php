@@ -258,70 +258,7 @@ class UserApiRepository
  
     public static function advanceRequests(array $data)
     {
-        $user = auth()->user();
- 
-        $userTeam = UserTeam::find($data['team_id']);
- 
-        $conn = SqlServerApiRepository::startConnection();
-        if ($conn) {
-            $sql = "INSERT INTO FBall.dbo.tbl_RequestRelease (TeamRowID,Players,Officials,TheCost,Details,WhoInsert,WhenInsert,Match,TheDate,Place,MatchTime,LeaveTime,ReturnTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
- 
-            $details = '';
-            if (isset($data['breakfast']) && intval($data['breakfast']) > 0) {
-                $details .= 'فطار';
-            }
-            if (isset($data['snacks']) && intval($data['snacks']) > 0) {
-                if (isset($data['breakfast']) && intval($data['breakfast']) > 0) {
-                    $details .= ' + ';
-                }
-                $details .= 'سناكس';
-            }
-            if (isset($data['lunch']) && intval($data['lunch']) > 0) {
-                if (isset($data['snacks']) && intval($data['snacks']) > 0) {
-                    $details .= ' + ';
-                }
-                $details .= 'غداء';
-            }
-            if (isset($data['dinner']) && intval($data['dinner']) > 0) {
-                if (isset($data['lunch']) && intval($data['lunch']) > 0) {
-                    $details .= ' + ';
-                }
-                $details .= 'عشاء';
-            }
- 
-            $params = [
-                $userTeam->team->team_id,
-                $data['players_count'],
-                $data['escorts_count'],
-                $data['cost'],
-                $details,
-                $user->user_id,
-                date('Y-m-d H:i:s'),
-                isset($data['tournament']) ? $data['tournament'] : null,
-                isset($data['date']) ? date('Y-m-d H:i:s', strtotime($data['date'])) : null,
-                isset($data['location']) ? $data['location'] : null,
-                isset($data['match_timing']) ? $data['match_timing'] : null,
-                isset($data['move_date']) ? $data['move_date'] : null,
-                isset($data['return_date']) ? $data['return_date'] : null,
-            ];
-            $stmt = sqlsrv_prepare($conn, $sql, $params);
-            $execute = sqlsrv_execute($stmt);
-            sqlsrv_close($conn);
-            if ($execute) {
-                if ($userTeam->team->email) {
-                    UtilsRepository::sendReportEmail('طلب سلفة:' . $userTeam->team->name,
-                        $userTeam->team->email);
-                }
-                return [
-                    'message' => trans('api.success_message'),
-                    'code' => HttpCode::SUCCESS
-                ];
-            }
-        }
-        return [
-            'message' => trans('api.general_error_message'),
-            'code' => HttpCode::ERROR
-        ];
+        return OfficialApiRepository::createAdvanceRequest($data);
     }
  
  
