@@ -71,4 +71,24 @@ class AdvanceRequest extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getSeasonAttribute(): ?string
+    {
+        $teamName = $this->team_name ?: ($this->user_team ? ($this->user_team->full_team_name ?: ($this->user_team->team ? $this->user_team->team->name : null)) : ($this->sport_team ? $this->sport_team->name_ar : null));
+
+        if (!empty($teamName) && preg_match('/^(\d{4}[-\/]\d{4})/', $teamName, $matches)) {
+            return $matches[1];
+        }
+
+        if (!empty($this->move_date) && $this->move_date !== '1970-01-01') {
+            $season = Season::where('start_date', '<=', $this->move_date)
+                ->where('end_date', '>=', $this->move_date)
+                ->value('name');
+            if ($season) {
+                return $season;
+            }
+        }
+
+        return null;
+    }
 }

@@ -14,6 +14,7 @@ class AdvanceRequestResource extends JsonResource
             'user_team_id'   => $this->user_team_id,
             'team_row_id'    => $this->team_row_id,
             'team_name'      => $this->team_name ?: ($this->user_team ? ($this->user_team->full_team_name ?: ($this->user_team->team ? $this->user_team->team->name : null)) : ($this->sport_team ? $this->sport_team->name_ar : null)),
+            'season'         => $this->season,
             'user_id'        => $this->user_id,
             'players_count'  => (int) $this->players_count,
             'escorts_count'  => (int) $this->escorts_count,
