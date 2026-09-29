@@ -20,6 +20,8 @@ class EmergencyService
             'name_en' => 'required',
             'phone' => 'required',
             'country_code' => 'required',
+            'whatsapp' => 'nullable',
+            'whatsapp_country_code' => 'nullable',
             'order' => 'required|numeric'
         ];
         $validated = ValidationRepository::validateWebGeneral($data, $rules);
@@ -49,6 +51,8 @@ class EmergencyService
             'name_en' => 'required',
             'phone' => 'required',
             'country_code' => 'required',
+            'whatsapp' => 'nullable',
+            'whatsapp_country_code' => 'nullable',
             'order' => 'required|numeric'
         ];
         $validated = ValidationRepository::validateWebGeneral($data, $rules);

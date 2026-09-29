@@ -17,6 +17,8 @@ class Emergency extends Model
         'name_en',
         'phone',
         'country_code',
+        'whatsapp',
+        'whatsapp_country_code',
         'order',
     ];
 

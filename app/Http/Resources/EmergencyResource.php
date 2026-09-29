@@ -21,6 +21,8 @@ class EmergencyResource extends JsonResource
             'name_en' => $this->name_en,
             'phone' => $this->phone,
             'country_code' => $this->country_code,
+            'whatsapp' => $this->whatsapp,
+            'whatsapp_country_code' => $this->whatsapp_country_code ?: $this->country_code,
             'order' => (int)$this->order,
         ];
     }

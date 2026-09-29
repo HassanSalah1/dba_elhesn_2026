@@ -187,6 +187,7 @@ return [
     'notification_note' => 'ملحوظة : لإرسال إشعار لكل المستخدمين لا تختر أى مستخدم.',
     'telegram' => 'تليجرام',
     'whatsapp' => 'واتس آب',
+    'whatsapp_country_code' => 'كود دولة الواتس آب',
     'statistics' => 'الإحصائيات',
     'usersCount' => 'عدد المستخدمين',
     'registerUsersCount' => 'عدد المستخدمين المدعوين للتطبيق',

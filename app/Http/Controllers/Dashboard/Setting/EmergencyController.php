@@ -22,6 +22,7 @@ class EmergencyController extends Controller
             trans('admin.name_en'),
             trans('admin.phone'),
             trans('admin.phonecode'),
+            trans('admin.whatsapp'),
             trans('admin.order'),
             trans('admin.actions')
         ];

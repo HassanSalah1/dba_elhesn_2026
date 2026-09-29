@@ -11,6 +11,9 @@ class EmergencyRepository
     {
         $emergencies = Emergency::orderBy('order', 'ASC')->get();
         return DataTables::of($emergencies)
+            ->addColumn('whatsapp', function ($emergency) {
+                return $emergency->whatsapp ? ($emergency->whatsapp_country_code ? $emergency->whatsapp_country_code . ' ' : '') . $emergency->whatsapp : '-';
+            })
             ->addColumn('actions', function ($emergency) {
                 $ul = '<a data-toggle="tooltip" title="' . trans('admin.edit') . '" id="' . $emergency->id . '" onclick="editEmergency(this);return false;" href="#" class="on-default edit-row btn btn-info"><i data-feather="edit"></i></a> ';
                 $ul .= '<a data-toggle="tooltip" title="' . trans('admin.delete_action') . '" id="' . $emergency->id . '" onclick="deleteEmergency(this);return false;" href="#" class="on-default remove-row btn btn-danger"><i data-feather="delete"></i></a>';
@@ -26,6 +29,8 @@ class EmergencyRepository
             'name_en' => $data['name_en'],
             'phone' => $data['phone'],
             'country_code' => $data['country_code'],
+            'whatsapp' => $data['whatsapp'] ?? null,
+            'whatsapp_country_code' => $data['whatsapp_country_code'] ?? '+971',
             'order' => $data['order'],
         ]);
         return (bool)$created;
@@ -59,6 +64,8 @@ class EmergencyRepository
                 'name_en' => $data['name_en'],
                 'phone' => $data['phone'],
                 'country_code' => $data['country_code'],
+                'whatsapp' => $data['whatsapp'] ?? null,
+                'whatsapp_country_code' => $data['whatsapp_country_code'] ?? '+971',
                 'order' => $data['order'],
             ]);
             return (bool)$updated;

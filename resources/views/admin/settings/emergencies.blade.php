@@ -49,6 +49,23 @@
     </div>
 
     <div class="mb-1">
+        <label class="form-label" for="whatsapp">{{trans('admin.whatsapp')}}</label>
+        <input type="text" name="whatsapp"
+               class="form-control dt-full-name"
+               id="whatsapp"
+               placeholder="{{trans('admin.whatsapp')}}"/>
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label" for="whatsapp_country_code">{{trans('admin.whatsapp_country_code')}}</label>
+        <input type="text" name="whatsapp_country_code"
+               class="form-control dt-full-name"
+               id="whatsapp_country_code"
+               value="+971"
+               placeholder="{{trans('admin.phonecode')}}"/>
+    </div>
+
+    <div class="mb-1">
         <label class="form-label" for="order">{{trans('admin.order')}}</label>
         <input type="number" name="order" min="1"
                class="form-control dt-full-name"
@@ -109,7 +126,7 @@
             onClose();
 
             loadDataTables('{{ url("/admin/emergencies/data") }}',
-                ['name_ar', 'name_en', 'phone', 'country_code', 'order', 'actions'], '',
+                ['name_ar', 'name_en', 'phone', 'country_code', 'whatsapp', 'order', 'actions'], '',
                 {
                     'show': '{{trans('admin.show')}}',
                     'first': '{{trans('admin.first')}}',
@@ -148,6 +165,8 @@
                     $('#general-form input[name=name_en]').val(response.data.name_en);
                     $('#general-form input[name=phone]').val(response.data.phone);
                     $('#general-form input[name=country_code]').val(response.data.country_code);
+                    $('#general-form input[name=whatsapp]').val(response.data.whatsapp);
+                    $('#general-form input[name=whatsapp_country_code]').val(response.data.whatsapp_country_code || '+971');
                     $('#general-form input[name=order]').val(response.data.order);
                     $('.general_modal').modal('toggle');
                     edit = true;
