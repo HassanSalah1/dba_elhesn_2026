@@ -554,7 +554,10 @@ class UserApiRepository
         }
 
         $query->where(function($q) {
-            $q->where('team1_row_id', 21)->orWhere('team2_row_id', 21);
+            $q->where('team1_row_id', 21)
+              ->orWhere('team2_row_id', 21)
+              ->orWhere('team1', 'LIKE', '%دبا الحصن%')
+              ->orWhere('team2', 'LIKE', '%دبا الحصن%');
         });
 
         if ($type === 'previous') {
