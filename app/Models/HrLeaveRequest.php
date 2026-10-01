@@ -8,6 +8,10 @@ class HrLeaveRequest extends Model
 {
     protected $table = 'hr_leave_requests';
 
+    const STATUS_WAITING_FOR_APPROVAL = 1;
+    const STATUS_APPROVED = 2;
+    const STATUS_REJECTED = 3;
+
     protected $fillable = [
         'employee_row_id',
         'leave_type_id',
@@ -15,7 +19,7 @@ class HrLeaveRequest extends Model
         'end_date',
         'description',
         'attachment_path',
-        'status',
+        'status_id',
         'admin_reply_notes',
         'synced_to_sqlserver',
     ];

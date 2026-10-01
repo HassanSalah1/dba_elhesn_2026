@@ -1688,6 +1688,43 @@ class SqlServerApiRepository
     }
 
     /**
+     * Sync HR Leave Request statuses and notes from SQL Server
+     */
+    public static function syncHrLeaveRequestsStatusWithSqlServer(): array
+    {
+        $conn = self::startConnection();
+        $stats = ['updated' => 0];
+
+        if (!$conn) {
+            return $stats;
+        }
+
+        $sql = "SELECT RequestID, SatusID, AdminReplyNotes FROM dbo.MobileApp_HR_LeaveRequests WHERE SatusID IS NOT NULL";
+        $result = \sqlsrv_query($conn, $sql);
+
+        if ($result === false) {
+            sqlsrv_close($conn);
+            return $stats;
+        }
+
+        while ($object = \sqlsrv_fetch_object($result)) {
+            if (!empty($object->RequestID) && !empty($object->SatusID)) {
+                $req = HrLeaveRequest::find($object->RequestID);
+                if ($req && ($req->status_id != $object->SatusID || $req->admin_reply_notes != $object->AdminReplyNotes)) {
+                    $req->update([
+                        'status_id' => (int) $object->SatusID,
+                        'admin_reply_notes' => $object->AdminReplyNotes
+                    ]);
+                    $stats['updated']++;
+                }
+            }
+        }
+
+        sqlsrv_close($conn);
+        return $stats;
+    }
+
+    /**
      * Push a SINGLE HR Leave Request to SQL Server (Real-time + Binary attachment support)
      */
     public static function pushSingleHrLeaveRequestToSqlServer(HrLeaveRequest $leaveRequest): bool
@@ -1718,7 +1755,7 @@ class SqlServerApiRepository
         if ($checkResult && \sqlsrv_fetch($checkResult)) {
             $sql = "UPDATE dbo.MobileApp_HR_LeaveRequests SET 
                     EmployeeRowID = ?, TypeID = ?, StartDate = ?, EndDate = ?, Description = ?, 
-                    AttachmentUrl = ?, Status = ?, AdminReplyNotes = ?
+                    AttachmentUrl = ?, SatusID = ?, AdminReplyNotes = ?
                     WHERE RequestID = ?";
 
             $params = [
@@ -1728,14 +1765,14 @@ class SqlServerApiRepository
                 $leaveRequest->end_date,
                 $leaveRequest->description,
                 $attachmentData !== null ? [ $attachmentData, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY), SQLSRV_SQLTYPE_VARBINARY('max') ] : null,
-                $leaveRequest->status,
+                $leaveRequest->status_id,
                 $leaveRequest->admin_reply_notes,
                 $leaveRequest->id,
             ];
             $result = \sqlsrv_query($conn, $sql, $params);
         } else {
             $sql = "INSERT INTO dbo.MobileApp_HR_LeaveRequests 
-                    (RequestID, EmployeeRowID, TypeID, StartDate, EndDate, Description, AttachmentUrl, Status, CreatedAt, AdminReplyNotes)
+                    (RequestID, EmployeeRowID, TypeID, StartDate, EndDate, Description, AttachmentUrl, SatusID, CreatedAt, AdminReplyNotes)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $params = [
@@ -1746,7 +1783,7 @@ class SqlServerApiRepository
                 $leaveRequest->end_date,
                 $leaveRequest->description,
                 $attachmentData !== null ? [ $attachmentData, SQLSRV_PARAM_IN, SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY), SQLSRV_SQLTYPE_VARBINARY('max') ] : null,
-                $leaveRequest->status,
+                $leaveRequest->status_id,
                 $leaveRequest->created_at ? $leaveRequest->created_at->format('Y-m-d H:i:s') : now()->format('Y-m-d H:i:s'),
                 $leaveRequest->admin_reply_notes,
             ];

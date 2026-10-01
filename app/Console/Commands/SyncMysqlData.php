@@ -147,6 +147,10 @@ class SyncMysqlData extends Command
             $this->line('Pushing <info>hr_leave_requests</info> to SQL Server...');
             $stats  = V2SqlServerApiRepository::pushHrLeaveRequestsToSqlServer();
             $rows[] = ['hr_leave_requests (push)', $stats['pushed'], $stats['failed']];
+
+            $this->line('Syncing <info>hr_leave_requests status</info> from SQL Server...');
+            $statusStats = V2SqlServerApiRepository::syncHrLeaveRequestsStatusWithSqlServer();
+            $rows[] = ['hr_leave_requests (status sync)', $statusStats['updated'], 0];
         }
 
         if (in_array($table, ['hr_documents', 'all'])) {

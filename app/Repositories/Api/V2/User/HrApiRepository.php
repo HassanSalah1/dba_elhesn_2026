@@ -155,7 +155,7 @@ class HrApiRepository
             'end_date' => $data['end_date'],
             'description' => $data['description'] ?? null,
             'attachment_path' => $attachmentPath,
-            'status' => 0, // Pending
+            'status_id' => HrLeaveRequest::STATUS_WAITING_FOR_APPROVAL,
         ]);
 
         // Push real-time to SQL Server

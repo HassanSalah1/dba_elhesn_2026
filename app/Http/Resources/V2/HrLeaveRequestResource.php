@@ -17,7 +17,7 @@ class HrLeaveRequestResource extends JsonResource
             'end_date' => $this->end_date,
             'description' => $this->description,
             'attachment_url' => $this->attachment_path ? asset($this->attachment_path) : null,
-            'status' => $this->status, // 0:Pending, 1:Approved, 2:Rejected
+            'status' => $this->status_id, // 1:Waiting for Approval, 2:Approved, 3:Rejected
             'admin_reply_notes' => $this->admin_reply_notes,
             'employee' => $this->employee ? [
                 'id' => $this->employee->id,
