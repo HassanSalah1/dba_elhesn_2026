@@ -628,7 +628,10 @@ class SettingApiRepository
                 $q->orderBy('match_date', 'desc')->orderBy('match_time', 'desc');
             }
             $q->where(function($qq) {
-                $qq->where('team1_row_id', 21)->orWhere('team2_row_id', 21);
+                $qq->where('team1_row_id', 21)
+                   ->orWhere('team2_row_id', 21)
+                   ->orWhere('team1', 'LIKE', '%دبا الحصن%')
+                   ->orWhere('team2', 'LIKE', '%دبا الحصن%');
             });
             $q->with(['team1Club', 'team2Club']);
         }, 'season']);
@@ -659,7 +662,10 @@ class SettingApiRepository
         
         $query->whereHas('matches', function ($q) {
             $q->where(function($qq) {
-                $qq->where('team1_row_id', 21)->orWhere('team2_row_id', 21);
+                $qq->where('team1_row_id', 21)
+                   ->orWhere('team2_row_id', 21)
+                   ->orWhere('team1', 'LIKE', '%دبا الحصن%')
+                   ->orWhere('team2', 'LIKE', '%دبا الحصن%');
             });
         });
 
@@ -718,7 +724,10 @@ class SettingApiRepository
         $query = \App\Models\SportMatch::with(['team1Club', 'team2Club', 'competition.season'])
             ->where('competition_row_id', $data['competition_id'])
             ->where(function($q) {
-                $q->where('team1_row_id', 21)->orWhere('team2_row_id', 21);
+                $q->where('team1_row_id', 21)
+                  ->orWhere('team2_row_id', 21)
+                  ->orWhere('team1', 'LIKE', '%دبا الحصن%')
+                  ->orWhere('team2', 'LIKE', '%دبا الحصن%');
             });
 
         // Filter by season if provided
