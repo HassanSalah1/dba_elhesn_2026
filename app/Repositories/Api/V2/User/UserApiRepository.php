@@ -602,8 +602,7 @@ class UserApiRepository
                 'Team2Result' => $mapped['team2_result'],
                 'MatchInHouse' => $match->match_in_house,
                 'FANETMatchID' => $mapped['fanet_match_id'],
-                'LiveLink' => $mapped['live_link'],
-                'live_link' => $mapped['live_link']
+                'LiveLink' => $mapped['live_link']
             ];
         }
 
