@@ -894,6 +894,7 @@ class SettingApiRepository
             'pitch' => $match->pitch,
             'week' => $match->week,
             'live_link' => $match->live_link,
+            'LiveLink' => $match->live_link,
             'fanet_match_id' => $match->fanet_match_id,
             'competition_name' => $match->competition ? ($lang == 'ar' ? $match->competition->name_ar : $match->competition->name_en) : null,
             'season_name' => ($match->competition && $match->competition->season) ? $match->competition->season->name : null,
